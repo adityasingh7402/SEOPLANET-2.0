@@ -1,4 +1,6 @@
 import "./App.css";
+import React from 'react';
+import CustomCursor from "./components/ui/CustomCursor";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "sonner";
 import LandingPage from "./pages/LandingPage";
@@ -30,6 +32,7 @@ function App() {
 
   return (
     <div className="App">
+      <CustomCursor />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />

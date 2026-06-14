@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import TiltCard from "./ui/TiltCard";
 import { Rocket, TrendingUp, Crown, Check, ArrowUpRight } from "lucide-react";
 
 const reveal = {
@@ -126,9 +127,9 @@ export default function Packages() {
           {packages.map((pkg) => {
             const Icon = pkg.icon;
             return (
-              <motion.div
-                key={pkg.code}
-                {...reveal}
+              <TiltCard key={pkg.code} className="h-full w-full">
+                <motion.div
+                  {...reveal}
                 className={`relative rounded-2xl p-8 sm:p-10 transition-all duration-300 group flex flex-col justify-between min-h-[720px] ${
                   pkg.recommended
                     ? "bg-[#0A0A0F] border border-[#00FF94] shadow-[0_0_30px_rgba(0,255,148,0.12)] hover:shadow-[0_0_40px_rgba(0,255,148,0.2)]"
@@ -223,6 +224,7 @@ export default function Packages() {
                   </button>
                 </div>
               </motion.div>
+              </TiltCard>
             );
           })}
         </div>

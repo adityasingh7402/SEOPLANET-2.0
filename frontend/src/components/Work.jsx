@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import TiltCard from "./ui/TiltCard";
 import { ArrowUpRight } from "lucide-react";
 
 import CS1 from "../assets/team/work1.jpg";
@@ -88,11 +89,11 @@ export default function Work() {
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-5 lg:gap-6">
           {cases.map((c) => (
+            <TiltCard key={c.code} className={`${c.span} h-full w-full`}>
             <motion.a
-              key={c.code}
               href="#contact"
               {...reveal}
-              className={`${c.span} group relative rounded-2xl overflow-hidden border border-white/10 ${c.height}`}
+              className={`block group relative rounded-2xl overflow-hidden border border-white/10 ${c.height} w-full`}
               data-testid={c.testid}
             >
               <div
@@ -129,6 +130,7 @@ export default function Work() {
                 </div>
               </div>
             </motion.a>
+            </TiltCard>
           ))}
         </div>
       </div>

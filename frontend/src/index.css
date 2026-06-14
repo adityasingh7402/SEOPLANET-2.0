@@ -182,3 +182,10 @@ body {
     border-right: 2px solid #00FF94;
     animation: blink-caret 1s steps(1) infinite;
 }
+
+@media (pointer: fine) {
+  body { cursor: none; }
+  a, button { cursor: none !important; }
+}
+
+@media (pointer: fine) { body { cursor: none; } a, button { cursor: none !important; } }

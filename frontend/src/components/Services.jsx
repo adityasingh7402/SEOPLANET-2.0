@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import TiltCard from "./ui/TiltCard";
 import {
   Search,
   Zap,
@@ -73,9 +74,10 @@ export default function Services() {
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-5 lg:gap-6">
           {/* Highlight card */}
+          <TiltCard className="md:col-span-8 md:row-span-2 h-full w-full">
           <motion.div
             {...reveal}
-            className="md:col-span-8 md:row-span-2 relative neon-border rounded-2xl bg-gradient-to-br from-[#0A0F0C] to-[#05050A] p-8 sm:p-12 overflow-hidden group"
+            className="relative neon-border rounded-2xl bg-gradient-to-br from-[#0A0F0C] to-[#05050A] p-8 sm:p-12 overflow-hidden group h-full"
             data-testid="service-card-highlight"
           >
             <div className="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-[#00FF94]/15 blur-3xl" />
@@ -112,11 +114,13 @@ export default function Services() {
               </div>
             </div>
           </motion.div>
+          </TiltCard>
 
           {/* Side small */}
+          <TiltCard className="md:col-span-4 h-full w-full">
           <motion.div
             {...reveal}
-            className="md:col-span-4 relative rounded-2xl bg-white/[0.03] border border-white/10 p-7 hover:border-[#00FF94]/40 hover:-translate-y-1 transition-all duration-300 group"
+            className="relative rounded-2xl bg-white/[0.03] border border-white/10 p-7 hover:border-[#00FF94]/40 hover:-translate-y-1 transition-all duration-300 group h-full"
             data-testid="service-card-s02"
           >
             <div className="flex items-center justify-between mb-8">
@@ -130,10 +134,12 @@ export default function Services() {
               Funnel teardown, experimentation, and revenue calibration.
             </p>
           </motion.div>
+          </TiltCard>
 
+          <TiltCard className="md:col-span-4 h-full w-full">
           <motion.div
             {...reveal}
-            className="md:col-span-4 relative rounded-2xl bg-white/[0.03] border border-white/10 p-7 hover:border-[#00E5FF]/40 hover:-translate-y-1 transition-all duration-300 group"
+            className="relative rounded-2xl bg-white/[0.03] border border-white/10 p-7 hover:border-[#00E5FF]/40 hover:-translate-y-1 transition-all duration-300 group h-full"
             data-testid="service-card-s03"
           >
             <div className="flex items-center justify-between mb-8">
@@ -147,12 +153,13 @@ export default function Services() {
               Generative Engine Optimization for ChatGPT, Perplexity, Gemini.
             </p>
           </motion.div>
+          </TiltCard>
 
           {services.map((s) => (
+            <TiltCard key={s.code} className="md:col-span-3 h-full w-full">
             <motion.div
-              key={s.code}
               {...reveal}
-              className="md:col-span-3 relative rounded-2xl bg-white/[0.03] border border-white/10 p-6 hover:bg-white/[0.06] hover:-translate-y-1 transition-all duration-300 group"
+              className="relative rounded-2xl bg-white/[0.03] border border-white/10 p-6 hover:bg-white/[0.06] hover:-translate-y-1 transition-all duration-300 group h-full"
               data-testid={`service-card-${s.code.toLowerCase()}`}
             >
               <div className="flex items-center justify-between mb-6">
@@ -166,6 +173,7 @@ export default function Services() {
                 {s.desc}
               </p>
             </motion.div>
+            </TiltCard>
 
             
           ))}
