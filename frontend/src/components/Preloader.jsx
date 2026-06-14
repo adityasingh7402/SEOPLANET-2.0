@@ -45,32 +45,40 @@ export default function Preloader() {
           className="fixed inset-0 z-[100] bg-[#05050A] flex flex-col items-center justify-center overflow-hidden"
           data-testid="preloader"
         >
-          {/* Subtle noise */}
-          <div className="absolute inset-0 grain pointer-events-none opacity-50" />
-
-          {/* Minimalist central counter */}
+          {/* Central Logo */}
           <div className="relative flex flex-col items-center justify-center z-10">
             <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="flex flex-col items-center"
+              className="flex items-center gap-3 sm:gap-4"
             >
-              <div className="font-display font-light text-white text-6xl sm:text-8xl tracking-tighter mb-4 tabular-nums">
-                {String(progress).padStart(3, "0")}
-              </div>
-              <div className="font-mono-pro text-[10px] sm:text-xs tracking-[0.4em] uppercase text-white/40">
+              <span className="relative inline-block w-3 h-3 sm:w-4 sm:h-4">
+                <span className="absolute inset-0 rounded-full bg-[#00FF94]" />
+                <span className="absolute inset-0 rounded-full bg-[#00FF94] animate-ping opacity-60" />
+              </span>
+              <span className="font-display font-black tracking-tight text-white text-3xl sm:text-4xl">
                 SEO PLANET
-              </div>
+              </span>
             </motion.div>
           </div>
 
-          {/* Minimal Loading Bar at bottom */}
-          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 w-48 sm:w-64 h-[1px] bg-white/10 overflow-hidden">
-            <motion.div
-              className="absolute inset-y-0 left-0 bg-white"
-              style={{ width: `${progress}%` }}
-            />
+          {/* Premium Loading Bar at bottom */}
+          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 w-48 sm:w-64">
+            <div className="flex justify-between items-end mb-2">
+              <span className="font-mono-pro text-[9px] sm:text-[10px] uppercase tracking-[0.25em] text-white/40">
+                Loading
+              </span>
+              <span className="font-mono-pro text-[9px] sm:text-[10px] tabular-nums text-white/40">
+                {String(progress).padStart(3, "0")}%
+              </span>
+            </div>
+            <div className="w-full h-[1px] bg-white/10 overflow-hidden relative">
+              <motion.div
+                className="absolute inset-y-0 left-0 bg-[#00FF94] shadow-[0_0_10px_rgba(0,255,148,0.5)]"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
           </div>
         </motion.div>
       )}
