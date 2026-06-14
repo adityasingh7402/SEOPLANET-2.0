@@ -190,9 +190,9 @@ export default function Hero3D() {
       stars.rotation.y += delta * 0.01;
       stars.rotation.x += delta * 0.004;
 
-      // Mouse parallax for camera
-      camera.position.x += (mouse.x * 0.5 - camera.position.x) * 0.04;
-      camera.position.y += (-mouse.y * 0.35 - camera.position.y) * 0.04;
+      // Mouse parallax for camera (inverted so globe follows cursor)
+      camera.position.x += (-mouse.x * 0.5 - camera.position.x) * 0.04;
+      camera.position.y += (mouse.y * 0.35 - camera.position.y) * 0.04;
       camera.lookAt(0, 0, 0);
 
       // Floating shards
