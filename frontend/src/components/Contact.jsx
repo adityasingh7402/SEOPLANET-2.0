@@ -1,0 +1,232 @@
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { ArrowUpRight, Send, Loader2, CheckCircle2, Phone } from "lucide-react";
+import axios from "axios";
+import { toast } from "sonner";
+
+
+const fields = [
+  { name: "name", label: "Your Name", type: "text", placeholder: "Full name", required: true },
+  { name: "email", label: "Email", type: "email", placeholder: "you@company.com", required: true },
+  { name: "company", label: "Company", type: "text", placeholder: "Optional", required: false },
+];
+
+export default function Contact() {
+  const [form, setForm] = useState({ name: "", email: "", company: "", message: "" });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const onChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+
+  useEffect(() => {
+    const handleSelectPackage = (e) => {
+      const pkg = e.detail;
+      setForm((f) => ({
+        ...f,
+        message: `I am interested in the ${pkg} package. Let's discuss how we can scale our brand.`,
+      }));
+    };
+    window.addEventListener("select-package", handleSelectPackage);
+    return () => window.removeEventListener("select-package", handleSelectPackage);
+  }, []);
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.name || !form.email || !form.message) {
+      toast.error("Identifier, transmission and message are required.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await axios.post(`https://seoplanet-2-0.onrender.com/api/contact`, {
+        ...form
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      });
+      if (res.data?.status === "success") {
+        setSuccess(true);
+        toast.success("Message received. We'll reply within 24 hours.");
+        setForm({ name: "", email: "", company: "", message: "" });
+      } else {
+        toast.error(res.data?.message || "Something went wrong. Please try again.");
+      }
+    } catch (err) {
+      console.error("Form error:", err);
+      toast.error(err?.response?.data?.message || err?.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <section
+      id="contact"
+      className="relative py-24 sm:py-40 px-4 sm:px-12 overflow-hidden"
+      data-testid="contact-section"
+    >
+      <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
+      <div className="absolute left-1/2 -top-40 -translate-x-1/2 w-[700px] h-[700px] rounded-full bg-[#00FF94]/8 blur-3xl pointer-events-none" />
+
+      <div className="max-w-6xl mx-auto relative">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
+        >
+          <p className="overline mb-4">[06] · Get in Touch</p>
+          <h2 className="font-display text-4xl sm:text-6xl lg:text-7xl font-black tracking-tighter leading-[0.98]">
+            Let&apos;s <span className="neon-text italic font-light">talk</span>.
+          </h2>
+          <p className="mt-6 font-mono-pro text-sm text-white/55 max-w-xl mx-auto">
+            Tell us about your goals. We&apos;ll respond within 24 hours with a
+            short brief — no sales script.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.1 }}
+          className="grid md:grid-cols-12 gap-6 lg:gap-8"
+        >
+          {/* Form */}
+          <form
+            onSubmit={onSubmit}
+            className="md:col-span-8 relative rounded-2xl glass p-5 sm:p-10"
+            data-testid="contact-form"
+          >
+            <div className="grid sm:grid-cols-2 gap-5 mb-5">
+              {fields.slice(0, 2).map((f) => (
+                <div key={f.name}>
+                  <label className="overline block mb-2 text-white/50">{f.label}</label>
+                  <input
+                    type={f.type}
+                    name={f.name}
+                    value={form[f.name]}
+                    onChange={onChange}
+                    required={f.required}
+                    placeholder={f.placeholder}
+                    className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3.5 text-white text-sm font-mono-pro placeholder:text-white/25 focus:outline-none focus:border-[#00FF94] focus:bg-white/[0.06] focus:shadow-[0_0_0_3px_rgba(0,255,148,0.12)] transition-all"
+                    data-testid={`contact-input-${f.name}`}
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div className="mb-5">
+              <label className="overline block mb-2 text-white/50">{fields[2].label}</label>
+              <input
+                type="text"
+                name="company"
+                value={form.company}
+                onChange={onChange}
+                placeholder={fields[2].placeholder}
+                className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3.5 text-white text-sm font-mono-pro placeholder:text-white/25 focus:outline-none focus:border-[#00FF94] focus:bg-white/[0.06] focus:shadow-[0_0_0_3px_rgba(0,255,148,0.12)] transition-all"
+                data-testid="contact-input-company"
+              />
+            </div>
+
+            <div className="mb-7">
+              <label className="overline block mb-2 text-white/50">Your Message</label>
+              <textarea
+                name="message"
+                value={form.message}
+                onChange={onChange}
+                required
+                rows={5}
+                placeholder="What does growth look like for your business?"
+                className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3.5 text-white text-sm font-mono-pro placeholder:text-white/25 focus:outline-none focus:border-[#00FF94] focus:bg-white/[0.06] focus:shadow-[0_0_0_3px_rgba(0,255,148,0.12)] transition-all resize-none"
+                data-testid="contact-input-message"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full inline-flex items-center justify-center gap-3 rounded-full bg-[#00FF94] text-black px-7 py-4 font-mono-pro text-xs uppercase tracking-[0.25em] font-bold hover:bg-white transition-colors active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
+              data-testid="contact-form-submit"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" /> Sending…
+                </>
+              ) : success ? (
+                <>
+                  <CheckCircle2 className="w-4 h-4" /> Message Sent
+                </>
+              ) : (
+                <>
+                  Send Message <Send className="w-4 h-4" />
+                </>
+              )}
+            </button>
+
+            <p className="mt-4 text-[10px] font-mono-pro text-white/35 text-center tracking-wider">
+              Secure submission · Avg. response 6h 14m
+            </p>
+          </form>
+
+          {/* Side details */}
+          <div className="md:col-span-4 flex flex-col gap-5">
+            <div className="rounded-2xl glass p-5 sm:p-7" data-testid="contact-details-launch">
+              <p className="overline mb-3">Email</p>
+              <a
+                href="mailto:enquiry@seoplanet.in"
+                className="font-display text-base sm:text-xl text-white font-bold hover:text-[#00FF94] transition-colors inline-flex items-center gap-2 break-all"
+                data-testid="contact-email-link"
+              >
+                enquiry@seoplanet.in
+                <ArrowUpRight className="w-4 h-4 shrink-0" />
+              </a>
+              <p className="mt-4 text-xs font-mono-pro text-white/50 leading-relaxed">
+                Direct line for partnerships, press, and new projects.
+              </p>
+            </div>
+
+            <div className="rounded-2xl glass p-5 sm:p-7" data-testid="contact-details-phone">
+              <p className="overline mb-3 flex items-center gap-2">
+                <Phone className="w-3 h-3 text-[#00FF94]" /> Phone
+              </p>
+              <a
+                href="tel:+918796422715"
+                className="font-display text-base sm:text-xl text-white font-bold hover:text-[#00FF94] transition-colors inline-flex items-center gap-2 tabular-nums"
+                data-testid="contact-phone-link"
+              >
+                +91 87964 22715
+                <ArrowUpRight className="w-4 h-4 shrink-0" />
+              </a>
+              <p className="mt-4 text-xs font-mono-pro text-white/50 leading-relaxed">
+                Mon–Fri · 10:00 – 19:00 IST
+              </p>
+            </div>
+
+            <div className="rounded-2xl glass p-5 sm:p-7" data-testid="contact-details-hq">
+              <p className="overline mb-3">Office</p>
+              <p className="font-mono-pro text-sm text-white/80 leading-relaxed">
+                482, Dwarka Sector 15 <br />
+                New Delhi — 110075 <br />
+                India
+              </p>
+            </div>
+
+            <div className="rounded-2xl neon-border p-5 sm:p-7 bg-[#0A0F0C]" data-testid="contact-details-availability">
+              <p className="overline mb-3">Availability</p>
+              <p className="font-mono-pro text-sm text-white/80">
+                Q1 2026 — <span className="neon-text">2 spots open</span>
+              </p>
+              <p className="mt-2 text-[11px] font-mono-pro text-white/45">
+                We onboard 6 partners per year. Fit first.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}

@@ -1,0 +1,6 @@
+/* App-level styles handled by tailwind + index.css */
+.App {
+    min-height: 100vh;
+    background: #05050A;
+    color: #fff;
+}
