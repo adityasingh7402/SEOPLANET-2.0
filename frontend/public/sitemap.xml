@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://seoplanet.agency/</loc>
+    <loc>https://seoplanet.in/</loc>
     <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://seoplanet.agency/#services</loc>
+    <loc>https://seoplanet.in/#services</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://seoplanet.agency/#work</loc>
+    <loc>https://seoplanet.in/#work</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://seoplanet.agency/#packages</loc>
+    <loc>https://seoplanet.in/#packages</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://seoplanet.agency/#team</loc>
+    <loc>https://seoplanet.in/#team</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
