@@ -12,7 +12,7 @@ const socials = [
 export default function Footer() {
   return (
     <footer
-      className="relative bg-transparent overflow-hidden border-t border-white/5"
+      className="relative bg-[#05050A] overflow-hidden border-t border-white/5"
       data-testid="footer"
     >
       <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />

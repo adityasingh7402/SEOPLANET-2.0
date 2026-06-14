@@ -1,6 +1,5 @@
 import "./App.css";
 import React from 'react';
-import BackgroundReveal from "./components/ui/BackgroundReveal";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "sonner";
 import LandingPage from "./pages/LandingPage";
@@ -32,7 +31,6 @@ function App() {
 
   return (
     <div className="App">
-      <BackgroundReveal />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
