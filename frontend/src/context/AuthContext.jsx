@@ -1,6 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 
+const initialToken = localStorage.getItem("seo_onboarding_token");
+if (initialToken) {
+  axios.defaults.headers.common["Authorization"] = `Bearer ${initialToken}`;
+}
+
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {

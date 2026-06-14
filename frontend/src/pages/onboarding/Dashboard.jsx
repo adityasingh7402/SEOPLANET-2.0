@@ -94,6 +94,9 @@ export default function Dashboard() {
         setData(res.data.data);
       } catch (err) {
         console.error("Dashboard fetch error", err);
+        if (err.response?.status === 401 || err.response?.status === 403) {
+          logout();
+        }
       } finally {
         setLoading(false);
       }
@@ -109,7 +112,16 @@ export default function Dashboard() {
     );
   }
 
-  if (!data) return null;
+  if (!data) {
+    return (
+      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#05050A] text-white">
+        <p className="font-mono-pro text-sm text-white/50 mb-4">Session expired or failed to load data.</p>
+        <button onClick={logout} className="px-6 py-2 bg-[#00FF94]/10 text-[#00FF94] rounded-lg font-mono-pro text-xs uppercase tracking-wider hover:bg-[#00FF94] hover:text-black transition-colors">
+          Return to Login
+        </button>
+      </div>
+    );
+  }
 
   if (data.username === "admin") {
     return <AdminDashboard adminData={data} />;
