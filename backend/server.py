@@ -157,18 +157,22 @@ class LoginRequest(BaseModel):
 
 @api_router.post("/auth/login")
 async def login(req: LoginRequest):
-    client_doc = await db.clients.find_one({"username": req.username})
-    if not client_doc or not verify_password(req.password, client_doc["password_hash"]):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
+    try:
+        client_doc = await db.clients.find_one({"username": req.username})
+        if not client_doc or not verify_password(req.password, client_doc["password_hash"]):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Incorrect username or password",
+            )
+        
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={"sub": client_doc["username"]}, expires_delta=access_token_expires
         )
-    
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": client_doc["username"]}, expires_delta=access_token_expires
-    )
-    return {"access_token": access_token, "token_type": "bearer"}
+        return {"access_token": access_token, "token_type": "bearer"}
+    except Exception as e:
+        import traceback
+        raise HTTPException(status_code=400, detail=str(traceback.format_exc()))
 
 @api_router.get("/onboarding/dashboard")
 async def get_onboarding_dashboard(current_client: dict = Depends(get_current_client)):
