@@ -168,7 +168,7 @@ async def login(req: LoginRequest):
         if not client_doc or not verify_password(req.password, client_doc["password_hash"]):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Incorrect username or password",
+                detail=f"Incorrect username or password. client_doc is: {bool(client_doc)}",
             )
         
         access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
