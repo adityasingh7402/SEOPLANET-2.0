@@ -1,6 +1,6 @@
 from fastapi import FastAPI, APIRouter, HTTPException, Query, Depends, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from passlib.context import CryptContext
+import bcrypt
 from jose import JWTError, jwt
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
@@ -39,11 +39,20 @@ SECRET_KEY = os.environ.get("JWT_SECRET", "super-secret-key-for-seoplanet-onboar
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 # 7 days
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+    try:
+        if isinstance(hashed_password, str):
+            hashed_password = hashed_password.encode('utf-8')
+        if isinstance(plain_password, str):
+            plain_password = plain_password.encode('utf-8')
+        return bcrypt.checkpw(plain_password, hashed_password)
+    except Exception:
+        return False
+
+def hash_password(password: str) -> str:
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
@@ -195,7 +204,7 @@ async def create_new_client(payload: ClientCreate, current_client: dict = Depend
     if existing:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Client already exists")
         
-    hashed_password = pwd_context.hash(payload.password)
+    hashed_password = hash_password(payload.password)
     client_doc = {
         "username": payload.username,
         "company_name": payload.company_name,
