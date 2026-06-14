@@ -76,7 +76,7 @@ export default function Hero() {
       </motion.div>
 
       {/* Content */}
-      <div className="relative z-[3] max-w-7xl mx-auto px-6 sm:px-12 pt-32 sm:pt-44 pb-28 sm:pb-32 min-h-screen flex flex-col justify-center">
+      <div className="relative z-[3] max-w-7xl mx-auto px-6 sm:px-12 pt-28 sm:pt-36 pb-20 sm:pb-24 min-h-screen flex flex-col justify-center">
         <motion.p {...fade(0)} className="overline mb-6">
           <span className="text-[#00FF94]">[001]</span> &nbsp;Next-Gen Marketing Agency
         </motion.p>
@@ -85,7 +85,7 @@ export default function Hero() {
           initial="hidden"
           animate="visible"
           variants={{}}
-          className="font-display font-black text-white text-4xl sm:text-5xl lg:text-[5.5rem] leading-[0.92] tracking-tighter max-w-5xl"
+          className="font-display font-black text-white text-3xl sm:text-4xl lg:text-6xl leading-[0.95] tracking-tighter max-w-5xl"
           data-testid="hero-headline"
         >
           {[
@@ -132,14 +132,14 @@ export default function Hero() {
 
         <motion.p
           {...fade(0.55)}
-          className="mt-8 max-w-xl text-sm sm:text-base text-white/60 leading-relaxed font-mono-pro"
+          className="mt-6 max-w-xl text-sm sm:text-base text-white/60 leading-relaxed font-mono-pro"
         >
           SEO Planet is a digital marketing agency built for the AI era. We pair
           algorithmic SEO with performance ads, content systems, and analytics
           to help ambitious brands win their category.
         </motion.p>
 
-        <motion.div {...fade(0.8)} className="mt-10 flex flex-wrap items-center gap-4">
+        <motion.div {...fade(0.8)} className="mt-8 flex flex-wrap items-center gap-4">
           <MagneticWrap strength={24}>
             <a
               href="#contact"
@@ -166,7 +166,7 @@ export default function Hero() {
         {/* Metric strip */}
         <motion.div
           {...fade(1.0)}
-          className="mt-20 grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/5 border border-white/5 max-w-3xl"
+          className="mt-12 sm:mt-16 grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/5 border border-white/5 max-w-3xl"
           data-testid="hero-metric-strip"
         >
           <HeroMetric
