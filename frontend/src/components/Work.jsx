@@ -3,10 +3,10 @@ import { motion } from "framer-motion";
 import TiltCard from "./ui/TiltCard";
 import { ArrowUpRight } from "lucide-react";
 
-import CS1 from "../assets/team/work1.jpg";
-import CS2 from "../assets/team/work2.jpg";
-import CS3 from "../assets/team/work3.jpg";
-import CS4 from "../assets/team/work4.jpg";
+import CS1 from "../assets/team/work1.webp";
+import CS2 from "../assets/team/work2.webp";
+import CS3 from "../assets/team/work3.webp";
+import CS4 from "../assets/team/work4.webp";
 
 const reveal = {
   initial: { opacity: 0, y: 40 },

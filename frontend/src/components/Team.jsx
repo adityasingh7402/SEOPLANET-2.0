@@ -1,10 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-import T1 from "../assets/team/team1.jpg";
-import T2 from "../assets/team/team2.jpg";
-import T3 from "../assets/team/team3.jpg";
-import T4 from "../assets/team/team4.jpg";
+import T1 from "../assets/team/team1.webp";
+import T2 from "../assets/team/team2.webp";
+import T3 from "../assets/team/team3.webp";
+import T4 from "../assets/team/team4.webp";
 
 const team = [
   {

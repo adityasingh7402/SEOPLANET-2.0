@@ -1,7 +1,8 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Activity } from "lucide-react";
-import Hero3D from "./Hero3D";
+
+const Hero3D = lazy(() => import("./Hero3D"));
 import MagneticWrap from "./MagneticWrap";
 import useCountUp from "../hooks/useCountUp";
 
@@ -50,9 +51,11 @@ export default function Hero() {
       <div className="absolute inset-0 grid-bg opacity-60" />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#05050A]" />
 
-      {/* 3D scene */}
+      {/* 3D scene (Lazy Loaded for Performance) */}
       <div className="absolute inset-0 z-[2]">
-        <Hero3D />
+        <Suspense fallback={<div className="absolute inset-0" />}>
+          <Hero3D />
+        </Suspense>
       </div>
 
       {/* Top status bar */}
