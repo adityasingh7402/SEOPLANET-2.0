@@ -166,9 +166,10 @@ async def login(req: LoginRequest):
     try:
         client_doc = await db.clients.find_one({"username": req.username})
         if not client_doc or not verify_password(req.password, client_doc["password_hash"]):
+            db_name = os.environ.get('DB_NAME', 'unknown')
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=f"Incorrect username or password. client_doc is: {bool(client_doc)}",
+                detail=f"Incorrect username or password. DB_NAME is: {db_name}, client_doc is: {bool(client_doc)}",
             )
         
         access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
