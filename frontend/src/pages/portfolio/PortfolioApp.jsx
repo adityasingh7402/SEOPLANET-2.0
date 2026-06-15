@@ -390,6 +390,8 @@ function ProjectRow({ p, index, revealed }) {
   const imageRef = useRef(null);
   const rowRef = useRef(null);
 
+  const isEven = index % 2 === 0;
+
   const handleMouseMove = (e) => {
     if (!imageRef.current || !rowRef.current || isOpen) return;
     const rect = rowRef.current.getBoundingClientRect();
@@ -440,10 +442,12 @@ function ProjectRow({ p, index, revealed }) {
         {!isOpen && (
           <div style={{
             position: "absolute",
-            top: 0, right: "clamp(24px, 4vw, 64px)",
+            top: 0, 
+            right: isEven ? "clamp(24px, 4vw, 64px)" : "auto",
+            left: !isEven ? "clamp(24px, 4vw, 64px)" : "auto",
             width: "42%", height: "100%",
             overflow: "hidden",
-            clipPath: isHovered ? "inset(0% 0% 0% 0%)" : "inset(0% 100% 0% 0%)",
+            clipPath: isHovered ? "inset(0% 0% 0% 0%)" : (isEven ? "inset(0% 100% 0% 0%)" : "inset(0% 0% 0% 100%)"),
             transition: "clip-path 0.7s cubic-bezier(0.76,0,0.24,1)",
             zIndex: 2,
             pointerEvents: "none",
@@ -468,12 +472,20 @@ function ProjectRow({ p, index, revealed }) {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          flexDirection: isEven ? "row" : "row-reverse",
           padding: "clamp(28px, 4vw, 48px) 0",
           position: "relative",
           zIndex: 3,
         }}>
-          {/* Left */}
-          <div style={{ display: "flex", alignItems: "baseline", gap: "clamp(16px, 3vw, 40px)", flex: 1 }}>
+          {/* Title Area */}
+          <div style={{ 
+            display: "flex", 
+            alignItems: "baseline", 
+            gap: "clamp(16px, 3vw, 40px)", 
+            flex: 1,
+            flexDirection: isEven ? "row" : "row-reverse",
+            textAlign: isEven ? "left" : "right"
+          }}>
             <span style={{
               fontFamily: "JetBrains Mono, monospace", fontSize: "11px", fontWeight: 700,
               color: isHovered || isOpen ? p.color : "rgba(255,255,255,0.2)",
@@ -505,8 +517,17 @@ function ProjectRow({ p, index, revealed }) {
             </div>
           </div>
 
-          {/* Right */}
-          <div style={{ textAlign: "right", flexShrink: 0, marginLeft: "24px", display: "flex", alignItems: "center", gap: "32px" }}>
+          {/* Stats Area */}
+          <div style={{ 
+            textAlign: isEven ? "right" : "left", 
+            flexShrink: 0, 
+            marginLeft: isEven ? "24px" : "0", 
+            marginRight: isEven ? "0" : "24px",
+            display: "flex", 
+            alignItems: "center", 
+            gap: "32px",
+            flexDirection: isEven ? "row" : "row-reverse"
+          }}>
             {/* Expand/collapse chevron */}
             <div style={{
               width: "40px", height: "40px", borderRadius: "50%",
