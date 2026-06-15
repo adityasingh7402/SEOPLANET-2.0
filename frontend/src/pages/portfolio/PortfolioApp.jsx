@@ -24,6 +24,7 @@ const PROJECTS = [
     quote: "SEO Planet completely transformed our digital presence. Bookings went up 300% in month one. The attention to performance is incredible.",
     quoteAuthor: "Founder, Eventa",
     video: "https://cdn.pixabay.com/video/2020/05/21/40008-424750244_tiny.mp4", // Placeholder for actual showreel
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1440&q=80", // Manually provided screenshot
   },
   {
     index: "002",
@@ -42,6 +43,7 @@ const PROJECTS = [
     quote: "The attention to detail is unmatched. Our properties finally look as premium online as they do in person.",
     quoteAuthor: "Director, Midheaven Properties",
     video: "https://cdn.pixabay.com/video/2019/04/10/22744-330560410_tiny.mp4", // Placeholder
+    image: "https://images.unsplash.com/photo-1555421689-d68471e189f2?w=1440&q=80", // Manually provided screenshot
   },
 ];
 
@@ -141,8 +143,9 @@ function ExpandPanel({ p, open, isEven }) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const [imgError, setImgError] = useState(false);
 
-  // Thum.io provides much faster, more reliable free screenshots without aggressive rate limits
-  const screenshotUrl = `https://image.thum.io/get/width/1440/crop/900/noanimate/${p.url}`;
+  // Thum.io provides much faster, more reliable free screenshots without aggressive rate limits. 
+  // However, for SPAs, a manually provided 'image' in PROJECTS is highly recommended.
+  const screenshotUrl = p.image || `https://image.thum.io/get/width/1440/crop/900/noanimate/${p.url}`;
 
   useEffect(() => {
     if (!panelRef.current) return;
