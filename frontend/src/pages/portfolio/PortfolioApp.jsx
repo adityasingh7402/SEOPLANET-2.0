@@ -135,7 +135,7 @@ function Header({ scrolled }) {
 /* ─────────────────────────────────────────────
    INLINE EXPAND PANEL
 ───────────────────────────────────────────── */
-function ExpandPanel({ p, open }) {
+function ExpandPanel({ p, open, isEven }) {
   const panelRef = useRef(null);
   const [height, setHeight] = useState(0);
   const [imgLoaded, setImgLoaded] = useState(false);
@@ -175,13 +175,20 @@ function ExpandPanel({ p, open }) {
       <div ref={panelRef}>
         <div style={{
           display: "grid",
-          gridTemplateColumns: "1.1fr 0.9fr",
+          gridTemplateColumns: isEven ? "1.1fr 0.9fr" : "0.9fr 1.1fr",
           gap: "0",
           borderTop: `1px solid ${p.color}20`,
           background: "#07070F",
         }}>
           {/* LEFT: Preview / Before & After */}
-          <div style={{ padding: "32px 40px 32px 56px", borderRight: "1px solid rgba(255,255,255,0.05)", display: "flex", flexDirection: "column" }}>
+          <div style={{ 
+            padding: isEven ? "32px 40px 32px 56px" : "32px 56px 32px 40px", 
+            borderRight: isEven ? "1px solid rgba(255,255,255,0.05)" : "none", 
+            borderLeft: !isEven ? "1px solid rgba(255,255,255,0.05)" : "none", 
+            display: "flex", flexDirection: "column",
+            gridColumn: isEven ? "1" : "2",
+            gridRow: "1"
+          }}>
 
             {/* Browser chrome */}
             <div style={{
@@ -264,7 +271,12 @@ function ExpandPanel({ p, open }) {
           </div>
 
           {/* RIGHT: details */}
-          <div style={{ padding: "48px 56px 48px 40px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <div style={{ 
+            padding: isEven ? "48px 56px 48px 40px" : "48px 40px 48px 56px", 
+            display: "flex", flexDirection: "column", justifyContent: "space-between",
+            gridColumn: isEven ? "2" : "1",
+            gridRow: "1"
+          }}>
             <div>
               <div style={{
                 fontFamily: "JetBrains Mono, monospace", fontSize: "9px",
@@ -536,7 +548,7 @@ function ProjectRow({ p, index, revealed }) {
         </div>
       </div>
 
-      <ExpandPanel p={p} open={isOpen} />
+      <ExpandPanel p={p} open={isOpen} isEven={isEven} />
     </div>
   );
 }
