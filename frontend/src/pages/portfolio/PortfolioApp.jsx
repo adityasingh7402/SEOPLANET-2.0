@@ -127,21 +127,32 @@ function Header({ scrolled }) {
 function ExpandPanel({ p, open }) {
   const panelRef = useRef(null);
   const [height, setHeight] = useState(0);
-  const [iframeLoaded, setIframeLoaded] = useState(false);
+  const [imgLoaded, setImgLoaded] = useState(false);
+  const [imgError, setImgError] = useState(false);
+
+  // Microlink.io free screenshot API — works as a plain <img> src
+  const screenshotUrl = `https://api.microlink.io/?url=${encodeURIComponent(p.url)}&screenshot=true&meta=false&embed=screenshot.url&colorScheme=dark&viewport.width=1440&viewport.height=900`;
 
   useEffect(() => {
     if (!panelRef.current) return;
     if (open) {
-      // Let the panel render first then get its scrollHeight
-      const measure = () => setHeight(panelRef.current.scrollHeight);
-      // Small timeout to allow iframe to start rendering layout
-      const t = setTimeout(measure, 50);
+      const t = setTimeout(() => {
+        if (panelRef.current) setHeight(panelRef.current.scrollHeight);
+      }, 60);
       return () => clearTimeout(t);
     } else {
       setHeight(0);
-      setIframeLoaded(false);
+      setImgLoaded(false);
+      setImgError(false);
     }
   }, [open]);
+
+  // Recalculate height once image loads (it changes the layout)
+  useEffect(() => {
+    if (imgLoaded && panelRef.current && open) {
+      setHeight(panelRef.current.scrollHeight);
+    }
+  }, [imgLoaded, open]);
 
   return (
     <div
@@ -154,77 +165,150 @@ function ExpandPanel({ p, open }) {
       <div ref={panelRef}>
         <div style={{
           display: "grid",
-          gridTemplateColumns: "1fr 1fr",
+          gridTemplateColumns: "1.1fr 0.9fr",
           gap: "0",
           borderTop: `1px solid ${p.color}20`,
           background: "#07070F",
         }}>
-          {/* LEFT: iframe preview */}
-          <div style={{ position: "relative", aspectRatio: "16/10", overflow: "hidden", borderRight: "1px solid rgba(255,255,255,0.05)" }}>
-            {/* Loading skeleton */}
-            {!iframeLoaded && (
+          {/* LEFT: Screenshot preview with browser chrome */}
+          <div style={{ padding: "32px 40px 32px 56px", borderRight: "1px solid rgba(255,255,255,0.05)" }}>
+
+            {/* Browser chrome */}
+            <div style={{
+              background: "#0D0D18",
+              borderRadius: "8px 8px 0 0",
+              border: "1px solid rgba(255,255,255,0.08)",
+              borderBottom: "none",
+              padding: "10px 16px",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+            }}>
+              {/* Traffic lights */}
+              <div style={{ display: "flex", gap: "6px" }}>
+                {["#FF5F56", "#FFBD2E", "#27C93F"].map((c) => (
+                  <div key={c} style={{ width: "10px", height: "10px", borderRadius: "50%", background: c, opacity: 0.8 }} />
+                ))}
+              </div>
+              {/* Address bar */}
               <div style={{
-                position: "absolute", inset: 0,
-                background: "#0A0A12",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                flexDirection: "column", gap: "12px",
+                flex: 1,
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.06)",
+                borderRadius: "4px",
+                padding: "4px 12px",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
               }}>
-                <div style={{
-                  width: "32px", height: "32px", borderRadius: "50%",
-                  border: `2px solid ${p.color}40`,
-                  borderTopColor: p.color,
-                  animation: "spin 0.8s linear infinite",
-                }} />
+                <span style={{ fontSize: "9px", color: "rgba(255,255,255,0.25)", marginRight: "2px" }}>🔒</span>
                 <span style={{
-                  fontFamily: "JetBrains Mono, monospace", fontSize: "9px",
-                  letterSpacing: "0.25em", textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.25)",
+                  fontFamily: "JetBrains Mono, monospace",
+                  fontSize: "10px",
+                  color: "rgba(255,255,255,0.35)",
+                  letterSpacing: "0.02em",
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
                 }}>
-                  Loading {p.url}
+                  {p.url.replace("https://", "")}
                 </span>
               </div>
-            )}
-            <iframe
-              src={p.url}
-              title={p.title}
-              onLoad={() => setIframeLoaded(true)}
-              style={{
-                width: "200%",
-                height: "200%",
-                border: "none",
-                transform: "scale(0.5)",
-                transformOrigin: "0 0",
-                pointerEvents: "none",
-                opacity: iframeLoaded ? 1 : 0,
-                transition: "opacity 0.5s ease",
-              }}
-              sandbox="allow-scripts allow-same-origin"
-            />
-            {/* Visit overlay */}
-            <a
-              href={p.url}
-              target="_blank"
-              rel="noreferrer"
-              style={{
-                position: "absolute", bottom: "20px", right: "20px",
-                display: "flex", alignItems: "center", gap: "8px",
-                padding: "10px 18px",
-                background: p.color,
-                color: "#000",
-                fontFamily: "JetBrains Mono, monospace",
-                fontSize: "9px", fontWeight: 700,
-                letterSpacing: "0.25em", textTransform: "uppercase",
-                textDecoration: "none",
-                cursor: "none",
-                zIndex: 10,
-              }}
-            >
-              Visit Live Site ↗
-            </a>
+            </div>
+
+            {/* Screenshot image */}
+            <div style={{
+              position: "relative",
+              width: "100%",
+              border: "1px solid rgba(255,255,255,0.06)",
+              borderTop: "none",
+              borderRadius: "0 0 8px 8px",
+              overflow: "hidden",
+              background: "#0A0A12",
+              minHeight: imgLoaded ? "auto" : "280px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}>
+              {/* Loading state */}
+              {!imgLoaded && !imgError && (
+                <div style={{
+                  position: "absolute", inset: 0,
+                  display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                  gap: "12px",
+                }}>
+                  <div style={{
+                    width: "28px", height: "28px", borderRadius: "50%",
+                    border: `2px solid ${p.color}30`,
+                    borderTopColor: p.color,
+                    animation: "spin 0.8s linear infinite",
+                  }} />
+                  <span style={{
+                    fontFamily: "JetBrains Mono, monospace", fontSize: "9px",
+                    letterSpacing: "0.25em", textTransform: "uppercase",
+                    color: "rgba(255,255,255,0.2)",
+                  }}>
+                    Capturing screenshot…
+                  </span>
+                </div>
+              )}
+
+              {/* Error fallback */}
+              {imgError && (
+                <div style={{
+                  padding: "48px 24px",
+                  display: "flex", flexDirection: "column", alignItems: "center", gap: "12px",
+                }}>
+                  <span style={{ fontSize: "32px" }}>🌐</span>
+                  <a href={p.url} target="_blank" rel="noreferrer" style={{
+                    fontFamily: "JetBrains Mono, monospace", fontSize: "10px",
+                    letterSpacing: "0.2em", textTransform: "uppercase",
+                    color: p.color, textDecoration: "none",
+                  }}>
+                    Open {p.title} ↗
+                  </a>
+                </div>
+              )}
+
+              <img
+                src={screenshotUrl}
+                alt={`${p.title} preview`}
+                onLoad={() => setImgLoaded(true)}
+                onError={() => { setImgError(true); setImgLoaded(true); }}
+                style={{
+                  display: imgError ? "none" : "block",
+                  width: "100%",
+                  height: "auto",
+                  opacity: imgLoaded && !imgError ? 1 : 0,
+                  transition: "opacity 0.6s ease",
+                }}
+              />
+
+              {/* Visit overlay */}
+              {imgLoaded && !imgError && (
+                <a
+                  href={p.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    position: "absolute", bottom: "16px", right: "16px",
+                    padding: "8px 16px",
+                    background: p.color, color: "#000",
+                    fontFamily: "JetBrains Mono, monospace",
+                    fontSize: "9px", fontWeight: 700,
+                    letterSpacing: "0.2em", textTransform: "uppercase",
+                    textDecoration: "none", zIndex: 10,
+                    boxShadow: `0 4px 20px ${p.color}40`,
+                  }}
+                >
+                  Visit Live ↗
+                </a>
+              )}
+            </div>
           </div>
 
           {/* RIGHT: details */}
-          <div style={{ padding: "48px 56px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <div style={{ padding: "48px 56px 48px 40px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <div>
               <div style={{
                 fontFamily: "JetBrains Mono, monospace", fontSize: "9px",
@@ -235,35 +319,35 @@ function ExpandPanel({ p, open }) {
               </div>
               <h3 style={{
                 fontFamily: "'Unbounded', sans-serif", fontWeight: 900,
-                fontSize: "clamp(1.5rem, 3vw, 2.5rem)",
+                fontSize: "clamp(1.4rem, 2.5vw, 2.2rem)",
                 color: "#fff", letterSpacing: "-0.03em", lineHeight: 1,
-                margin: "0 0 12px",
+                margin: "0 0 10px",
               }}>
                 {p.title}
               </h3>
               <p style={{
                 fontFamily: "'Unbounded', sans-serif", fontWeight: 400,
-                fontSize: "13px", color: "rgba(255,255,255,0.4)",
-                letterSpacing: "-0.01em", margin: "0 0 28px",
+                fontSize: "12px", color: "rgba(255,255,255,0.35)",
+                letterSpacing: "-0.01em", margin: "0 0 24px",
               }}>
                 {p.subtitle}
               </p>
               <p style={{
                 fontFamily: "Inter, sans-serif", fontSize: "14px",
-                lineHeight: 1.75, color: "rgba(255,255,255,0.55)",
-                margin: "0 0 32px", maxWidth: "480px",
+                lineHeight: 1.8, color: "rgba(255,255,255,0.55)",
+                margin: "0 0 28px",
               }}>
                 {p.description}
               </p>
 
               {/* Tags */}
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "40px" }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "36px" }}>
                 {p.tags.map((tag) => (
                   <span key={tag} style={{
                     fontFamily: "JetBrains Mono, monospace", fontSize: "9px",
-                    letterSpacing: "0.2em", textTransform: "uppercase",
-                    color: "rgba(255,255,255,0.35)",
-                    border: "1px solid rgba(255,255,255,0.08)",
+                    letterSpacing: "0.18em", textTransform: "uppercase",
+                    color: "rgba(255,255,255,0.3)",
+                    border: "1px solid rgba(255,255,255,0.07)",
                     padding: "5px 10px",
                   }}>
                     {tag}
@@ -273,10 +357,10 @@ function ExpandPanel({ p, open }) {
             </div>
 
             {/* Stat */}
-            <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "24px" }}>
+            <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "22px" }}>
               <div style={{
                 fontFamily: "'Unbounded', sans-serif", fontWeight: 900,
-                fontSize: "2.5rem", letterSpacing: "-0.03em",
+                fontSize: "2.2rem", letterSpacing: "-0.03em",
                 color: p.color, lineHeight: 1,
               }}>
                 {p.result}
@@ -284,7 +368,7 @@ function ExpandPanel({ p, open }) {
               <div style={{
                 fontFamily: "JetBrains Mono, monospace", fontSize: "9px",
                 letterSpacing: "0.25em", textTransform: "uppercase",
-                color: "rgba(255,255,255,0.25)", marginTop: "6px",
+                color: "rgba(255,255,255,0.22)", marginTop: "6px",
               }}>
                 {p.resultLabel} · {p.year}
               </div>
@@ -295,6 +379,7 @@ function ExpandPanel({ p, open }) {
     </div>
   );
 }
+
 
 /* ─────────────────────────────────────────────
    PROJECT ROW
