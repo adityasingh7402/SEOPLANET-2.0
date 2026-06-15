@@ -10,11 +10,15 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #05050A; }
 ::-webkit-scrollbar-thumb { background: rgba(0,255,148,0.2); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(0,255,148,0.45); }
 
-/* Prevent default cursor everywhere on portfolio */
+/* Kill default cursor everywhere */
 *, *::before, *::after { cursor: none !important; }
