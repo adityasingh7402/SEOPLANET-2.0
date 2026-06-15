@@ -263,6 +263,11 @@ async def create_new_client(payload: ClientCreate, current_client: dict = Depend
         ],
         "goals": [
             {"title": "Leads per month", "target": 500, "current": 120}
+        ],
+        "full_deliverables": [
+            {"name": "Q3 Content Strategy", "type": "Strategy", "status": "Delivered", "due_date": "2026-06-01", "url": "#"},
+            {"name": "Technical SEO Audit", "type": "Audit", "status": "In Progress", "due_date": "2026-06-20", "url": "#"},
+            {"name": "Backlink Campaign (Tier 1)", "type": "Off-page", "status": "Pending Approval", "due_date": "2026-06-30", "url": "#"}
         ]
     }
     await db.clients.insert_one(client_doc)
@@ -287,6 +292,7 @@ class ClientUpdate(BaseModel):
     keyword_rankings: list = []
     competitors: list = []
     goals: list = []
+    full_deliverables: list = []
 
 @api_router.put("/onboarding/clients/{username}")
 async def update_client(username: str, payload: ClientUpdate, current_client: dict = Depends(get_current_client)):
@@ -303,7 +309,8 @@ async def update_client(username: str, payload: ClientUpdate, current_client: di
         "traffic_trend": payload.traffic_trend,
         "keyword_rankings": payload.keyword_rankings,
         "competitors": payload.competitors,
-        "goals": payload.goals
+        "goals": payload.goals,
+        "full_deliverables": payload.full_deliverables
     }
     result = await db.clients.update_one({"username": username}, {"$set": update_data})
     if result.matched_count == 0:

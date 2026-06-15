@@ -66,7 +66,8 @@ export default function AdminDashboard({ adminData }) {
       traffic_trend: client.traffic_trend || [],
       keyword_rankings: client.keyword_rankings || [],
       competitors: client.competitors || [],
-      goals: client.goals || []
+      goals: client.goals || [],
+      full_deliverables: client.full_deliverables || []
     });
     setEditTab("metrics");
   };
@@ -226,7 +227,7 @@ export default function AdminDashboard({ adminData }) {
               <div className="flex-1 flex overflow-hidden">
                 {/* Editor Tabs */}
                 <div className="w-48 border-r border-white/5 bg-black/20 p-4 space-y-2 overflow-y-auto custom-scrollbar">
-                  {["metrics", "trend", "keywords", "competitors", "goals", "timeline", "activity", "documents"].map(tab => (
+                  {["metrics", "trend", "keywords", "competitors", "goals", "deliverables", "timeline", "activity", "documents"].map(tab => (
                     <button key={tab} onClick={() => setEditTab(tab)} className={`w-full text-left px-4 py-3 rounded-xl font-mono-pro text-[10px] uppercase tracking-wider transition-all ${editTab === tab ? 'bg-[#00D67D]/10 text-[#00D67D]' : 'text-white/50 hover:bg-white/[0.02] hover:text-white'}`}>
                       {tab}
                     </button>
@@ -331,6 +332,33 @@ export default function AdminDashboard({ adminData }) {
                           <input type="number" value={item.target} onChange={e => updateArrayItem("goals", i, "target", Number(e.target.value))} className="w-24 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm" placeholder="Target" />
                           <input type="number" value={item.current} onChange={e => updateArrayItem("goals", i, "current", Number(e.target.value))} className="w-24 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-[#00D67D]" placeholder="Current" />
                           <button onClick={() => removeArrayItem("goals", i)} className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg"><Trash2 className="w-4 h-4"/></button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {editTab === "deliverables" && (
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between mb-4 border-b border-white/10 pb-2">
+                        <h3 className="font-display text-lg font-bold">Deliverables Tracking</h3>
+                        <button onClick={() => addArrayItem("full_deliverables", {name: "New Task", type: "Content", status: "In Progress", due_date: "", url: "#"})} className="text-xs font-mono-pro text-[#00D67D] hover:text-white flex items-center gap-1"><PlusCircle className="w-3 h-3"/> Add Deliverable</button>
+                      </div>
+                      {editForm.full_deliverables.map((item, i) => (
+                        <div key={i} className="flex flex-col gap-2 bg-white/[0.02] p-4 rounded-xl border border-white/5">
+                          <div className="flex gap-2">
+                            <input type="text" value={item.name} onChange={e => updateArrayItem("full_deliverables", i, "name", e.target.value)} className="flex-1 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm" placeholder="Name" />
+                            <input type="text" value={item.type} onChange={e => updateArrayItem("full_deliverables", i, "type", e.target.value)} className="w-32 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm" placeholder="Type" />
+                            <select value={item.status} onChange={e => updateArrayItem("full_deliverables", i, "status", e.target.value)} className="w-40 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white">
+                              <option value="In Progress">In Progress</option>
+                              <option value="Pending Approval">Pending Approval</option>
+                              <option value="Delivered">Delivered</option>
+                            </select>
+                            <button onClick={() => removeArrayItem("full_deliverables", i)} className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg"><Trash2 className="w-4 h-4"/></button>
+                          </div>
+                          <div className="flex gap-2">
+                            <input type="text" value={item.due_date} onChange={e => updateArrayItem("full_deliverables", i, "due_date", e.target.value)} className="w-40 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-[#00D67D]" placeholder="Due Date (YYYY-MM-DD)" />
+                            <input type="text" value={item.url} onChange={e => updateArrayItem("full_deliverables", i, "url", e.target.value)} className="flex-1 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-[#00D67D]" placeholder="File/Folder URL" />
+                          </div>
                         </div>
                       ))}
                     </div>
