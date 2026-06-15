@@ -268,19 +268,16 @@ export default function Work() {
         </div>
 
         {/* View Full Portfolio Button */}
-        <motion.div {...reveal} className="mt-16 sm:mt-24 flex justify-center">
+        <motion.div {...reveal} className="mt-16 sm:mt-24 flex justify-center px-6">
           <a
             href="https://portfolio.seoplanet.in"
             target="_blank"
             rel="noreferrer"
-            className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-transparent border border-[#00FF94] text-[#00FF94] font-mono-pro text-xs font-bold uppercase tracking-widest overflow-hidden transition-all duration-300 hover:text-black"
+            className="group inline-flex justify-center items-center gap-3 rounded-full bg-[#00FF94] text-black px-7 py-4 font-mono-pro text-xs uppercase tracking-[0.25em] font-bold hover:bg-white transition-colors active:scale-95 w-full sm:w-auto"
+            style={{ animation: "pulse-ring 2.6s infinite" }}
           >
-            {/* Background fill on hover */}
-            <div className="absolute inset-0 w-full h-full bg-[#00FF94] transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out z-0" />
-            
-            <span className="relative z-10 flex items-center gap-2">
-              View Full Portfolio <ArrowUpRight className="w-4 h-4 group-hover:rotate-45 transition-transform duration-300" />
-            </span>
+            View Full Portfolio
+            <ArrowUpRight className="w-4 h-4 transition-transform group-hover:rotate-45" />
           </a>
         </motion.div>
       </div>
