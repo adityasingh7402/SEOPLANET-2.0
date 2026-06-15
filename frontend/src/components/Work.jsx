@@ -206,7 +206,7 @@ export default function Work() {
             </h2>
           </div>
           <p className="font-mono-pro text-sm text-white/55 max-w-sm">
-            Verified case studies from brands we&apos;ve helped scale. No vanity metrics — just outcomes.
+            Verified case studies from brands we&apos;ve helped scale. No vanity metrics - just outcomes.
           </p>
         </motion.div>
 

@@ -7,7 +7,7 @@ const steps = [
     code: "PHASE 01",
     icon: Telescope,
     title: "Discovery & Audit",
-    desc: "We audit the full picture — competitors, search intent, technical debt, and current trajectory. You get a real map, not a slide deck.",
+    desc: "We audit the full picture - competitors, search intent, technical debt, and current trajectory. You get a real map, not a slide deck.",
     duration: "Week 1–2",
   },
   {
@@ -21,7 +21,7 @@ const steps = [
     code: "PHASE 03",
     icon: Rocket,
     title: "Execution & Launch",
-    desc: "Production at velocity — content shipped weekly, ads live in 5 days, technical fixes deployed in sprints. You feel the lift fast.",
+    desc: "Production at velocity - content shipped weekly, ads live in 5 days, technical fixes deployed in sprints. You feel the lift fast.",
     duration: "Month 2–5",
   },
   {

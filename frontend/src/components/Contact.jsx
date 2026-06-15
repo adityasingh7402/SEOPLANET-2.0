@@ -99,7 +99,7 @@ export default function Contact() {
           </h2>
           <p className="mt-6 font-mono-pro text-sm text-white/55 max-w-xl mx-auto">
             Tell us about your goals. We&apos;ll respond within 24 hours with a
-            short brief — no sales script.
+            short brief - no sales script.
           </p>
         </motion.div>
 
@@ -262,7 +262,7 @@ export default function Contact() {
               <p className="overline mb-3">Office</p>
               <p className="font-mono-pro text-sm text-white/80 leading-relaxed">
                 482, Dwarka Sector 15 <br />
-                New Delhi — 110075 <br />
+                New Delhi - 110075 <br />
                 India
               </p>
             </div>
@@ -270,7 +270,7 @@ export default function Contact() {
             <div className="rounded-2xl neon-border p-5 sm:p-7 bg-[#0A0F0C]" data-testid="contact-details-availability">
               <p className="overline mb-3">Availability</p>
               <p className="font-mono-pro text-sm text-white/80">
-                Q1 2026 — <span className="neon-text">2 spots open</span>
+                Q1 2026 - <span className="neon-text">2 spots open</span>
               </p>
               <p className="mt-2 text-[11px] font-mono-pro text-white/45">
                 We onboard 6 partners per year. Fit first.

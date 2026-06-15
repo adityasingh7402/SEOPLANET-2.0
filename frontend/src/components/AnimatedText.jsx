@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 
 /**
- * Animated text — splits text into words & letters and reveals
+ * Animated text - splits text into words & letters and reveals
  * each letter with a staggered "rise" animation, gated by viewport.
  */
 export default function AnimatedText({
