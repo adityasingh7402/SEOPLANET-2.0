@@ -67,7 +67,9 @@ export default function AdminDashboard({ adminData }) {
       keyword_rankings: client.keyword_rankings || [],
       competitors: client.competitors || [],
       goals: client.goals || [],
-      full_deliverables: client.full_deliverables || []
+      full_deliverables: client.full_deliverables || [],
+      content_calendar: client.content_calendar || [],
+      monthly_reports: client.monthly_reports || []
     });
     setEditTab("metrics");
   };
@@ -227,7 +229,7 @@ export default function AdminDashboard({ adminData }) {
               <div className="flex-1 flex overflow-hidden">
                 {/* Editor Tabs */}
                 <div className="w-48 border-r border-white/5 bg-black/20 p-4 space-y-2 overflow-y-auto custom-scrollbar">
-                  {["metrics", "trend", "keywords", "competitors", "goals", "deliverables", "timeline", "activity", "documents"].map(tab => (
+                  {["metrics", "trend", "keywords", "competitors", "goals", "deliverables", "content", "reports", "timeline", "activity", "documents"].map(tab => (
                     <button key={tab} onClick={() => setEditTab(tab)} className={`w-full text-left px-4 py-3 rounded-xl font-mono-pro text-[10px] uppercase tracking-wider transition-all ${editTab === tab ? 'bg-[#00D67D]/10 text-[#00D67D]' : 'text-white/50 hover:bg-white/[0.02] hover:text-white'}`}>
                       {tab}
                     </button>
@@ -359,6 +361,51 @@ export default function AdminDashboard({ adminData }) {
                             <input type="text" value={item.due_date} onChange={e => updateArrayItem("full_deliverables", i, "due_date", e.target.value)} className="w-40 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-[#00D67D]" placeholder="Due Date (YYYY-MM-DD)" />
                             <input type="text" value={item.url} onChange={e => updateArrayItem("full_deliverables", i, "url", e.target.value)} className="flex-1 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-[#00D67D]" placeholder="File/Folder URL" />
                           </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {editTab === "content" && (
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between mb-4 border-b border-white/10 pb-2">
+                        <h3 className="font-display text-lg font-bold">Content Calendar</h3>
+                        <button onClick={() => addArrayItem("content_calendar", {title: "New Post", keyword: "", publish_date: "", status: "Pending Approval"})} className="text-xs font-mono-pro text-[#00D67D] hover:text-white flex items-center gap-1"><PlusCircle className="w-3 h-3"/> Add Content</button>
+                      </div>
+                      {editForm.content_calendar.map((item, i) => (
+                        <div key={i} className="flex flex-col gap-2 bg-white/[0.02] p-4 rounded-xl border border-white/5">
+                          <div className="flex gap-2">
+                            <input type="text" value={item.title} onChange={e => updateArrayItem("content_calendar", i, "title", e.target.value)} className="flex-1 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm" placeholder="Title" />
+                            <input type="text" value={item.keyword} onChange={e => updateArrayItem("content_calendar", i, "keyword", e.target.value)} className="w-40 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm" placeholder="Target Keyword" />
+                          </div>
+                          <div className="flex gap-2">
+                            <input type="text" value={item.publish_date} onChange={e => updateArrayItem("content_calendar", i, "publish_date", e.target.value)} className="w-40 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-[#00D67D]" placeholder="Date (YYYY-MM-DD)" />
+                            <select value={item.status} onChange={e => updateArrayItem("content_calendar", i, "status", e.target.value)} className="flex-1 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white">
+                              <option value="Drafting">Drafting</option>
+                              <option value="Pending Approval">Pending Approval</option>
+                              <option value="Approved">Approved</option>
+                              <option value="Revision Requested">Revision Requested</option>
+                              <option value="Published">Published</option>
+                            </select>
+                            <button onClick={() => removeArrayItem("content_calendar", i)} className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg"><Trash2 className="w-4 h-4"/></button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {editTab === "reports" && (
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between mb-4 border-b border-white/10 pb-2">
+                        <h3 className="font-display text-lg font-bold">Monthly Reports</h3>
+                        <button onClick={() => addArrayItem("monthly_reports", {title: "Monthly Report", month: "", url: "#"})} className="text-xs font-mono-pro text-[#00D67D] hover:text-white flex items-center gap-1"><PlusCircle className="w-3 h-3"/> Add Report</button>
+                      </div>
+                      {editForm.monthly_reports.map((item, i) => (
+                        <div key={i} className="flex gap-2 items-start bg-white/[0.02] p-4 rounded-xl border border-white/5">
+                          <input type="text" value={item.title} onChange={e => updateArrayItem("monthly_reports", i, "title", e.target.value)} className="flex-1 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm" placeholder="Title (e.g. Q1 Summary)" />
+                          <input type="text" value={item.month} onChange={e => updateArrayItem("monthly_reports", i, "month", e.target.value)} className="w-32 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm" placeholder="Month" />
+                          <input type="text" value={item.url} onChange={e => updateArrayItem("monthly_reports", i, "url", e.target.value)} className="w-48 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-[#00D67D]" placeholder="PDF Link URL" />
+                          <button onClick={() => removeArrayItem("monthly_reports", i)} className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg"><Trash2 className="w-4 h-4"/></button>
                         </div>
                       ))}
                     </div>

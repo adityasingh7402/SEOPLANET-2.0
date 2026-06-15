@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
-import { LogOut, Loader2, FileText, CheckCircle2, Clock, PlayCircle, TrendingUp, Target, Shield, Link, Activity, Lock, Users, Search, LayoutDashboard, LayoutGrid, List, Download, CheckCircle, CircleDashed } from "lucide-react";
+import { LogOut, Loader2, FileText, CheckCircle2, Clock, PlayCircle, TrendingUp, Target, Shield, Link, Activity, Lock, Users, Search, LayoutDashboard, LayoutGrid, List, Download, CheckCircle, CircleDashed, Calendar, BarChart3, Calculator } from "lucide-react";
 import axios from "axios";
 import AdminDashboard from "./AdminDashboard";
 import { AreaChart, Area, Tooltip, ResponsiveContainer } from "recharts";
@@ -87,8 +87,24 @@ export default function Dashboard() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showDashboard, setShowDashboard] = useState(false);
-  const [activeTab, setActiveTab] = useState("overview"); // "overview" | "deliverables"
+  const [activeTab, setActiveTab] = useState("overview"); // "overview" | "deliverables" | "content" | "reports"
   const [viewMode, setViewMode] = useState("table"); // "table" | "kanban"
+  const [aov, setAov] = useState(500);
+  const [conversionRate, setConversionRate] = useState(2.5);
+
+  const handleContentStatus = async (index, newStatus) => {
+    try {
+      await axios.put("https://seoplanet-2-0.onrender.com/api/onboarding/clients/me/content-status", {
+        item_index: index,
+        status: newStatus
+      });
+      const newData = { ...data };
+      newData.content_calendar[index].status = newStatus;
+      setData(newData);
+    } catch (err) {
+      console.error("Failed to update status", err);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -159,6 +175,18 @@ export default function Dashboard() {
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl font-mono-pro text-xs uppercase tracking-widest transition-all duration-300 ${activeTab === "deliverables" ? 'bg-[#00FF94]/10 text-[#00FF94] border border-[#00FF94]/20 shadow-[0_0_20px_rgba(0,255,148,0.1)]' : 'text-white/40 hover:text-white hover:bg-white/5 border border-transparent'}`}
               >
                 <Activity className="w-4 h-4" /> Deliverables
+              </button>
+              <button 
+                onClick={() => setActiveTab("content")}
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl font-mono-pro text-xs uppercase tracking-widest transition-all duration-300 ${activeTab === "content" ? 'bg-[#00FF94]/10 text-[#00FF94] border border-[#00FF94]/20 shadow-[0_0_20px_rgba(0,255,148,0.1)]' : 'text-white/40 hover:text-white hover:bg-white/5 border border-transparent'}`}
+              >
+                <Calendar className="w-4 h-4" /> Content
+              </button>
+              <button 
+                onClick={() => setActiveTab("reports")}
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl font-mono-pro text-xs uppercase tracking-widest transition-all duration-300 ${activeTab === "reports" ? 'bg-[#00FF94]/10 text-[#00FF94] border border-[#00FF94]/20 shadow-[0_0_20px_rgba(0,255,148,0.1)]' : 'text-white/40 hover:text-white hover:bg-white/5 border border-transparent'}`}
+              >
+                <BarChart3 className="w-4 h-4" /> Reports
               </button>
             </div>
           </div>
@@ -562,6 +590,147 @@ export default function Dashboard() {
                   })}
                 </div>
               )}
+            </motion.div>
+            ) : activeTab === "content" ? (
+            <motion.div key="content" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }} className="space-y-8">
+              <div>
+                <h2 className="font-display text-3xl font-bold text-white mb-2">Content Calendar</h2>
+                <p className="font-mono-pro text-sm text-white/50">Review and approve upcoming content pieces before publication.</p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {data.content_calendar && data.content_calendar.length > 0 ? data.content_calendar.map((item, i) => (
+                  <div key={i} className="glass rounded-2xl border border-white/10 overflow-hidden flex flex-col group hover:border-white/20 transition-colors">
+                    <div className="p-6 flex-1 border-b border-white/5">
+                      <div className="flex justify-between items-start mb-4">
+                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-mono-pro text-[9px] uppercase tracking-widest ${
+                          item.status === 'Approved' ? 'bg-[#00FF94]/10 text-[#00FF94] border border-[#00FF94]/20' : 
+                          item.status === 'Revision Requested' ? 'bg-red-400/10 text-red-400 border border-red-400/20' :
+                          'bg-[#FF9F0A]/10 text-[#FF9F0A] border border-[#FF9F0A]/20'
+                        }`}>
+                          {item.status}
+                        </span>
+                        <div className="flex items-center gap-2 text-white/40">
+                          <Clock className="w-3.5 h-3.5" />
+                          <span className="font-mono-pro text-[10px] uppercase">{item.publish_date || "TBD"}</span>
+                        </div>
+                      </div>
+                      <h3 className="font-display font-bold text-xl text-white mb-2">{item.title}</h3>
+                      <div className="inline-flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-lg border border-white/5">
+                        <Search className="w-3.5 h-3.5 text-white/40" />
+                        <span className="font-mono-pro text-xs text-white/60">{item.keyword}</span>
+                      </div>
+                    </div>
+                    {item.status === "Pending Approval" && (
+                      <div className="grid grid-cols-2 bg-black/20">
+                        <button onClick={() => handleContentStatus(i, "Approved")} className="py-4 font-mono-pro text-xs uppercase tracking-widest text-[#00FF94] hover:bg-[#00FF94]/10 transition-colors border-r border-white/5">
+                          Approve
+                        </button>
+                        <button onClick={() => handleContentStatus(i, "Revision Requested")} className="py-4 font-mono-pro text-xs uppercase tracking-widest text-red-400 hover:bg-red-400/10 transition-colors">
+                          Revise
+                        </button>
+                      </div>
+                    )}
+                    {item.status === "Approved" && (
+                      <div className="py-4 text-center bg-[#00FF94]/5 border-t border-[#00FF94]/10">
+                        <span className="font-mono-pro text-xs uppercase tracking-widest text-[#00FF94] flex items-center justify-center gap-2">
+                          <CheckCircle className="w-4 h-4" /> Ready for Publication
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                )) : (
+                  <div className="col-span-full py-12 text-center glass rounded-2xl border border-white/10">
+                    <Calendar className="w-8 h-8 text-white/20 mx-auto mb-4" />
+                    <p className="font-mono-pro text-xs text-white/40 uppercase tracking-widest">No content scheduled.</p>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+            ) : (
+            <motion.div key="reports" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }} className="grid lg:grid-cols-12 gap-12 lg:gap-16">
+              
+              <div className="lg:col-span-8 space-y-8">
+                <div>
+                  <h2 className="font-display text-3xl font-bold text-white mb-2">Monthly Intelligence</h2>
+                  <p className="font-mono-pro text-sm text-white/50">Comprehensive performance reports and strategic insights.</p>
+                </div>
+                
+                <div className="space-y-4">
+                  {data.monthly_reports && data.monthly_reports.length > 0 ? data.monthly_reports.map((item, i) => (
+                    <div key={i} className="glass rounded-2xl p-6 border border-white/10 flex items-center justify-between group hover:border-[#00FF94]/40 transition-all duration-300">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-black/40 border border-white/5 flex items-center justify-center">
+                          <FileText className="w-6 h-6 text-[#00FF94]" />
+                        </div>
+                        <div>
+                          <h3 className="font-display font-bold text-lg text-white mb-1">{item.title}</h3>
+                          <p className="font-mono-pro text-xs uppercase tracking-widest text-white/40">{item.month}</p>
+                        </div>
+                      </div>
+                      <a href={item.url} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3 rounded-xl bg-white/5 text-white hover:bg-[#00FF94] hover:text-black font-mono-pro text-xs uppercase tracking-widest font-bold transition-all duration-300">
+                        <Download className="w-4 h-4" /> Download PDF
+                      </a>
+                    </div>
+                  )) : (
+                    <div className="py-12 text-center glass rounded-2xl border border-white/10">
+                      <p className="font-mono-pro text-xs text-white/40 uppercase tracking-widest">No reports available yet.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="lg:col-span-4">
+                <div className="glass rounded-3xl p-8 border border-[#00FF94]/20 relative overflow-hidden sticky top-8">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-[#00FF94]/10 blur-[80px] rounded-full pointer-events-none" />
+                  
+                  <div className="flex items-center gap-3 mb-8">
+                    <div className="w-10 h-10 rounded-xl bg-[#00FF94]/10 flex items-center justify-center">
+                      <Calculator className="w-5 h-5 text-[#00FF94]" />
+                    </div>
+                    <h3 className="font-display font-bold text-xl text-white">ROI Calculator</h3>
+                  </div>
+
+                  <div className="space-y-6">
+                    <div>
+                      <div className="flex justify-between mb-2">
+                        <label className="font-mono-pro text-xs uppercase tracking-widest text-white/60">Avg Order Value</label>
+                        <span className="font-mono-pro text-xs text-[#00FF94]">${aov}</span>
+                      </div>
+                      <input 
+                        type="range" 
+                        min="10" max="5000" step="10"
+                        value={aov} 
+                        onChange={e => setAov(Number(e.target.value))}
+                        className="w-full accent-[#00FF94]"
+                      />
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between mb-2">
+                        <label className="font-mono-pro text-xs uppercase tracking-widest text-white/60">Conversion Rate</label>
+                        <span className="font-mono-pro text-xs text-[#00FF94]">{conversionRate}%</span>
+                      </div>
+                      <input 
+                        type="range" 
+                        min="0.1" max="10" step="0.1"
+                        value={conversionRate} 
+                        onChange={e => setConversionRate(Number(e.target.value))}
+                        className="w-full accent-[#00FF94]"
+                      />
+                    </div>
+
+                    <div className="pt-6 border-t border-white/10">
+                      <p className="font-mono-pro text-xs uppercase tracking-widest text-white/40 mb-2">Est. Organic Revenue/Mo</p>
+                      <p className="font-display font-black text-4xl text-[#00FF94]">
+                        ${(parseInt((data.metrics?.traffic || "0").toString().replace(/,/g, '')) * (conversionRate / 100) * aov).toLocaleString(undefined, {maximumFractionDigits: 0})}
+                      </p>
+                      <p className="font-mono-pro text-[10px] text-white/30 mt-2">Based on current traffic: {data.metrics?.traffic || "0"}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </motion.div>
             )}
             </AnimatePresence>

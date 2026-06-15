@@ -268,6 +268,13 @@ async def create_new_client(payload: ClientCreate, current_client: dict = Depend
             {"name": "Q3 Content Strategy", "type": "Strategy", "status": "Delivered", "due_date": "2026-06-01", "url": "#"},
             {"name": "Technical SEO Audit", "type": "Audit", "status": "In Progress", "due_date": "2026-06-20", "url": "#"},
             {"name": "Backlink Campaign (Tier 1)", "type": "Off-page", "status": "Pending Approval", "due_date": "2026-06-30", "url": "#"}
+        ],
+        "content_calendar": [
+            {"title": "10 SEO Trends for 2026", "keyword": "seo trends", "publish_date": "2026-07-05", "status": "Pending Approval"},
+            {"title": "How to do Local SEO", "keyword": "local seo guide", "publish_date": "2026-07-12", "status": "Approved"}
+        ],
+        "monthly_reports": [
+            {"title": "May 2026 Performance", "month": "May 2026", "url": "#"}
         ]
     }
     await db.clients.insert_one(client_doc)
@@ -293,6 +300,8 @@ class ClientUpdate(BaseModel):
     competitors: list = []
     goals: list = []
     full_deliverables: list = []
+    content_calendar: list = []
+    monthly_reports: list = []
 
 @api_router.put("/onboarding/clients/{username}")
 async def update_client(username: str, payload: ClientUpdate, current_client: dict = Depends(get_current_client)):
@@ -310,12 +319,33 @@ async def update_client(username: str, payload: ClientUpdate, current_client: di
         "keyword_rankings": payload.keyword_rankings,
         "competitors": payload.competitors,
         "goals": payload.goals,
-        "full_deliverables": payload.full_deliverables
+        "full_deliverables": payload.full_deliverables,
+        "content_calendar": payload.content_calendar,
+        "monthly_reports": payload.monthly_reports
     }
     result = await db.clients.update_one({"username": username}, {"$set": update_data})
     if result.matched_count == 0:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Client not found")
     return {"status": "success", "message": "Client updated"}
+
+class ContentStatusUpdate(BaseModel):
+    item_index: int
+    status: str
+
+@api_router.put("/onboarding/clients/me/content-status")
+async def update_content_status(payload: ContentStatusUpdate, current_client: dict = Depends(get_current_client)):
+    if not current_client or current_client.get("username") == "admin":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Only clients can update content status")
+    
+    username = current_client["username"]
+    update_field = f"content_calendar.{payload.item_index}.status"
+    result = await db.clients.update_one(
+        {"username": username},
+        {"$set": {update_field: payload.status}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Client not found")
+    return {"status": "success", "message": "Status updated"}
 
 
 @api_router.post("/status", response_model=StatusCheck)
