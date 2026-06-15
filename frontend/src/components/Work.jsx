@@ -266,6 +266,23 @@ export default function Work() {
             </TiltCard>
           ))}
         </div>
+
+        {/* View Full Portfolio Button */}
+        <motion.div {...reveal} className="mt-16 sm:mt-24 flex justify-center">
+          <a
+            href="https://portfolio.seoplanet.in"
+            target="_blank"
+            rel="noreferrer"
+            className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-transparent border border-[#00FF94] text-[#00FF94] font-mono-pro text-xs font-bold uppercase tracking-widest overflow-hidden transition-all duration-300 hover:text-black"
+          >
+            {/* Background fill on hover */}
+            <div className="absolute inset-0 w-full h-full bg-[#00FF94] transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out z-0" />
+            
+            <span className="relative z-10 flex items-center gap-2">
+              View Full Portfolio <ArrowUpRight className="w-4 h-4 group-hover:rotate-45 transition-transform duration-300" />
+            </span>
+          </a>
+        </motion.div>
       </div>
     </section>
   );
