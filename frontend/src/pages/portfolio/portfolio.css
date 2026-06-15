@@ -24,3 +24,13 @@
 .portfolio-root, .portfolio-root *, .portfolio-root *::before, .portfolio-root *::after { 
   cursor: none !important; 
 }
+
+/* Marquee Animation */
+.portfolio-marquee {
+  animation: portfolioMarquee 25s linear infinite;
+}
+
+@keyframes portfolioMarquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
