@@ -1,48 +1,85 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
-import { 
-  LogOut, Loader2, LineChart, Bell, TrendingUp, FileText, Activity, 
-  ClipboardCheck, Calendar, Clock, MessageSquare, Video, Receipt, Folder, 
-  Calculator, Sparkles, Lock, Target, Gift, Mail, Phone, Download
-} from "lucide-react";
+import { LogOut, Loader2, FileText, CheckCircle2, Clock, PlayCircle, TrendingUp, Target, Shield, Link, Activity, Lock } from "lucide-react";
 import axios from "axios";
 import AdminDashboard from "./AdminDashboard";
-import { AreaChart, Area, Tooltip, ResponsiveContainer } from "recharts";
 
-function ElegantLoader({ companyName, onComplete }) {
+function CinematicLoader({ companyName, onComplete }) {
+  const [phase, setPhase] = useState(0);
+
   useEffect(() => {
-    const t = setTimeout(() => onComplete(), 2500);
-    return () => clearTimeout(t);
+    const t1 = setTimeout(() => setPhase(1), 1200);
+    const t2 = setTimeout(() => setPhase(2), 2400);
+    const t3 = setTimeout(() => onComplete(), 4000);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, [onComplete]);
 
   return (
     <motion.div 
-      exit={{ opacity: 0, y: -20 }} 
+      exit={{ opacity: 0, scale: 1.05 }} 
       transition={{ duration: 0.8, ease: "easeInOut" }}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#0A0A0C] text-[#FAFAFA]"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#05050A] text-white grain"
     >
+      <div className="absolute inset-0 grid-bg opacity-20" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#00FF94]/10 blur-[150px] animate-pulse" />
+      
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
+        initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="flex flex-col items-center text-center"
+        transition={{ duration: 0.5 }}
+        className="relative z-10 flex flex-col items-center"
       >
-        <Loader2 className="w-8 h-8 text-[#00D67D] animate-spin mb-6" />
-        <p className="font-display text-2xl font-bold mb-2">Preparing your workspace</p>
-        <p className="font-mono-pro text-sm text-white/50">{companyName}</p>
+        <Lock className="w-12 h-12 text-[#00FF94] mb-8 opacity-80" />
+        
+        <div className="h-12 flex items-center justify-center">
+          <AnimatePresence mode="wait">
+            {phase === 0 && (
+              <motion.p key="p0" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="font-mono-pro text-sm uppercase tracking-[0.3em] text-white/50">
+                Decrypting Secure Channel...
+              </motion.p>
+            )}
+            {phase === 1 && (
+              <motion.p key="p1" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="font-mono-pro text-sm uppercase tracking-[0.3em] text-white/50">
+                Synchronizing Strategy Vault...
+              </motion.p>
+            )}
+            {phase === 2 && (
+              <motion.div key="p2" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center">
+                <p className="font-display text-3xl font-bold text-[#00FF94] mb-2 drop-shadow-[0_0_15px_rgba(0,255,148,0.5)]">ACCESS GRANTED</p>
+                <p className="font-mono-pro text-xs uppercase tracking-[0.4em] text-white">Welcome, {companyName}</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+        
+        {phase < 2 && (
+          <div className="w-64 h-1 bg-white/10 rounded-full mt-8 overflow-hidden">
+            <motion.div 
+              initial={{ width: "0%" }} 
+              animate={{ width: "100%" }} 
+              transition={{ duration: 2.4, ease: "linear" }}
+              className="h-full bg-[#00FF94] shadow-[0_0_10px_#00FF94]"
+            />
+          </div>
+        )}
       </motion.div>
     </motion.div>
   );
 }
 
-// MOCK DATA for KPI Chart
-const chartData = [
-  { name: "Week 1", traffic: 4000 },
-  { name: "Week 2", traffic: 5000 },
-  { name: "Week 3", traffic: 6500 },
-  { name: "Week 4", traffic: 8000 },
-];
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.3 }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+};
 
 export default function Dashboard() {
   const { logout } = useAuth();
@@ -57,295 +94,221 @@ export default function Dashboard() {
         setData(res.data.data);
       } catch (err) {
         console.error("Dashboard fetch error", err);
-        if (err.response?.status === 401 || err.response?.status === 403) logout();
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, [logout]);
+  }, []);
 
-  if (loading && !data) return <div className="min-h-screen bg-[#0A0A0C]" />;
-  if (!data) return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#0A0A0C] text-[#FAFAFA]">
-      <p className="font-mono-pro text-sm text-white/50 mb-4">Session expired.</p>
-      <button onClick={logout} className="px-6 py-2 bg-[#00D67D]/10 text-[#00D67D] rounded-lg font-mono-pro text-xs uppercase tracking-wider hover:bg-[#00D67D] hover:text-black transition-colors">
-        Return to Login
-      </button>
-    </div>
-  );
+  if (loading && !data) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center bg-[#05050A]">
+        <Loader2 className="w-8 h-8 text-[#00FF94] animate-spin" />
+      </div>
+    );
+  }
 
-  if (data.username === "admin") return <AdminDashboard adminData={data} />;
+  if (!data) return null;
+
+  if (data.username === "admin") {
+    return <AdminDashboard adminData={data} />;
+  }
 
   return (
     <>
       <AnimatePresence>
-        {!showDashboard && <ElegantLoader companyName={data.company_name} onComplete={() => setShowDashboard(true)} />}
+        {!showDashboard && (
+          <CinematicLoader companyName={data.company_name} onComplete={() => setShowDashboard(true)} />
+        )}
       </AnimatePresence>
 
       {showDashboard && (
-        <div className="min-h-screen w-full bg-[#0A0A0C] text-[#FAFAFA] overflow-x-hidden pb-32">
-          <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] rounded-full bg-[#00D67D]/5 blur-[120px] pointer-events-none" />
+        <div className="min-h-screen w-full bg-[#05050A] text-white overflow-hidden grain selection:bg-[#00FF94] selection:text-black">
+          <div className="fixed inset-0 grid-bg opacity-10 pointer-events-none" />
+          <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] rounded-full bg-[#00FF94]/5 blur-[150px] pointer-events-none" />
 
-          <header className="relative z-10 border-b border-white/5 bg-[#0A0A0C]/80 backdrop-blur-2xl">
-            <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          <header className="relative z-10 border-b border-white/5 bg-[#0A0A0F]/80 backdrop-blur-xl">
+            <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className="font-display font-bold tracking-widest text-sm uppercase">SEO PLANET</span>
-                <span className="text-white/20">|</span>
-                <span className="font-mono-pro text-xs uppercase tracking-widest text-white/50">Client Portal</span>
+                <div className="w-2 h-2 rounded-full bg-[#00FF94] shadow-[0_0_10px_#00FF94] animate-pulse" />
+                <span className="font-display font-bold tracking-widest text-sm uppercase">
+                  SEO PLANET <span className="text-white/20 mx-3">|</span> <span className="text-[#00FF94]">Secure Portal</span>
+                </span>
               </div>
-              <button onClick={logout} className="flex items-center gap-2 text-xs font-mono-pro text-white/50 hover:text-[#00D67D] transition-colors">
-                <LogOut className="w-4 h-4" /> Disconnect
+              <button onClick={logout} className="group flex items-center gap-2 text-xs font-mono-pro text-white/50 hover:text-white transition-colors">
+                <LogOut className="w-4 h-4 group-hover:text-[#00FF94] transition-colors" /> Disconnect
               </button>
             </div>
           </header>
 
-          <main className="relative z-10 max-w-7xl mx-auto px-6 py-12 sm:py-24 space-y-20">
-            
-            <div className="text-center md:text-left">
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter leading-[1.1] mb-6">
-                Welcome back,<br/>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/40">{data.company_name}</span>
-              </h1>
-              <p className="font-mono-pro text-base sm:text-lg text-white/50 max-w-2xl leading-relaxed">
-                Your bespoke SEO command center. Everything you need to track performance, manage deliverables, and stay connected.
-              </p>
-            </div>
+          <main className="relative z-10 max-w-6xl mx-auto px-6 py-12 sm:py-20">
+            <motion.div variants={containerVariants} initial="hidden" animate="show" className="grid lg:grid-cols-12 gap-12 lg:gap-16">
+              
+              {/* Left Column */}
+              <div className="lg:col-span-7 space-y-12">
+                <motion.div variants={itemVariants}>
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00FF94]/10 border border-[#00FF94]/20 mb-6">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#00FF94] shadow-[0_0_8px_#00FF94]" />
+                    <span className="font-mono-pro text-[10px] text-[#00FF94] uppercase tracking-widest">Exclusive Portal Activated</span>
+                  </div>
+                  <h1 className="font-display text-4xl sm:text-6xl font-black tracking-tighter leading-none mb-6">
+                    Command Center:<br/>
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/50">{data.company_name}</span>
+                  </h1>
+                  <p className="font-mono-pro text-sm text-white/60 leading-relaxed max-w-lg">
+                    Your dedicated SEO engine is live. All strategic assets, real-time analytics, and execution roadmaps are fully synchronized and accessible below.
+                  </p>
+                </motion.div>
 
-            {/* 1. WELCOME ZONE */}
-            <section className="space-y-6">
-               <h2 className="overline-premium text-white/40 mb-6">WELCOME ZONE — FIRST THING THEY SEE</h2>
-               <div className="grid lg:grid-cols-2 gap-6">
-                  {/* Campaign snapshot */}
-                  <div className="glass rounded-3xl p-8 border border-white/5 relative group hover:bg-white/[0.02] transition-colors">
-                    <LineChart className="w-6 h-6 text-[#00D67D] mb-6" />
-                    <h3 className="font-display text-2xl font-bold mb-2">Campaign Snapshot</h3>
-                    <p className="font-mono-pro text-sm text-white/50 mb-8 max-w-sm">Live overview of active campaigns — traffic, rankings, leads — all in one glance.</p>
-                    
-                    {data.metrics && (
-                      <div className="grid grid-cols-2 gap-4">
-                        {[
-                          { label: "Organic Traffic", value: data.metrics.traffic },
-                          { label: "Top 3 Rankings", value: data.metrics.rankings },
-                          { label: "Domain Auth", value: data.metrics.da },
-                          { label: "New Backlinks", value: data.metrics.backlinks }
-                        ].map((m, i) => (
-                          <div key={i} className="p-4 bg-black/20 rounded-xl border border-white/5">
-                            <p className="font-display text-xl font-bold">{m.value}</p>
-                            <p className="font-mono-pro text-[10px] uppercase tracking-wider text-white/40">{m.label}</p>
+                <div className="space-y-12">
+                  
+                  {/* Client Metrics */}
+                  {data.metrics && (
+                    <motion.div variants={itemVariants} className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                      {[
+                        { label: "Organic Traffic", value: data.metrics.traffic, icon: TrendingUp },
+                        { label: "Top 3 Rankings", value: data.metrics.rankings, icon: Target },
+                        { label: "Domain Auth", value: data.metrics.da, icon: Shield },
+                        { label: "New Backlinks", value: data.metrics.backlinks, icon: Link }
+                      ].map((m, i) => (
+                        <motion.div 
+                          key={i} 
+                          whileHover={{ y: -4, scale: 1.02 }}
+                          className="group relative glass rounded-2xl p-6 border border-white/10 hover:border-[#00FF94]/40 hover:shadow-[0_0_30px_rgba(0,255,148,0.1)] transition-all duration-300"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-br from-[#00FF94]/0 to-[#00FF94]/[0.02] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <m.icon className="w-6 h-6 text-[#00FF94] mb-4 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300" />
+                          <p className="font-display font-black text-3xl mb-1 tracking-tight">{m.value}</p>
+                          <p className="font-mono-pro text-[10px] uppercase tracking-widest text-white/40">{m.label}</p>
+                        </motion.div>
+                      ))}
+                    </motion.div>
+                  )}
+
+                  {/* Campaign Roadmap */}
+                  <motion.div variants={itemVariants}>
+                    <h3 className="overline text-white/40 mb-10 flex items-center gap-3">
+                      <div className="w-8 h-[1px] bg-white/20" /> Campaign Roadmap
+                    </h3>
+                    <div className="relative ml-4 space-y-14">
+                      {/* Animated vertical line */}
+                      <div className="absolute top-2 bottom-2 left-[-1px] w-[2px] bg-white/5 rounded-full overflow-hidden">
+                        <motion.div 
+                          initial={{ height: 0 }} 
+                          animate={{ height: "100%" }} 
+                          transition={{ duration: 3, ease: "easeOut", delay: 1 }}
+                          className="w-full bg-gradient-to-b from-[#00FF94] to-transparent shadow-[0_0_10px_#00FF94]" 
+                        />
+                      </div>
+
+                      {data.timeline?.map((item, i) => (
+                        <motion.div key={i} whileHover={{ x: 4 }} className="relative pl-10 group transition-transform">
+                          <div className={`absolute -left-[5px] top-1.5 w-3 h-3 rounded-full border-2 border-[#05050A] transition-colors duration-500 ${
+                            item.status === 'completed' ? 'bg-[#00FF94] shadow-[0_0_12px_#00FF94]' :
+                            item.status === 'in_progress' ? 'bg-white shadow-[0_0_12px_white] animate-pulse' :
+                            'bg-[#0A0A0F] border-white/20'
+                          }`} />
+                          
+                          <div className={`flex items-start justify-between gap-4 ${item.status === 'pending' ? 'opacity-40' : ''}`}>
+                            <div>
+                              <h4 className="font-display text-xl font-bold mb-1.5 group-hover:text-[#00FF94] transition-colors">{item.title}</h4>
+                              <p className="font-mono-pro text-xs text-white/40 uppercase tracking-widest">Phase {item.step}</p>
+                            </div>
+                            <div>
+                              {item.status === 'completed' && <CheckCircle2 className="w-6 h-6 text-[#00FF94]" />}
+                              {item.status === 'in_progress' && <PlayCircle className="w-6 h-6 text-white" />}
+                              {item.status === 'pending' && <Clock className="w-6 h-6 text-white/20" />}
+                            </div>
                           </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </motion.div>
+
+                  {/* Recent Deliverables */}
+                  {data.recent_activity && data.recent_activity.length > 0 && (
+                    <motion.div variants={itemVariants} className="pt-8">
+                      <h3 className="overline text-white/40 mb-8 flex items-center gap-3">
+                        <div className="w-8 h-[1px] bg-white/20" /> <Activity className="w-4 h-4" /> Recent Deliverables
+                      </h3>
+                      <div className="space-y-4">
+                        {data.recent_activity.map((act, i) => (
+                          <motion.div key={i} whileHover={{ scale: 1.01 }} className="flex gap-5 p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-[#00FF94]/20 transition-colors">
+                            <div className="w-2 h-2 rounded-full bg-[#00FF94] mt-2 shadow-[0_0_10px_#00FF94]" />
+                            <div>
+                              <p className="font-mono-pro text-[10px] text-[#00FF94] mb-1.5 uppercase tracking-wider">
+                                {new Date(act.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                              </p>
+                              <p className="font-display text-base font-medium text-white/90">{act.title}</p>
+                            </div>
+                          </motion.div>
                         ))}
                       </div>
-                    )}
-                    <span className="absolute top-6 right-6 px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider text-[#00D67D] bg-[#00D67D]/10">Core</span>
-                  </div>
+                    </motion.div>
+                  )}
+                </div>
+              </div>
 
-                  {/* Dedicated Account Manager */}
-                  <div className="glass rounded-3xl p-8 border border-white/5 relative group hover:bg-white/[0.02] transition-colors flex flex-col">
-                    <Bell className="w-6 h-6 text-[#00D67D] mb-6" />
-                    <h3 className="font-display text-2xl font-bold mb-2">Dedicated Account Manager</h3>
-                    <p className="font-mono-pro text-sm text-white/50 mb-8 max-w-sm">Direct Calendly link, WhatsApp, email — front and centre. Feels personal, not corporate.</p>
-                    
-                    <div className="mt-auto bg-black/20 rounded-2xl p-6 border border-white/5 flex items-center gap-6">
-                      <img src="https://ui-avatars.com/api/?name=SEO+Planet&background=00D67D&color=000" alt="Manager" className="w-16 h-16 rounded-full" />
-                      <div>
-                        <p className="font-display font-bold text-lg">Your Growth Team</p>
-                        <div className="flex items-center gap-3 mt-3">
-                          <a href="mailto:founder@seoplanet.in" className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#00D67D] hover:text-black transition-colors" title="Email"><Mail className="w-4 h-4" /></a>
-                          <a href="#" className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#00D67D] hover:text-black transition-colors" title="WhatsApp"><Phone className="w-4 h-4" /></a>
-                          <a href="#" className="px-4 h-8 rounded-full bg-[#00D67D]/10 text-[#00D67D] flex items-center gap-2 text-xs font-bold font-mono-pro uppercase tracking-wider hover:bg-[#00D67D] hover:text-black transition-colors"><Calendar className="w-4 h-4" /> Book</a>
-                        </div>
-                      </div>
-                    </div>
-                    <span className="absolute top-6 right-6 px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider text-[#00D67D] bg-[#00D67D]/10">Core</span>
+              {/* Right Column */}
+              <div className="lg:col-span-5 space-y-8 lg:pt-32">
+                {/* Sprint Focus */}
+                <motion.div variants={itemVariants} className="relative rounded-3xl p-[1px] overflow-hidden group">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#00FF94]/40 to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
+                  <div className="relative rounded-3xl bg-[#0A0A0F] p-8 sm:p-10 h-full backdrop-blur-xl">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#00FF94]/10 blur-[50px] pointer-events-none" />
+                    <h3 className="overline text-[#00FF94] mb-6 flex items-center gap-2"><Target className="w-4 h-4"/> Current Sprint Focus</h3>
+                    <p className="font-display text-2xl sm:text-3xl font-bold leading-tight tracking-tight drop-shadow-lg">
+                      {data.current_focus || "Phase 1: Technical Foundation & Site Architecture"}
+                    </p>
                   </div>
-               </div>
-            </section>
+                </motion.div>
 
-            {/* 2. REPORTING & VISIBILITY */}
-            <section className="space-y-6">
-               <h2 className="overline-premium text-white/40 mb-6">REPORTING & VISIBILITY</h2>
-               <div className="grid lg:grid-cols-3 gap-6">
-                  {/* Live KPI Dashboard */}
-                  <div className="lg:col-span-2 glass rounded-3xl p-8 border border-white/5 relative group">
-                    <TrendingUp className="w-6 h-6 text-[#00D67D] mb-6" />
-                    <h3 className="font-display text-2xl font-bold mb-2">Live KPI Dashboard</h3>
-                    <p className="font-mono-pro text-sm text-white/50 mb-8 max-w-md">Organic traffic, keyword rankings, DA/PA, backlinks added, leads generated — updated weekly.</p>
-                    
-                    <div className="h-64 w-full mt-4">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart data={chartData}>
-                          <defs>
-                            <linearGradient id="colorTraffic" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#00D67D" stopOpacity={0.3}/>
-                              <stop offset="95%" stopColor="#00D67D" stopOpacity={0}/>
-                            </linearGradient>
-                          </defs>
-                          <Tooltip contentStyle={{ backgroundColor: '#0A0A0C', border: '1px solid rgba(255,255,255,0.1)' }} />
-                          <Area type="monotone" dataKey="traffic" stroke="#00D67D" strokeWidth={3} fillOpacity={1} fill="url(#colorTraffic)" />
-                        </AreaChart>
-                      </ResponsiveContainer>
-                    </div>
-                    <span className="absolute top-6 right-6 px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider text-[#00D67D] bg-[#00D67D]/10">Core</span>
-                  </div>
-
-                  {/* Right Stack */}
-                  <div className="flex flex-col gap-6">
-                    {/* Monthly Reports */}
-                    <div className="glass rounded-3xl p-8 border border-white/5 relative group flex-1">
-                      <FileText className="w-6 h-6 text-[#00D67D] mb-6" />
-                      <h3 className="font-display text-xl font-bold mb-2">Monthly Reports</h3>
-                      <p className="font-mono-pro text-sm text-white/50 mb-6">Downloadable PDF reports with commentary. Branded, polished.</p>
-                      <button className="w-full py-3 bg-white/5 rounded-xl font-mono-pro text-xs uppercase tracking-wider hover:bg-white/10 transition flex items-center justify-center gap-2">
-                        <Download className="w-4 h-4"/> Download Latest
-                      </button>
-                      <span className="absolute top-6 right-6 px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider text-[#00D67D] bg-[#00D67D]/10">Core</span>
-                    </div>
-                    {/* Competitor */}
-                    <div className="glass rounded-3xl p-8 border border-[#FFBD2E]/20 relative group flex-1">
-                      <Activity className="w-6 h-6 text-[#FFBD2E] mb-6" />
-                      <h3 className="font-display text-xl font-bold mb-2 text-[#FFBD2E]">Competitor Intel</h3>
-                      <p className="font-mono-pro text-sm text-[#FFBD2E]/50 mb-6">Side-by-side view vs competitors on keywords, backlinks, and DA.</p>
-                      <span className="absolute top-6 right-6 px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider text-[#FFBD2E] bg-[#FFBD2E]/10">Power</span>
-                    </div>
-                  </div>
-               </div>
-            </section>
-
-            {/* 3. DELIVERY & PROJECT TRACKING */}
-            <section className="space-y-6">
-               <h2 className="overline-premium text-white/40 mb-6">DELIVERY & PROJECT TRACKING</h2>
-               <div className="grid lg:grid-cols-3 gap-6">
-                  {/* Deliverable tracker */}
-                  <div className="lg:col-span-2 glass rounded-3xl p-8 border border-white/5 relative group">
-                    <ClipboardCheck className="w-6 h-6 text-[#00D67D] mb-6" />
-                    <h3 className="font-display text-2xl font-bold mb-2">Deliverable Tracker</h3>
-                    <p className="font-mono-pro text-sm text-white/50 mb-8 max-w-md">What's been delivered, what's in progress, what's coming next — with dates. Full transparency.</p>
-                    
-                    <div className="relative ml-4 space-y-8 mt-8 border-l border-white/10 pl-8">
-                       {data.timeline?.map((item, i) => (
-                         <div key={i} className="relative group/item">
-                           <div className={`absolute -left-[37.5px] top-1.5 w-2.5 h-2.5 rounded-full transition-colors ${
-                             item.status === 'completed' ? 'bg-[#00D67D]' :
-                             item.status === 'in_progress' ? 'bg-white shadow-[0_0_10px_rgba(255,255,255,0.5)]' :
-                             'bg-[#0A0A0C] border border-white/20'
-                           }`} />
-                           <h4 className={`font-display text-lg font-bold mb-1 ${item.status === 'pending' ? 'text-white/40' : 'text-white/90'}`}>{item.title}</h4>
-                           <p className="font-mono-pro text-xs text-white/30 uppercase tracking-widest">Phase {item.step}</p>
-                         </div>
-                       ))}
-                    </div>
-                    <span className="absolute top-6 right-6 px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider text-[#00D67D] bg-[#00D67D]/10">Core</span>
-                  </div>
-
-                  {/* Right Stack */}
-                  <div className="flex flex-col gap-6">
-                    <div className="glass rounded-3xl p-8 border border-white/5 relative group flex-1">
-                      <Calendar className="w-6 h-6 text-[#00D67D] mb-6" />
-                      <h3 className="font-display text-xl font-bold mb-2">Content Calendar</h3>
-                      <p className="font-mono-pro text-sm text-white/50">Planned content, publish dates, approval status. Review before publishing.</p>
-                      <span className="absolute top-6 right-6 px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider text-[#00D67D] bg-[#00D67D]/10">Core</span>
-                    </div>
-                    <div className="glass rounded-3xl p-8 border border-[#3B82F6]/20 relative group flex-1">
-                      <Clock className="w-6 h-6 text-[#3B82F6] mb-6" />
-                      <h3 className="font-display text-xl font-bold mb-2 text-[#3B82F6]">Approval Queue</h3>
-                      <p className="font-mono-pro text-sm text-[#3B82F6]/50">Changes awaiting client sign-off. Clear CTA to approve or request revisions.</p>
-                      <span className="absolute top-6 right-6 px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider text-[#3B82F6] bg-[#3B82F6]/10">New</span>
-                    </div>
-                  </div>
-               </div>
-            </section>
-
-            {/* 4. DOCUMENTS & BILLING */}
-            <section className="space-y-6">
-               <h2 className="overline-premium text-white/40 mb-6">DOCUMENTS & BILLING</h2>
-               <div className="grid lg:grid-cols-3 gap-6">
-                  {/* Document vault */}
-                  <div className="lg:col-span-2 glass rounded-3xl p-8 border border-white/5 relative group">
-                    <Folder className="w-6 h-6 text-white/60 mb-6" />
-                    <h3 className="font-display text-2xl font-bold mb-2">Document Vault</h3>
-                    <p className="font-mono-pro text-sm text-white/50 mb-8 max-w-md">Contract, SOW, brand assets, credentials handed over — all securely stored and downloadable.</p>
-                    
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {data.documents?.length > 0 ? data.documents.map((doc, i) => (
-                        <a key={i} href={doc.url} target="_blank" rel="noreferrer" className="flex items-center gap-4 p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.08] transition-all">
-                          <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-white/40">
-                            <FileText className="w-4 h-4" />
-                          </div>
-                          <div>
-                            <p className="font-display font-bold text-sm mb-0.5 text-white/90 truncate max-w-[150px]">{doc.title}</p>
-                            <p className="font-mono-pro text-[10px] text-white/40 uppercase tracking-wider">PDF Document</p>
+                {/* Vault */}
+                <motion.div variants={itemVariants} className="rounded-3xl glass p-8 sm:p-10 border border-white/10">
+                  <h3 className="overline text-white/40 mb-8 flex items-center gap-3">
+                    <div className="w-6 h-[1px] bg-white/20" /> Strategy Vault
+                  </h3>
+                  <div className="space-y-3">
+                    {data.documents?.length > 0 ? (
+                      data.documents.map((doc, i) => (
+                        <a key={i} href={doc.url} target="_blank" rel="noreferrer" className="group flex items-center justify-between p-4 rounded-2xl bg-white/[0.03] border border-white/5 hover:bg-[#00FF94]/5 hover:border-[#00FF94]/30 transition-all duration-300">
+                          <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-xl bg-black/40 flex items-center justify-center text-white/50 group-hover:text-[#00FF94] group-hover:scale-110 transition-all duration-300">
+                              <FileText className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <p className="font-display font-bold text-sm mb-1 group-hover:text-[#00FF94] transition-colors">{doc.title}</p>
+                              <p className="font-mono-pro text-[10px] text-white/40 uppercase tracking-wider">Secure Document</p>
+                            </div>
                           </div>
                         </a>
-                      )) : <p className="text-sm text-white/40 font-mono-pro italic">No documents uploaded.</p>}
+                      ))
+                    ) : (
+                      <p className="text-sm text-white/40 font-mono-pro italic">No documents uploaded yet.</p>
+                    )}
+                  </div>
+                </motion.div>
+
+                {/* Support */}
+                <motion.div variants={itemVariants} className="relative rounded-3xl p-8 sm:p-10 border border-[#00FF94]/20 bg-[#00FF94]/5 overflow-hidden">
+                  <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-[#00FF94]/10 to-transparent opacity-50" />
+                  <div className="relative z-10">
+                    <div className="flex items-start justify-between mb-6">
+                      <h3 className="overline text-[#00FF94] mb-2">Dedicated Support</h3>
+                      <div className="w-2.5 h-2.5 rounded-full bg-[#00FF94] shadow-[0_0_10px_#00FF94] animate-pulse" />
                     </div>
-                    <span className="absolute top-6 right-6 px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider text-white/60 bg-white/5">Trust Builder</span>
+                    <p className="font-mono-pro text-sm text-white/70 leading-relaxed mb-8">
+                      Need assistance or want to request a strategy pivot? Open a direct comms channel with your account manager.
+                    </p>
+                    <a href="mailto:founder@seoplanet.in" className="inline-flex items-center justify-center w-full gap-3 rounded-full bg-white text-black px-8 py-4 font-mono-pro text-xs uppercase tracking-[0.2em] font-bold hover:bg-[#00FF94] hover:shadow-[0_0_20px_rgba(0,255,148,0.4)] transition-all duration-300 hover:scale-[1.02]">
+                      Contact Team
+                    </a>
                   </div>
+                </motion.div>
+              </div>
 
-                  {/* Right Stack */}
-                  <div className="flex flex-col gap-6">
-                    <div className="glass rounded-3xl p-8 border border-white/5 relative group flex-1">
-                      <Receipt className="w-6 h-6 text-[#00D67D] mb-6" />
-                      <h3 className="font-display text-xl font-bold mb-2">Invoice History</h3>
-                      <p className="font-mono-pro text-sm text-white/50">Paid, pending, upcoming. Download receipts anytime.</p>
-                      <span className="absolute top-6 right-6 px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider text-[#00D67D] bg-[#00D67D]/10">Core</span>
-                    </div>
-                    <div className="glass rounded-3xl p-8 border border-[#FFBD2E]/20 relative group flex-1">
-                      <Calculator className="w-6 h-6 text-[#FFBD2E] mb-6" />
-                      <h3 className="font-display text-xl font-bold mb-2 text-[#FFBD2E]">ROI Calculator</h3>
-                      <p className="font-mono-pro text-sm text-[#FFBD2E]/50">Live view of estimated revenue impact from organic traffic.</p>
-                      <span className="absolute top-6 right-6 px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider text-[#FFBD2E] bg-[#FFBD2E]/10">Power</span>
-                    </div>
-                  </div>
-               </div>
-            </section>
-
-            {/* 5. COMMUNICATION & RELATIONSHIP */}
-            <section className="space-y-6">
-               <h2 className="overline-premium text-white/40 mb-6">COMMUNICATION & RELATIONSHIP</h2>
-               <div className="grid lg:grid-cols-2 gap-6">
-                  <div className="glass rounded-3xl p-8 border border-[#FFBD2E]/20 relative group">
-                    <MessageSquare className="w-6 h-6 text-[#FFBD2E] mb-6" />
-                    <h3 className="font-display text-2xl font-bold mb-2 text-[#FFBD2E]">Messaging Thread</h3>
-                    <p className="font-mono-pro text-sm text-[#FFBD2E]/50 mb-8 max-w-sm">In-portal communication — keeps everything in one place. No lost email threads.</p>
-                    <span className="absolute top-6 right-6 px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider text-[#FFBD2E] bg-[#FFBD2E]/10">Power</span>
-                  </div>
-                  <div className="glass rounded-3xl p-8 border border-white/5 relative group">
-                    <Video className="w-6 h-6 text-white/60 mb-6" />
-                    <h3 className="font-display text-2xl font-bold mb-2">Strategy Session Recordings</h3>
-                    <p className="font-mono-pro text-sm text-white/50 mb-8 max-w-sm">Past call recordings and summary notes accessible anytime. Clients feel supported.</p>
-                    <span className="absolute top-6 right-6 px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider text-white/60 bg-white/5">Trust Builder</span>
-                  </div>
-               </div>
-            </section>
-
-            {/* 6. PREMIUM-FEEL TOUCHES */}
-            <section className="space-y-6">
-               <h2 className="overline-premium text-white/40 mb-6">PREMIUM-FEEL TOUCHES</h2>
-               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                  <div className="glass rounded-3xl p-8 border border-white/5 group">
-                    <Sparkles className="w-6 h-6 text-[#00D67D] mb-6" />
-                    <h3 className="font-display text-lg font-bold mb-2">Onboarding Progress</h3>
-                    <p className="font-mono-pro text-xs text-white/50">A clear checklist of launch steps — shows how far along they are.</p>
-                  </div>
-                  <div className="glass rounded-3xl p-8 border border-white/5 group">
-                    <Lock className="w-6 h-6 text-[#00D67D] mb-6" />
-                    <h3 className="font-display text-lg font-bold mb-2">White-Label Branding</h3>
-                    <p className="font-mono-pro text-xs text-white/50">Portal feels like an extension of your brand — not a generic tool.</p>
-                  </div>
-                  <div className="glass rounded-3xl p-8 border border-white/5 group">
-                    <Target className="w-6 h-6 text-[#00D67D] mb-6" />
-                    <h3 className="font-display text-lg font-bold mb-2">Goal Tracking</h3>
-                    <p className="font-mono-pro text-xs text-white/50">Client sets goals. Dashboard tracks progress towards them visually.</p>
-                  </div>
-                  <div className="glass rounded-3xl p-8 border border-white/5 group">
-                    <Gift className="w-6 h-6 text-[#00D67D] mb-6" />
-                    <h3 className="font-display text-lg font-bold mb-2">Referral Program</h3>
-                    <p className="font-mono-pro text-xs text-white/50">Happy clients can refer and track rewards from inside the portal.</p>
-                  </div>
-               </div>
-            </section>
-
+            </motion.div>
           </main>
         </div>
       )}
