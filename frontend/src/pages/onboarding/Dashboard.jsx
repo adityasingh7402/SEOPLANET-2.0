@@ -6,15 +6,6 @@ import axios from "axios";
 import AdminDashboard from "./AdminDashboard";
 import { AreaChart, Area, Tooltip, ResponsiveContainer } from "recharts";
 
-const chartData = [
-  { name: "Jan", traffic: 2000 },
-  { name: "Feb", traffic: 3200 },
-  { name: "Mar", traffic: 4500 },
-  { name: "Apr", traffic: 6000 },
-  { name: "May", traffic: 7100 },
-  { name: "Jun", traffic: 8500 },
-];
-
 function CinematicLoader({ companyName, onComplete }) {
   const [phase, setPhase] = useState(0);
 
@@ -178,10 +169,10 @@ export default function Dashboard() {
                     <div className="space-y-6">
                       <motion.div variants={itemVariants} className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                         {[
-                          { label: "Organic Traffic", value: data.metrics.traffic || "8,500", icon: TrendingUp, change: "+12%" },
-                          { label: "Keywords Ranked", value: data.metrics.rankings || "342", icon: Search, change: "+5%" },
-                          { label: "Backlinks Added", value: data.metrics.backlinks || "45", icon: Link, change: "+15%" },
-                          { label: "Leads Generated", value: "128", icon: Users, change: "+8%" }
+                          { label: "Organic Traffic", value: data.metrics?.traffic || "0", icon: TrendingUp, change: data.metrics_changes?.traffic || "+0%" },
+                          { label: "Keywords Ranked", value: data.metrics?.rankings || "0", icon: Search, change: data.metrics_changes?.rankings || "+0%" },
+                          { label: "Backlinks Added", value: data.metrics?.backlinks || "0", icon: Link, change: data.metrics_changes?.backlinks || "+0" },
+                          { label: "Leads Generated", value: data.metrics?.da || "0", icon: Users, change: data.metrics_changes?.da || "+0" }
                         ].map((m, i) => (
                           <motion.div 
                             key={i} 
@@ -205,7 +196,7 @@ export default function Dashboard() {
                         <h3 className="font-mono-pro text-xs text-white/40 uppercase tracking-widest mb-6">Traffic Trend (6 Months)</h3>
                         <div className="h-48 w-full">
                           <ResponsiveContainer width="100%" height="100%">
-                            <AreaChart data={chartData}>
+                            <AreaChart data={data.traffic_trend || []}>
                               <defs>
                                 <linearGradient id="colorTraffic" x1="0" y1="0" x2="0" y2="1">
                                   <stop offset="5%" stopColor="#00FF94" stopOpacity={0.3}/>
@@ -223,6 +214,106 @@ export default function Dashboard() {
                         </div>
                       </motion.div>
                     </div>
+                  )}
+
+                  {/* Keyword Rankings */}
+                  {data.keyword_rankings && data.keyword_rankings.length > 0 && (
+                    <motion.div variants={itemVariants} className="glass rounded-2xl p-6 border border-white/10 overflow-hidden">
+                      <h3 className="font-mono-pro text-xs text-white/40 uppercase tracking-widest mb-6">Keyword Positions</h3>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left">
+                          <thead>
+                            <tr className="border-b border-white/5">
+                              <th className="pb-3 font-mono-pro text-[10px] text-white/40 uppercase tracking-widest font-normal whitespace-nowrap">Keyword</th>
+                              <th className="pb-3 font-mono-pro text-[10px] text-white/40 uppercase tracking-widest font-normal">Rank</th>
+                              <th className="pb-3 font-mono-pro text-[10px] text-white/40 uppercase tracking-widest font-normal">Change</th>
+                              <th className="pb-3 font-mono-pro text-[10px] text-white/40 uppercase tracking-widest font-normal">Volume</th>
+                              <th className="pb-3 font-mono-pro text-[10px] text-white/40 uppercase tracking-widest font-normal text-right">Status</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-white/5">
+                            {data.keyword_rankings.map((kw, i) => (
+                              <tr key={i} className="group hover:bg-white/[0.02] transition-colors">
+                                <td className="py-4 pr-4 font-display font-medium text-white/90 whitespace-nowrap">{kw.keyword}</td>
+                                <td className="py-4 font-display text-xl text-white">{kw.rank}</td>
+                                <td className={`py-4 font-mono-pro text-xs ${kw.change.startsWith('-') ? 'text-red-400' : 'text-[#00FF94]'}`}>{kw.change}</td>
+                                <td className="py-4 font-mono-pro text-xs text-white/50">{kw.volume}</td>
+                                <td className="py-4 text-right">
+                                  <span className={`inline-flex px-2 py-1 rounded-full font-mono-pro text-[9px] uppercase tracking-wider ${kw.status === 'active' ? 'bg-[#00FF94]/10 text-[#00FF94]' : 'bg-white/5 text-white/40'}`}>
+                                    {kw.status}
+                                  </span>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Competitor Comparison */}
+                  {data.competitors && data.competitors.length > 0 && (
+                    <motion.div variants={itemVariants} className="glass rounded-2xl p-6 border border-white/10">
+                      <h3 className="font-mono-pro text-xs text-white/40 uppercase tracking-widest mb-6">Competitive Landscape</h3>
+                      <div className="space-y-4">
+                        {/* Client's own row for comparison */}
+                        <div className="flex items-center justify-between p-4 rounded-xl bg-[#00FF94]/5 border border-[#00FF94]/20">
+                          <span className="font-display font-bold text-[#00FF94] truncate mr-4">{data.company_name} (You)</span>
+                          <div className="flex gap-8 text-right shrink-0">
+                            <div>
+                              <p className="font-mono-pro text-[9px] text-white/40 uppercase mb-1">Traffic</p>
+                              <p className="font-display text-lg text-white">{data.metrics?.traffic || "0"}</p>
+                            </div>
+                            <div>
+                              <p className="font-mono-pro text-[9px] text-white/40 uppercase mb-1">DA</p>
+                              <p className="font-display text-lg text-white">{data.metrics?.da || "0"}</p>
+                            </div>
+                          </div>
+                        </div>
+                        {/* Competitors */}
+                        {data.competitors.map((comp, i) => (
+                          <div key={i} className="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] border border-white/5">
+                            <span className="font-display font-medium text-white/60 truncate mr-4">{comp.name}</span>
+                            <div className="flex gap-8 text-right opacity-60 shrink-0">
+                              <div>
+                                <p className="font-display text-lg">{comp.traffic}</p>
+                              </div>
+                              <div>
+                                <p className="font-display text-lg">{comp.da}</p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Goal Progress */}
+                  {data.goals && data.goals.length > 0 && (
+                    <motion.div variants={itemVariants} className="glass rounded-2xl p-6 border border-white/10">
+                      <h3 className="font-mono-pro text-xs text-white/40 uppercase tracking-widest mb-6">Target Progression</h3>
+                      <div className="space-y-6">
+                        {data.goals.map((goal, i) => {
+                          const percent = Math.min(100, Math.max(0, (goal.current / goal.target) * 100));
+                          return (
+                            <div key={i}>
+                              <div className="flex justify-between items-end mb-2">
+                                <span className="font-display font-bold text-white/90 truncate mr-4">{goal.title}</span>
+                                <span className="font-mono-pro text-[10px] text-white/50 uppercase shrink-0">Current: {goal.current} / Target: {goal.target}</span>
+                              </div>
+                              <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                                <motion.div 
+                                  initial={{ width: 0 }}
+                                  animate={{ width: `${percent}%` }}
+                                  transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
+                                  className="h-full bg-gradient-to-r from-[#00FF94]/50 to-[#00FF94] shadow-[0_0_10px_#00FF94]"
+                                />
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </motion.div>
                   )}
 
                   {/* Campaign Roadmap */}

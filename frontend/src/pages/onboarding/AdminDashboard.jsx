@@ -58,10 +58,15 @@ export default function AdminDashboard({ adminData }) {
     setEditingClient(client);
     setEditForm({
       metrics: client.metrics || { traffic: "0", rankings: "0", da: "0", backlinks: "0" },
+      metrics_changes: client.metrics_changes || { traffic: "+0%", rankings: "+0%", da: "+0", backlinks: "+0" },
       current_focus: client.current_focus || "",
       timeline: client.timeline || [],
       recent_activity: client.recent_activity || [],
-      documents: client.documents || []
+      documents: client.documents || [],
+      traffic_trend: client.traffic_trend || [],
+      keyword_rankings: client.keyword_rankings || [],
+      competitors: client.competitors || [],
+      goals: client.goals || []
     });
     setEditTab("metrics");
   };
@@ -220,9 +225,9 @@ export default function AdminDashboard({ adminData }) {
               {/* Modal Body */}
               <div className="flex-1 flex overflow-hidden">
                 {/* Editor Tabs */}
-                <div className="w-48 border-r border-white/5 bg-black/20 p-4 space-y-2">
-                  {["metrics", "timeline", "activity", "documents"].map(tab => (
-                    <button key={tab} onClick={() => setEditTab(tab)} className={`w-full text-left px-4 py-3 rounded-xl font-mono-pro text-xs uppercase tracking-wider transition-all ${editTab === tab ? 'bg-[#00D67D]/10 text-[#00D67D]' : 'text-white/50 hover:bg-white/[0.02] hover:text-white'}`}>
+                <div className="w-48 border-r border-white/5 bg-black/20 p-4 space-y-2 overflow-y-auto custom-scrollbar">
+                  {["metrics", "trend", "keywords", "competitors", "goals", "timeline", "activity", "documents"].map(tab => (
+                    <button key={tab} onClick={() => setEditTab(tab)} className={`w-full text-left px-4 py-3 rounded-xl font-mono-pro text-[10px] uppercase tracking-wider transition-all ${editTab === tab ? 'bg-[#00D67D]/10 text-[#00D67D]' : 'text-white/50 hover:bg-white/[0.02] hover:text-white'}`}>
                       {tab}
                     </button>
                   ))}
@@ -235,15 +240,99 @@ export default function AdminDashboard({ adminData }) {
                     <div className="space-y-6">
                       <h3 className="font-display text-lg font-bold mb-4 border-b border-white/10 pb-2">Core Metrics & Focus</h3>
                       <div className="grid grid-cols-2 gap-6">
-                        <div><label className="overline-premium block mb-2 text-white/50 text-[10px]">Organic Traffic</label><input value={editForm.metrics.traffic} onChange={e => setEditForm({...editForm, metrics: {...editForm.metrics, traffic: e.target.value}})} className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:border-[#00D67D] outline-none" /></div>
-                        <div><label className="overline-premium block mb-2 text-white/50 text-[10px]">Top 3 Rankings</label><input value={editForm.metrics.rankings} onChange={e => setEditForm({...editForm, metrics: {...editForm.metrics, rankings: e.target.value}})} className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:border-[#00D67D] outline-none" /></div>
-                        <div><label className="overline-premium block mb-2 text-white/50 text-[10px]">Domain Authority</label><input value={editForm.metrics.da} onChange={e => setEditForm({...editForm, metrics: {...editForm.metrics, da: e.target.value}})} className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:border-[#00D67D] outline-none" /></div>
-                        <div><label className="overline-premium block mb-2 text-white/50 text-[10px]">New Backlinks</label><input value={editForm.metrics.backlinks} onChange={e => setEditForm({...editForm, metrics: {...editForm.metrics, backlinks: e.target.value}})} className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:border-[#00D67D] outline-none" /></div>
+                        <div className="flex gap-2">
+                          <div className="flex-1"><label className="overline-premium block mb-2 text-white/50 text-[10px]">Traffic Value</label><input value={editForm.metrics.traffic} onChange={e => setEditForm({...editForm, metrics: {...editForm.metrics, traffic: e.target.value}})} className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:border-[#00D67D] outline-none" /></div>
+                          <div className="w-24"><label className="overline-premium block mb-2 text-[#00D67D] text-[10px]">Change</label><input value={editForm.metrics_changes?.traffic || ""} onChange={e => setEditForm({...editForm, metrics_changes: {...editForm.metrics_changes, traffic: e.target.value}})} className="w-full bg-[#00D67D]/5 border border-[#00D67D]/20 rounded-xl px-4 py-3 text-[#00D67D] text-sm focus:border-[#00D67D] outline-none" /></div>
+                        </div>
+                        <div className="flex gap-2">
+                          <div className="flex-1"><label className="overline-premium block mb-2 text-white/50 text-[10px]">Rankings Value</label><input value={editForm.metrics.rankings} onChange={e => setEditForm({...editForm, metrics: {...editForm.metrics, rankings: e.target.value}})} className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:border-[#00D67D] outline-none" /></div>
+                          <div className="w-24"><label className="overline-premium block mb-2 text-[#00D67D] text-[10px]">Change</label><input value={editForm.metrics_changes?.rankings || ""} onChange={e => setEditForm({...editForm, metrics_changes: {...editForm.metrics_changes, rankings: e.target.value}})} className="w-full bg-[#00D67D]/5 border border-[#00D67D]/20 rounded-xl px-4 py-3 text-[#00D67D] text-sm focus:border-[#00D67D] outline-none" /></div>
+                        </div>
+                        <div className="flex gap-2">
+                          <div className="flex-1"><label className="overline-premium block mb-2 text-white/50 text-[10px]">Backlinks Value</label><input value={editForm.metrics.backlinks} onChange={e => setEditForm({...editForm, metrics: {...editForm.metrics, backlinks: e.target.value}})} className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:border-[#00D67D] outline-none" /></div>
+                          <div className="w-24"><label className="overline-premium block mb-2 text-[#00D67D] text-[10px]">Change</label><input value={editForm.metrics_changes?.backlinks || ""} onChange={e => setEditForm({...editForm, metrics_changes: {...editForm.metrics_changes, backlinks: e.target.value}})} className="w-full bg-[#00D67D]/5 border border-[#00D67D]/20 rounded-xl px-4 py-3 text-[#00D67D] text-sm focus:border-[#00D67D] outline-none" /></div>
+                        </div>
+                        <div className="flex gap-2">
+                          <div className="flex-1"><label className="overline-premium block mb-2 text-white/50 text-[10px]">Leads Value</label><input value={editForm.metrics.da} onChange={e => setEditForm({...editForm, metrics: {...editForm.metrics, da: e.target.value}})} className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:border-[#00D67D] outline-none" /></div>
+                          <div className="w-24"><label className="overline-premium block mb-2 text-[#00D67D] text-[10px]">Change</label><input value={editForm.metrics_changes?.da || ""} onChange={e => setEditForm({...editForm, metrics_changes: {...editForm.metrics_changes, da: e.target.value}})} className="w-full bg-[#00D67D]/5 border border-[#00D67D]/20 rounded-xl px-4 py-3 text-[#00D67D] text-sm focus:border-[#00D67D] outline-none" /></div>
+                        </div>
                       </div>
                       <div className="pt-4">
                         <label className="overline-premium block mb-2 text-[#00D67D] text-[10px]">Current Sprint Focus (Highlighted Card)</label>
                         <input value={editForm.current_focus} onChange={e => setEditForm({...editForm, current_focus: e.target.value})} className="w-full bg-[#00D67D]/5 border border-[#00D67D]/20 rounded-xl px-4 py-3 text-white text-sm focus:border-[#00D67D] outline-none" placeholder="e.g. Phase 2: Technical Content Expansion" />
                       </div>
+                    </div>
+                  )}
+
+                  {editTab === "trend" && (
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between mb-4 border-b border-white/10 pb-2">
+                        <h3 className="font-display text-lg font-bold">Traffic Trend (6 Mo)</h3>
+                        <button onClick={() => addArrayItem("traffic_trend", {name: "Month", traffic: 0})} className="text-xs font-mono-pro text-[#00D67D] hover:text-white flex items-center gap-1"><PlusCircle className="w-3 h-3"/> Add Month</button>
+                      </div>
+                      {editForm.traffic_trend.map((item, i) => (
+                        <div key={i} className="flex gap-4 items-start bg-white/[0.02] p-4 rounded-xl border border-white/5">
+                          <input type="text" value={item.name} onChange={e => updateArrayItem("traffic_trend", i, "name", e.target.value)} className="w-32 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm" placeholder="Month (e.g. Jan)" />
+                          <input type="number" value={item.traffic} onChange={e => updateArrayItem("traffic_trend", i, "traffic", Number(e.target.value))} className="flex-1 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-[#00D67D]" placeholder="Traffic count" />
+                          <button onClick={() => removeArrayItem("traffic_trend", i)} className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg"><Trash2 className="w-4 h-4"/></button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {editTab === "keywords" && (
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between mb-4 border-b border-white/10 pb-2">
+                        <h3 className="font-display text-lg font-bold">Keyword Rankings</h3>
+                        <button onClick={() => addArrayItem("keyword_rankings", {keyword: "new keyword", rank: 1, change: "+0", volume: "0", status: "active"})} className="text-xs font-mono-pro text-[#00D67D] hover:text-white flex items-center gap-1"><PlusCircle className="w-3 h-3"/> Add Keyword</button>
+                      </div>
+                      {editForm.keyword_rankings.map((item, i) => (
+                        <div key={i} className="flex gap-2 items-start bg-white/[0.02] p-4 rounded-xl border border-white/5">
+                          <input type="text" value={item.keyword} onChange={e => updateArrayItem("keyword_rankings", i, "keyword", e.target.value)} className="flex-1 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm" placeholder="Keyword" />
+                          <input type="number" value={item.rank} onChange={e => updateArrayItem("keyword_rankings", i, "rank", Number(e.target.value))} className="w-16 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-center text-[#00D67D]" placeholder="Rank" />
+                          <input type="text" value={item.change} onChange={e => updateArrayItem("keyword_rankings", i, "change", e.target.value)} className="w-16 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-center" placeholder="+0" />
+                          <input type="text" value={item.volume} onChange={e => updateArrayItem("keyword_rankings", i, "volume", e.target.value)} className="w-24 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-center" placeholder="Vol" />
+                          <select value={item.status} onChange={e => updateArrayItem("keyword_rankings", i, "status", e.target.value)} className="w-24 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white">
+                            <option value="active">Active</option>
+                            <option value="dropped">Dropped</option>
+                          </select>
+                          <button onClick={() => removeArrayItem("keyword_rankings", i)} className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg"><Trash2 className="w-4 h-4"/></button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {editTab === "competitors" && (
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between mb-4 border-b border-white/10 pb-2">
+                        <h3 className="font-display text-lg font-bold">Competitors Comparison</h3>
+                        <button onClick={() => addArrayItem("competitors", {name: "Competitor", traffic: "0", da: "0"})} className="text-xs font-mono-pro text-[#00D67D] hover:text-white flex items-center gap-1"><PlusCircle className="w-3 h-3"/> Add Competitor</button>
+                      </div>
+                      {editForm.competitors.map((item, i) => (
+                        <div key={i} className="flex gap-4 items-start bg-white/[0.02] p-4 rounded-xl border border-white/5">
+                          <input type="text" value={item.name} onChange={e => updateArrayItem("competitors", i, "name", e.target.value)} className="flex-1 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm" placeholder="Competitor Name" />
+                          <input type="text" value={item.traffic} onChange={e => updateArrayItem("competitors", i, "traffic", e.target.value)} className="w-32 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm" placeholder="Traffic" />
+                          <input type="text" value={item.da} onChange={e => updateArrayItem("competitors", i, "da", e.target.value)} className="w-24 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-[#00D67D]" placeholder="DA" />
+                          <button onClick={() => removeArrayItem("competitors", i)} className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg"><Trash2 className="w-4 h-4"/></button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {editTab === "goals" && (
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between mb-4 border-b border-white/10 pb-2">
+                        <h3 className="font-display text-lg font-bold">Goal Progress</h3>
+                        <button onClick={() => addArrayItem("goals", {title: "New Goal", target: 100, current: 0})} className="text-xs font-mono-pro text-[#00D67D] hover:text-white flex items-center gap-1"><PlusCircle className="w-3 h-3"/> Add Goal</button>
+                      </div>
+                      {editForm.goals.map((item, i) => (
+                        <div key={i} className="flex gap-4 items-start bg-white/[0.02] p-4 rounded-xl border border-white/5">
+                          <input type="text" value={item.title} onChange={e => updateArrayItem("goals", i, "title", e.target.value)} className="flex-1 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm" placeholder="Goal Title (e.g. Leads)" />
+                          <input type="number" value={item.target} onChange={e => updateArrayItem("goals", i, "target", Number(e.target.value))} className="w-24 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm" placeholder="Target" />
+                          <input type="number" value={item.current} onChange={e => updateArrayItem("goals", i, "current", Number(e.target.value))} className="w-24 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-[#00D67D]" placeholder="Current" />
+                          <button onClick={() => removeArrayItem("goals", i)} className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg"><Trash2 className="w-4 h-4"/></button>
+                        </div>
+                      ))}
                     </div>
                   )}
 
