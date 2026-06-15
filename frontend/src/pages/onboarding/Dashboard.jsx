@@ -996,41 +996,41 @@ export default function Dashboard() {
                 </div>
               </div>
             </motion.div>
-                </AnimatePresence>
-              </div>
-            </main>
-
-            {/* Mobile Bottom Nav */}
-            <nav className="md:hidden absolute bottom-0 left-0 right-0 bg-[#0A0A0F]/90 backdrop-blur-xl border-t border-white/5 z-50">
-               <div className="flex items-center overflow-x-auto custom-scrollbar px-2 py-3 gap-2">
-                 {[
-                  { id: "overview", label: "Hub", icon: LayoutDashboard },
-                  { id: "deliverables", label: "Work", icon: Activity },
-                  { id: "content", label: "Content", icon: Calendar },
-                  { id: "reports", label: "Reports", icon: BarChart3 },
-                  { id: "documents", label: "Vault", icon: FolderClosed },
-                  { id: "messages", label: "Comms", icon: MessageSquare },
-                  { id: "invoices", label: "Billing", icon: Receipt },
-                 ].map(item => {
-                   const Icon = item.icon;
-                   const isActive = activeTab === item.id;
-                   return (
-                     <button
-                       key={item.id}
-                       onClick={() => setActiveTab(item.id)}
-                       className={`flex flex-col items-center justify-center gap-1 min-w-[64px] px-2 py-2 rounded-xl transition-colors ${isActive ? 'text-[#00FF94]' : 'text-white/40 hover:text-white'}`}
-                     >
-                       <Icon className="w-5 h-5" />
-                       <span className="font-mono-pro text-[9px] uppercase tracking-wider">{item.label}</span>
-                     </button>
-                   );
-                 })}
-               </div>
-            </nav>
-
+            )}
+            </AnimatePresence>
           </div>
-        </div>
-      )}
-    </>
+        </main>
+
+        {/* Mobile Bottom Nav */}
+        <nav className="md:hidden absolute bottom-0 left-0 right-0 bg-[#0A0A0F]/90 backdrop-blur-xl border-t border-white/5 z-50">
+           <div className="flex items-center overflow-x-auto custom-scrollbar px-2 py-3 gap-2">
+             {[
+              { id: "overview", label: "Hub", icon: LayoutDashboard },
+              { id: "deliverables", label: "Work", icon: Activity },
+              { id: "content", label: "Content", icon: Calendar },
+              { id: "reports", label: "Reports", icon: BarChart3 },
+              { id: "documents", label: "Vault", icon: FolderClosed },
+              { id: "messages", label: "Comms", icon: MessageSquare },
+              { id: "invoices", label: "Billing", icon: Receipt },
+             ].map(item => {
+               const Icon = item.icon;
+               const isActive = activeTab === item.id;
+               return (
+                 <button
+                   key={item.id}
+                   onClick={() => setActiveTab(item.id)}
+                   className={`flex flex-col items-center justify-center gap-1 min-w-[64px] px-2 py-2 rounded-xl transition-colors ${isActive ? 'text-[#00FF94]' : 'text-white/40 hover:text-white'}`}
+                 >
+                   <Icon className="w-5 h-5" />
+                   <span className="font-mono-pro text-[9px] uppercase tracking-wider">{item.label}</span>
+                 </button>
+               );
+             })}
+           </div>
+        </nav>
+      </div>
+    </div>
+  )}
+</>
   );
 }
