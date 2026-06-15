@@ -114,7 +114,7 @@ export default function Hero() {
           initial="hidden"
           animate="visible"
           variants={{}}
-          className="font-display font-black text-white text-4xl sm:text-5xl lg:text-[5rem] leading-[0.95] tracking-tighter max-w-5xl"
+          className="font-display font-black text-white text-3xl sm:text-5xl lg:text-[5rem] leading-[0.95] tracking-tighter max-w-5xl"
           data-testid="hero-headline"
         >
           {[
@@ -168,11 +168,11 @@ export default function Hero() {
           to help ambitious brands win their category.
         </motion.p>
 
-        <motion.div {...fade(0.8)} className="mt-10 flex flex-wrap items-center gap-4">
+        <motion.div {...fade(0.8)} className="mt-10 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-4 w-full sm:w-auto">
           <MagneticWrap strength={24}>
             <a
               href="#contact"
-              className="group inline-flex items-center gap-3 rounded-full bg-[#00FF94] text-black px-7 py-4 font-mono-pro text-xs uppercase tracking-[0.25em] font-bold hover:bg-white transition-colors active:scale-95"
+              className="group inline-flex justify-center items-center gap-3 rounded-full bg-[#00FF94] text-black px-7 py-4 font-mono-pro text-xs uppercase tracking-[0.25em] font-bold hover:bg-white transition-colors active:scale-95 w-full sm:w-auto"
               data-testid="hero-cta-launch"
               style={{ animation: "pulse-ring 2.6s infinite" }}
               aria-label="Start a new SEO project with SEO Planet"
@@ -184,7 +184,7 @@ export default function Hero() {
           <MagneticWrap strength={20}>
             <a
               href="#work"
-              className="group inline-flex items-center gap-3 rounded-full border border-white/15 text-white px-7 py-4 font-mono-pro text-xs uppercase tracking-[0.25em] hover:border-[#00FF94] hover:text-[#00FF94] transition-colors"
+              className="group inline-flex justify-center items-center gap-3 rounded-full border border-white/15 text-white px-7 py-4 font-mono-pro text-xs uppercase tracking-[0.25em] hover:border-[#00FF94] hover:text-[#00FF94] transition-colors w-full sm:w-auto"
               data-testid="hero-cta-work"
               aria-label="View SEO Planet case studies"
             >

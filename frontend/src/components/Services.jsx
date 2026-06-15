@@ -77,17 +77,18 @@ export default function Services() {
           <TiltCard className="md:col-span-8 md:row-span-2 h-full w-full">
           <motion.div
             {...reveal}
-            className="relative neon-border rounded-2xl bg-gradient-to-br from-[#0A0F0C] to-[#05050A] p-8 sm:p-12 overflow-hidden group h-full"
+            className="relative neon-border rounded-2xl bg-gradient-to-br from-[#0A0F0C] to-[#05050A] p-8 sm:p-12 group h-full"
+            style={{ transformStyle: "preserve-3d" }}
             data-testid="service-card-highlight"
           >
-            <div className="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-[#00FF94]/15 blur-3xl" />
-            <div className="absolute inset-0 grid-bg opacity-25" />
-            <div className="relative">
+            <div className="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-[#00FF94]/15 blur-3xl" style={{ transform: "translateZ(10px)" }} />
+            <div className="absolute inset-0 grid-bg opacity-25 rounded-2xl overflow-hidden" style={{ transform: "translateZ(20px)" }} />
+            <div className="relative" style={{ transform: "translateZ(50px)" }}>
               <div className="flex items-center justify-between mb-10">
                 <span className="overline">[S01] · Flagship</span>
                 <CircuitBoard className="w-6 h-6 text-[#00FF94]" />
               </div>
-              <h3 className="font-display text-3xl sm:text-5xl lg:text-6xl font-black tracking-tighter text-white">
+              <h3 className="font-display text-3xl sm:text-5xl lg:text-6xl font-black tracking-tighter text-white drop-shadow-xl">
                 Algorithmic <span className="neon-text">SEO</span>
               </h3>
               <p className="mt-5 text-white/65 max-w-md leading-relaxed font-mono-pro text-sm">
@@ -120,38 +121,44 @@ export default function Services() {
           <TiltCard className="md:col-span-4 h-full w-full">
           <motion.div
             {...reveal}
-            className="relative rounded-2xl bg-white/[0.03] border border-white/10 p-7 hover:border-[#00FF94]/40 hover:-translate-y-1 transition-all duration-300 group h-full"
+            className="relative rounded-2xl bg-white/[0.03] border border-white/10 p-7 transition-all duration-300 group h-full"
+            style={{ transformStyle: "preserve-3d" }}
             data-testid="service-card-s02"
           >
-            <div className="flex items-center justify-between mb-8">
-              <span className="overline">[S02]</span>
-              <Search className="w-5 h-5 text-[#00FF94] group-hover:scale-110 transition-transform" />
+            <div className="relative" style={{ transform: "translateZ(40px)" }}>
+              <div className="flex items-center justify-between mb-8">
+                <span className="overline">[S02]</span>
+                <Search className="w-5 h-5 text-[#00FF94] group-hover:scale-110 transition-transform" />
+              </div>
+              <h3 className="font-display text-2xl text-white font-bold tracking-tight">
+                Conversion Design
+              </h3>
+              <p className="mt-3 text-xs text-white/55 font-mono-pro leading-relaxed">
+                Funnel teardown, experimentation, and revenue calibration.
+              </p>
             </div>
-            <h3 className="font-display text-2xl text-white font-bold tracking-tight">
-              Conversion Design
-            </h3>
-            <p className="mt-3 text-xs text-white/55 font-mono-pro leading-relaxed">
-              Funnel teardown, experimentation, and revenue calibration.
-            </p>
           </motion.div>
           </TiltCard>
 
           <TiltCard className="md:col-span-4 h-full w-full">
           <motion.div
             {...reveal}
-            className="relative rounded-2xl bg-white/[0.03] border border-white/10 p-7 hover:border-[#00E5FF]/40 hover:-translate-y-1 transition-all duration-300 group h-full"
+            className="relative rounded-2xl bg-white/[0.03] border border-white/10 p-7 transition-all duration-300 group h-full"
+            style={{ transformStyle: "preserve-3d" }}
             data-testid="service-card-s03"
           >
-            <div className="flex items-center justify-between mb-8">
-              <span className="overline">[S03]</span>
-              <Sparkles className="w-5 h-5 text-[#00E5FF] group-hover:scale-110 transition-transform" />
+            <div className="relative" style={{ transform: "translateZ(40px)" }}>
+              <div className="flex items-center justify-between mb-8">
+                <span className="overline">[S03]</span>
+                <Sparkles className="w-5 h-5 text-[#00E5FF] group-hover:scale-110 transition-transform" />
+              </div>
+              <h3 className="font-display text-2xl text-white font-bold tracking-tight">
+                GEO &amp; AI Search
+              </h3>
+              <p className="mt-3 text-xs text-white/55 font-mono-pro leading-relaxed">
+                Generative Engine Optimization for ChatGPT, Perplexity, Gemini.
+              </p>
             </div>
-            <h3 className="font-display text-2xl text-white font-bold tracking-tight">
-              GEO &amp; AI Search
-            </h3>
-            <p className="mt-3 text-xs text-white/55 font-mono-pro leading-relaxed">
-              Generative Engine Optimization for ChatGPT, Perplexity, Gemini.
-            </p>
           </motion.div>
           </TiltCard>
 
@@ -159,19 +166,22 @@ export default function Services() {
             <TiltCard key={s.code} className="md:col-span-3 h-full w-full">
             <motion.div
               {...reveal}
-              className="relative rounded-2xl bg-white/[0.03] border border-white/10 p-6 hover:bg-white/[0.06] hover:-translate-y-1 transition-all duration-300 group h-full"
+              className="relative rounded-2xl bg-white/[0.03] border border-white/10 p-6 transition-all duration-300 group h-full"
+              style={{ transformStyle: "preserve-3d" }}
               data-testid={`service-card-${s.code.toLowerCase()}`}
             >
-              <div className="flex items-center justify-between mb-6">
-                <span className="overline">[{s.code}]</span>
-                <s.icon className="w-5 h-5" style={{ color: s.accent }} />
+              <div className="relative" style={{ transform: "translateZ(40px)" }}>
+                <div className="flex items-center justify-between mb-6">
+                  <span className="overline">[{s.code}]</span>
+                  <s.icon className="w-5 h-5" style={{ color: s.accent }} />
+                </div>
+                <h3 className="font-display text-lg text-white font-bold tracking-tight">
+                  {s.title}
+                </h3>
+                <p className="mt-2 text-xs text-white/55 font-mono-pro leading-relaxed">
+                  {s.desc}
+                </p>
               </div>
-              <h3 className="font-display text-lg text-white font-bold tracking-tight">
-                {s.title}
-              </h3>
-              <p className="mt-2 text-xs text-white/55 font-mono-pro leading-relaxed">
-                {s.desc}
-              </p>
             </motion.div>
             </TiltCard>
 

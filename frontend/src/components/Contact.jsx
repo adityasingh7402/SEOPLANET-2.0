@@ -151,7 +151,7 @@ export default function Contact() {
                     onChange={onChange}
                     required={f.required}
                     placeholder={f.placeholder}
-                    className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3.5 text-white text-sm font-mono-pro placeholder:text-white/25 focus:outline-none focus:border-[#00FF94] focus:bg-white/[0.06] focus:shadow-[0_0_0_3px_rgba(0,255,148,0.12)] transition-all"
+                    className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3.5 text-white text-base sm:text-sm font-mono-pro placeholder:text-white/25 focus:outline-none focus:border-[#00FF94] focus:bg-white/[0.06] focus:shadow-[0_0_0_3px_rgba(0,255,148,0.12)] transition-all"
                     data-testid={`contact-input-${f.name}`}
                   />
                 </div>
@@ -166,7 +166,7 @@ export default function Contact() {
                 value={form.company}
                 onChange={onChange}
                 placeholder={fields[2].placeholder}
-                className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3.5 text-white text-sm font-mono-pro placeholder:text-white/25 focus:outline-none focus:border-[#00FF94] focus:bg-white/[0.06] focus:shadow-[0_0_0_3px_rgba(0,255,148,0.12)] transition-all"
+                className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3.5 text-white text-base sm:text-sm font-mono-pro placeholder:text-white/25 focus:outline-none focus:border-[#00FF94] focus:bg-white/[0.06] focus:shadow-[0_0_0_3px_rgba(0,255,148,0.12)] transition-all"
                 data-testid="contact-input-company"
               />
             </div>
@@ -180,7 +180,7 @@ export default function Contact() {
                 required
                 rows={5}
                 placeholder="What does growth look like for your business?"
-                className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3.5 text-white text-sm font-mono-pro placeholder:text-white/25 focus:outline-none focus:border-[#00FF94] focus:bg-white/[0.06] focus:shadow-[0_0_0_3px_rgba(0,255,148,0.12)] transition-all resize-none"
+                className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3.5 text-white text-base sm:text-sm font-mono-pro placeholder:text-white/25 focus:outline-none focus:border-[#00FF94] focus:bg-white/[0.06] focus:shadow-[0_0_0_3px_rgba(0,255,148,0.12)] transition-all resize-none"
                 data-testid="contact-input-message"
               />
             </div>

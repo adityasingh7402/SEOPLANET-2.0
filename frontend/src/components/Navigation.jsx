@@ -88,7 +88,7 @@ export default function Navigation() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="md:hidden mx-6 mt-2 rounded-2xl glass p-6 flex flex-col gap-3"
+            className="md:hidden mx-4 sm:mx-6 mt-2 rounded-2xl glass p-6 pb-8 flex flex-col gap-4"
             data-testid="nav-mobile-menu"
           >
             {links.map((l) => (
@@ -96,7 +96,7 @@ export default function Navigation() {
                 key={l.href}
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="text-white/80 font-mono-pro uppercase tracking-[0.2em] text-xs py-2 border-b border-white/5"
+                className="text-white/80 font-mono-pro uppercase tracking-[0.2em] text-sm py-3 px-2 border-b border-white/5 hover:text-white"
               >
                 {l.label}
               </a>
@@ -104,10 +104,10 @@ export default function Navigation() {
             <a
               href="#contact"
               onClick={() => setOpen(false)}
-              className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-[#00FF94] text-black px-5 py-3 font-mono-pro text-xs uppercase tracking-[0.2em] font-bold"
+              className="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-[#00FF94] text-black px-5 py-4 font-mono-pro text-sm uppercase tracking-[0.2em] font-bold"
               aria-label="Start a new SEO project with SEO Planet"
             >
-              Start a Project <ArrowUpRight className="w-3.5 h-3.5" />
+              Start a Project <ArrowUpRight className="w-4 h-4" />
             </a>
           </motion.div>
         )}
