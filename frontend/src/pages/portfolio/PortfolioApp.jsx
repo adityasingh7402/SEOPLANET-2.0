@@ -139,7 +139,9 @@ function Header({ scrolled }) {
 ───────────────────────────────────────────── */
 function ExpandPanel({ p, open, isEven }) {
   const panelRef = useRef(null);
+  const containerRef = useRef(null);
   const [height, setHeight] = useState(0);
+  const [scale, setScale] = useState(1);
   useEffect(() => {
     if (!panelRef.current) return;
     if (open) {
@@ -150,7 +152,18 @@ function ExpandPanel({ p, open, isEven }) {
     } else {
       setHeight(0);
     }
-  }, [open]);
+  }, [open, scale]);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const obs = new ResizeObserver((entries) => {
+      for (let e of entries) {
+        setScale(e.contentRect.width / 1440);
+      }
+    });
+    obs.observe(containerRef.current);
+    return () => obs.disconnect();
+  }, []);
 
   return (
     <div
@@ -208,11 +221,13 @@ function ExpandPanel({ p, open, isEven }) {
               </div>
             </div>
 
-            {/* Visual Content (Live Iframe) */}
-            <div style={{
-              position: "relative", width: "100%", flex: 1, display: "flex",
-              border: "1px solid rgba(255,255,255,0.06)", borderTop: "none", borderRadius: "0 0 8px 8px",
-              background: "#0A0A12", minHeight: "450px", overflow: "hidden",
+            {/* Visual Content (Live Iframe Scaled) */}
+            <div 
+              ref={containerRef}
+              style={{
+                position: "relative", width: "100%", flex: 1, display: "flex",
+                border: "1px solid rgba(255,255,255,0.06)", borderTop: "none", borderRadius: "0 0 8px 8px",
+                background: "#0A0A12", overflow: "hidden", aspectRatio: "1440/900",
             }}>
               
               {open && (
@@ -221,8 +236,10 @@ function ExpandPanel({ p, open, isEven }) {
                   title={`${p.title} live preview`}
                   loading="lazy"
                   style={{
-                    width: "100%", height: "100%", border: "none",
-                    borderRadius: "0 0 8px 8px", background: "#fff"
+                    position: "absolute", top: 0, left: 0,
+                    width: "1440px", height: "900px", border: "none",
+                    borderRadius: "0 0 8px 8px", background: "#fff",
+                    transform: `scale(${scale})`, transformOrigin: "top left"
                   }}
                 />
               )}
