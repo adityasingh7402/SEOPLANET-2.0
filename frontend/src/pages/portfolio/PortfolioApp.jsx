@@ -24,8 +24,6 @@ const PROJECTS = [
     quote: "SEO Planet completely transformed our digital presence. Bookings went up 300% in month one. The attention to performance is incredible.",
     quoteAuthor: "Founder, Eventa",
     video: "https://cdn.pixabay.com/video/2020/05/21/40008-424750244_tiny.mp4", // Placeholder for actual showreel
-    beforeImg: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80", // Placeholder Before
-    afterImg: "https://images.unsplash.com/photo-1555421689-d68471e189f2?w=800&q=80", // Placeholder After
   },
   {
     index: "002",
@@ -44,8 +42,6 @@ const PROJECTS = [
     quote: "The attention to detail is unmatched. Our properties finally look as premium online as they do in person.",
     quoteAuthor: "Director, Midheaven Properties",
     video: "https://cdn.pixabay.com/video/2019/04/10/22744-330560410_tiny.mp4", // Placeholder
-    beforeImg: null,
-    afterImg: null,
   },
 ];
 
@@ -134,83 +130,7 @@ function Header({ scrolled }) {
   );
 }
 
-/* ─────────────────────────────────────────────
-   BEFORE/AFTER SLIDER
-───────────────────────────────────────────── */
-function BeforeAfterSlider({ beforeImg, afterImg }) {
-  const [sliderPos, setSliderPos] = useState(50);
-  const containerRef = useRef(null);
-  const [isDragging, setIsDragging] = useState(false);
 
-  const handleMove = (e) => {
-    if (!isDragging || !containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    let x = e.clientX || (e.touches && e.touches[0].clientX);
-    if (!x) return;
-    let pos = ((x - rect.left) / rect.width) * 100;
-    setSliderPos(Math.max(0, Math.min(100, pos)));
-  };
-
-  return (
-    <div 
-      ref={containerRef}
-      onMouseMove={handleMove}
-      onMouseUp={() => setIsDragging(false)}
-      onMouseLeave={() => setIsDragging(false)}
-      onTouchMove={handleMove}
-      onTouchEnd={() => setIsDragging(false)}
-      style={{
-        position: "relative",
-        width: "100%",
-        minHeight: "340px",
-        height: "100%",
-        overflow: "hidden",
-        borderRadius: "0 0 8px 8px",
-        userSelect: "none",
-        borderTop: "none"
-      }}
-    >
-      {/* After Image (Background) */}
-      <img src={afterImg} alt="After" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute" }} />
-      
-      {/* Before Image (Foreground, clipped) */}
-      <img src={beforeImg} alt="Before" style={{ 
-        width: "100%", height: "100%", objectFit: "cover", position: "absolute",
-        clipPath: `inset(0 ${100 - sliderPos}% 0 0)`
-      }} />
-
-      {/* Slider Handle */}
-      <div 
-        onMouseDown={() => setIsDragging(true)}
-        onTouchStart={() => setIsDragging(true)}
-        style={{
-          position: "absolute",
-          top: 0, bottom: 0,
-          left: `${sliderPos}%`,
-          width: "2px",
-          background: "#00FF94",
-          cursor: "ew-resize",
-          transform: "translateX(-50%)",
-          zIndex: 10,
-          boxShadow: "0 0 10px rgba(0,255,148,0.5)"
-        }}
-      >
-        <div style={{
-          position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
-          width: "28px", height: "28px", borderRadius: "50%", background: "#00FF94",
-          display: "flex", alignItems: "center", justifyContent: "center", color: "#000",
-          boxShadow: "0 4px 10px rgba(0,0,0,0.5)"
-        }}>
-          <span style={{ fontSize: "10px", fontFamily: "JetBrains Mono, monospace", letterSpacing: "-1px" }}>&lt;&gt;</span>
-        </div>
-      </div>
-      
-      {/* Labels */}
-      <div style={{ position: "absolute", top: "16px", left: "16px", background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)", padding: "6px 12px", borderRadius: "4px", fontSize: "9px", fontFamily: "JetBrains Mono, monospace", textTransform: "uppercase", letterSpacing: "0.15em", color: "#fff", zIndex: 5 }}>Before</div>
-      <div style={{ position: "absolute", top: "16px", right: "16px", background: "rgba(0,FF,148,0.15)", backdropFilter: "blur(4px)", padding: "6px 12px", borderRadius: "4px", fontSize: "9px", fontFamily: "JetBrains Mono, monospace", textTransform: "uppercase", letterSpacing: "0.15em", color: "#00FF94", border: "1px solid rgba(0,255,148,0.3)", zIndex: 5 }}>After</div>
-    </div>
-  );
-}
 
 /* ─────────────────────────────────────────────
    INLINE EXPAND PANEL
@@ -293,45 +213,39 @@ function ExpandPanel({ p, open }) {
               </div>
             </div>
 
-            {/* Visual Content (Slider OR Screenshot) */}
+            {/* Visual Content (Screenshot) */}
             <div style={{
               position: "relative", width: "100%", flex: 1, display: "flex",
               border: "1px solid rgba(255,255,255,0.06)", borderTop: "none", borderRadius: "0 0 8px 8px",
-              background: "#0A0A12", minHeight: (imgLoaded || p.beforeImg) ? "auto" : "280px",
+              background: "#0A0A12", minHeight: imgLoaded ? "auto" : "280px",
             }}>
               
-              {p.beforeImg && p.afterImg ? (
-                <BeforeAfterSlider beforeImg={p.beforeImg} afterImg={p.afterImg} />
-              ) : (
-                <>
-                  {!imgLoaded && !imgError && (
-                    <div style={{
-                      position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "12px",
-                    }}>
-                      <div style={{ width: "28px", height: "28px", borderRadius: "50%", border: `2px solid ${p.color}30`, borderTopColor: p.color, animation: "spin 0.8s linear infinite" }} />
-                      <span style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "9px", letterSpacing: "0.25em", textTransform: "uppercase", color: "rgba(255,255,255,0.2)" }}>Capturing screenshot…</span>
-                    </div>
-                  )}
-
-                  {imgError && (
-                    <div style={{ padding: "48px 24px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "100%", gap: "12px" }}>
-                      <span style={{ fontSize: "32px" }}>🌐</span>
-                      <a href={p.url} target="_blank" rel="noreferrer" style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "10px", letterSpacing: "0.2em", textTransform: "uppercase", color: p.color, textDecoration: "none" }}>Open {p.title} ↗</a>
-                    </div>
-                  )}
-
-                  <img
-                    src={screenshotUrl}
-                    alt={`${p.title} preview`}
-                    onLoad={() => setImgLoaded(true)}
-                    onError={() => { setImgError(true); setImgLoaded(true); }}
-                    style={{ display: imgError ? "none" : "block", width: "100%", height: "auto", objectFit: "cover", borderRadius: "0 0 8px 8px", opacity: imgLoaded && !imgError ? 1 : 0, transition: "opacity 0.6s ease" }}
-                  />
-                </>
+              {!imgLoaded && !imgError && (
+                <div style={{
+                  position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "12px",
+                }}>
+                  <div style={{ width: "28px", height: "28px", borderRadius: "50%", border: `2px solid ${p.color}30`, borderTopColor: p.color, animation: "spin 0.8s linear infinite" }} />
+                  <span style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "9px", letterSpacing: "0.25em", textTransform: "uppercase", color: "rgba(255,255,255,0.2)" }}>Capturing screenshot…</span>
+                </div>
               )}
 
+              {imgError && (
+                <div style={{ padding: "48px 24px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "100%", gap: "12px" }}>
+                  <span style={{ fontSize: "32px" }}>🌐</span>
+                  <a href={p.url} target="_blank" rel="noreferrer" style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "10px", letterSpacing: "0.2em", textTransform: "uppercase", color: p.color, textDecoration: "none" }}>Open {p.title} ↗</a>
+                </div>
+              )}
+
+              <img
+                src={screenshotUrl}
+                alt={`${p.title} preview`}
+                onLoad={() => setImgLoaded(true)}
+                onError={() => { setImgError(true); setImgLoaded(true); }}
+                style={{ display: imgError ? "none" : "block", width: "100%", height: "auto", objectFit: "cover", borderRadius: "0 0 8px 8px", opacity: imgLoaded && !imgError ? 1 : 0, transition: "opacity 0.6s ease" }}
+              />
+
               {/* Visit overlay */}
-              {((imgLoaded && !imgError) || p.beforeImg) && (
+              {imgLoaded && !imgError && (
                 <a
                   href={p.url}
                   target="_blank"
