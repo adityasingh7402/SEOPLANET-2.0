@@ -24,6 +24,7 @@ const PROJECTS = [
     quote: "SEO Planet completely transformed our digital presence. Bookings went up 300% in month one. The attention to performance is incredible.",
     quoteAuthor: "Founder, Eventa",
     video: "https://cdn.pixabay.com/video/2020/05/21/40008-424750244_tiny.mp4", // Placeholder for actual showreel
+    image: "/eventa.png",
   },
   {
     index: "002",
@@ -42,6 +43,7 @@ const PROJECTS = [
     quote: "The attention to detail is unmatched. Our properties finally look as premium online as they do in person.",
     quoteAuthor: "Director, Midheaven Properties",
     video: "https://cdn.pixabay.com/video/2019/04/10/22744-330560410_tiny.mp4", // Placeholder
+    image: "/midheaven.png",
   },
 ];
 
