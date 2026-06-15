@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { motion, useMotionValue, useSpring, useMotionTemplate } from "framer-motion";
 
-export default function TiltCard({ children, className = "", maxRotation = 12, isVolumetric = false }) {
+export default function TiltCard({ children, className = "", maxRotation = 18, isVolumetric = false }) {
   const ref = useRef(null);
 
   const x = useMotionValue(0.5);
@@ -45,19 +45,26 @@ export default function TiltCard({ children, className = "", maxRotation = 12, i
         {/* Volumetric Block Extrusion (Slices) */}
         {isVolumetric && (
           <div style={{ transformStyle: "preserve-3d" }} className="absolute inset-0 pointer-events-none transition-all duration-300">
-            {Array.from({ length: 15 }).map((_, i) => (
+            {Array.from({ length: 25 }).map((_, i) => (
               <div 
                 key={i}
-                className={`absolute inset-0 rounded-2xl ${i === 14 ? 'bg-[#00FF94]/10 border border-[#00FF94]/30 shadow-[0_0_20px_rgba(0,255,148,0.2)]' : 'bg-[#0A0F0C] border border-[#00FF94]/5'}`}
+                className={`absolute inset-0 rounded-2xl ${i === 24 ? 'bg-[#00FF94]/15 border border-[#00FF94]/50 shadow-[0_0_30px_rgba(0,255,148,0.3)]' : 'bg-[#05050A]/80 border border-[#00FF94]/5 backdrop-blur-[2px]'}`}
                 style={{ 
-                  transform: `translateZ(-${(i + 1) * 2}px)`,
+                  transform: `translateZ(-${(i + 1) * 3}px)`,
                 }} 
               />
             ))}
           </div>
         )}
 
-        <div style={{ transformStyle: "preserve-3d" }} className="w-full h-full relative z-10">
+        {/* Floating Content Layer */}
+        <div 
+          style={{ 
+            transformStyle: "preserve-3d",
+            transform: isVolumetric ? "translateZ(50px)" : "none"
+          }} 
+          className="w-full h-full relative z-10 transition-transform duration-300"
+        >
           {children}
         </div>
       </motion.div>
