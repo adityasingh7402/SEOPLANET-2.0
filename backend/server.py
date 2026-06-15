@@ -8,6 +8,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import asyncio
 import logging
+import urllib.request
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from typing import List, Optional, Any
@@ -355,6 +356,29 @@ app.add_middleware(
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+
+@app.on_event("startup")
+async def startup_event():
+    asyncio.create_task(ping_server())
+
+async def ping_server():
+    url = os.environ.get('RENDER_EXTERNAL_URL')
+    if not url:
+        logger.info("RENDER_EXTERNAL_URL not set, skipping self-ping.")
+        return
+    
+    logger.info(f"Starting self-ping to {url} every 10 minutes to prevent sleep.")
+    while True:
+        try:
+            await asyncio.sleep(10 * 60) # 10 minutes
+            logger.info("Sending self-ping to keep Render server awake...")
+            loop = asyncio.get_running_loop()
+            await loop.run_in_executor(None, urllib.request.urlopen, f"{url.rstrip('/')}/api/")
+            logger.info("Self-ping successful.")
+        except asyncio.CancelledError:
+            break
+        except Exception as e:
+            logger.error(f"Error during self-ping: {e}")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
