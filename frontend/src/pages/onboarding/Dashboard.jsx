@@ -20,7 +20,7 @@ function CinematicLoader({ onComplete }) {
     const t2 = setTimeout(() => setPhase(2), 2000);
     const t3 = setTimeout(() => onComplete(), 2800);
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
-  }, [onComplete]);
+  }, []); // Empty dependency array prevents resetting the loader on re-renders
 
   return (
     <motion.div 
@@ -123,7 +123,7 @@ const HoverButton = ({ children, className = "", ...props }) => {
 
 // --- Helper Components for Typography Animation ---
 const StaggeredText = ({ text }) => {
-  const words = text.split(" ");
+  const words = (text || "").split(" ");
   return (
     <span className="inline-block overflow-hidden">
       {words.map((word, i) => (
@@ -495,7 +495,7 @@ export default function Dashboard() {
                   >
                     <StaggeredText text="Command Center:" /><br/>
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/50">
-                      <TypewriterText text={data.company_name} delay={0.4} />
+                      <TypewriterText text={data.company_name || ""} delay={0.4} />
                     </span>
                   </motion.h1>
                   
@@ -603,16 +603,16 @@ export default function Dashboard() {
                                 </td>
                                 <td className="py-4 font-display text-xl text-white relative overflow-hidden h-full">
                                   <motion.div
-                                    initial={{ y: kw.change.startsWith('-') ? 20 : -20, opacity: 0 }}
+                                    initial={{ y: String(kw.change).startsWith('-') ? 20 : -20, opacity: 0 }}
                                     whileInView={{ y: 0, opacity: 1 }}
                                     viewport={{ once: true }}
                                     transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.1 + i * 0.04 }}
-                                    className={kw.change !== '0' && kw.change !== '0%' ? (kw.change.startsWith('-') ? 'text-red-400' : 'text-[#00FF94]') : 'text-white'}
+                                    className={kw.change !== '0' && kw.change !== '0%' ? (String(kw.change).startsWith('-') ? 'text-red-400' : 'text-[#00FF94]') : 'text-white'}
                                   >
                                     {kw.rank}
                                   </motion.div>
                                 </td>
-                                <td className={`py-4 font-mono-pro text-xs ${kw.change.startsWith('-') ? 'text-red-400' : 'text-[#00FF94]'}`}>{kw.change}</td>
+                                <td className={`py-4 font-mono-pro text-xs ${String(kw.change).startsWith('-') ? 'text-red-400' : 'text-[#00FF94]'}`}>{kw.change}</td>
                                 <td className="py-4 font-mono-pro text-xs text-white/50">{kw.volume}</td>
                                 <td className="py-4 text-right pr-4">
                                   <span className={`inline-flex px-2 py-1 rounded-full font-mono-pro text-[9px] uppercase tracking-wider ${kw.status === 'active' ? 'bg-[#00FF94]/10 text-[#00FF94]' : 'bg-white/[0.02] text-white/40'}`}>
