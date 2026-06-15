@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring as useFramerSpring } from "framer-motion";
+import { useSpring, animated, config } from "@react-spring/web";
+import Lenis from "lenis";
 import { useAuth } from "../../context/AuthContext";
 import { LogOut, Loader2, FileText, CheckCircle2, Clock, PlayCircle, TrendingUp, Target, Shield, Link, Activity, Lock, Users, Search, LayoutDashboard, LayoutGrid, List, Download, CheckCircle, CircleDashed, Calendar, BarChart3, Calculator, FolderClosed, MessageSquare, Receipt, Send, FileCode, ImageIcon } from "lucide-react";
 import axios from "axios";
@@ -7,64 +9,54 @@ import { Toaster, toast } from "sonner";
 import AdminDashboard from "./AdminDashboard";
 import { AreaChart, Area, Tooltip, ResponsiveContainer } from "recharts";
 
-function CinematicLoader({ companyName, onComplete }) {
+function CinematicLoader({ onComplete }) {
   const [phase, setPhase] = useState(0);
 
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase(1), 1200);
-    const t2 = setTimeout(() => setPhase(2), 2400);
-    const t3 = setTimeout(() => onComplete(), 4000);
+    // 0: Initial fade in
+    // 1: Ring drawing (0.5s)
+    // 2: Scale up and exit (2.5s)
+    const t1 = setTimeout(() => setPhase(1), 500);
+    const t2 = setTimeout(() => setPhase(2), 2000);
+    const t3 = setTimeout(() => onComplete(), 2800);
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, [onComplete]);
 
   return (
     <motion.div 
-      exit={{ opacity: 0, scale: 1.05 }} 
-      transition={{ duration: 0.8, ease: "easeInOut" }}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black text-white grain"
+      exit={{ opacity: 0, scale: 1.1, filter: "blur(10px)" }} 
+      transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black text-white"
     >
-      <div className="absolute inset-0 grid-bg opacity-20" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#00FF94]/10 blur-[150px] animate-pulse" />
-      
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="relative z-10 flex flex-col items-center"
+        animate={{ opacity: 1, scale: phase === 2 ? 1.2 : 1 }}
+        transition={{ duration: phase === 2 ? 0.8 : 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+        className="relative flex items-center justify-center w-32 h-32"
       >
-        <Lock className="w-12 h-12 text-[#00FF94] mb-8 opacity-80" />
-        
-        <div className="h-12 flex items-center justify-center">
-          <AnimatePresence mode="wait">
-            {phase === 0 && (
-              <motion.p key="p0" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="font-mono-pro text-sm uppercase tracking-[0.3em] text-white/50">
-                Decrypting Secure Channel...
-              </motion.p>
-            )}
-            {phase === 1 && (
-              <motion.p key="p1" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="font-mono-pro text-sm uppercase tracking-[0.3em] text-white/50">
-                Synchronizing Strategy Vault...
-              </motion.p>
-            )}
-            {phase === 2 && (
-              <motion.div key="p2" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center">
-                <p className="font-display text-3xl font-bold text-[#00FF94] mb-2 drop-shadow-[0_0_15px_rgba(0,255,148,0.5)]">ACCESS GRANTED</p>
-                <p className="font-mono-pro text-xs uppercase tracking-[0.4em] text-white">Welcome, {companyName}</p>
-              </motion.div>
-            )}
-          </AnimatePresence>
+        {/* Animated Progress Ring */}
+        <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="2" />
+          <motion.circle 
+            cx="50" cy="50" r="48" 
+            fill="none" 
+            stroke="#00FF94" 
+            strokeWidth="2"
+            strokeLinecap="round"
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={{ 
+              pathLength: phase >= 1 ? 1 : 0,
+              opacity: phase >= 1 ? 1 : 0
+            }}
+            transition={{ duration: 1.2, ease: "easeInOut" }}
+          />
+        </svg>
+
+        {/* Logo Center */}
+        <div className="flex flex-col items-center justify-center">
+          <div className="w-3 h-3 rounded-full bg-[#00FF94] shadow-[0_0_15px_#00FF94] mb-2" />
+          <span className="font-display font-bold tracking-[0.2em] text-[10px] uppercase text-white">SEO PLANET</span>
         </div>
-        
-        {phase < 2 && (
-          <div className="w-64 h-1 bg-white/10 rounded-full mt-8 overflow-hidden">
-            <motion.div 
-              initial={{ width: "0%" }} 
-              animate={{ width: "100%" }} 
-              transition={{ duration: 2.4, ease: "linear" }}
-              className="h-full bg-[#00FF94] shadow-[0_0_10px_#00FF94]"
-            />
-          </div>
-        )}
       </motion.div>
     </motion.div>
   );
@@ -74,13 +66,141 @@ const containerVariants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.3 }
+    transition: { staggerChildren: 0.08, delayChildren: 0.1 }
   }
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+  hidden: { opacity: 0, y: 40 },
+  show: { 
+    opacity: 1, y: 0, 
+    transition: { type: "spring", stiffness: 300, damping: 24 } 
+  }
+};
+
+const rightPanelVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.6 }
+  }
+};
+
+const rightItemVariants = {
+  hidden: { opacity: 0, x: 30 },
+  show: { 
+    opacity: 1, x: 0, 
+    transition: { type: "spring", stiffness: 300, damping: 24 } 
+  }
+};
+
+// --- HoverButton with Clip-Path Wipe & Spring Physics ---
+const HoverButton = ({ children, className = "", ...props }) => {
+  return (
+    <motion.button 
+      whileHover="hover"
+      whileTap={{ scale: 0.95 }}
+      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+      className={`relative overflow-hidden group ${className}`}
+      {...props}
+    >
+      <motion.div 
+        variants={{
+          hover: { x: "0%" },
+          initial: { x: "-100%" }
+        }}
+        initial="initial"
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className="absolute inset-0 bg-[#00FF94] z-0"
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer" />
+      <span className="relative z-10 group-hover:text-black transition-colors duration-300 flex items-center justify-center gap-2">
+        {children}
+      </span>
+    </motion.button>
+  );
+};
+
+// --- Helper Components for Typography Animation ---
+const StaggeredText = ({ text }) => {
+  const words = text.split(" ");
+  return (
+    <span className="inline-block overflow-hidden">
+      {words.map((word, i) => (
+        <motion.span
+          key={i}
+          className="inline-block mr-3"
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: i * 0.06 }}
+        >
+          {word}
+        </motion.span>
+      ))}
+    </span>
+  );
+};
+
+const TypewriterText = ({ text, delay = 0 }) => {
+  const [displayText, setDisplayText] = useState("");
+  const [showCaret, setShowCaret] = useState(true);
+
+  useEffect(() => {
+    if (!text) return;
+    let i = 0;
+    const typingDelay = setTimeout(() => {
+      const interval = setInterval(() => {
+        setDisplayText(text.slice(0, i + 1));
+        i++;
+        if (i >= text.length) {
+          clearInterval(interval);
+          setTimeout(() => setShowCaret(false), 1500);
+        }
+      }, 50); // typing speed
+      return () => clearInterval(interval);
+    }, delay * 1000);
+    
+    return () => clearTimeout(typingDelay);
+  }, [text, delay]);
+
+  return (
+    <span className="inline-block">
+      {displayText}
+      <motion.span 
+        animate={{ opacity: showCaret ? [1, 0] : 0 }} 
+        transition={{ repeat: showCaret ? Infinity : 0, duration: 0.8 }}
+        className="inline-block ml-1 w-[0.5em] h-[0.8em] bg-white align-baseline"
+      />
+    </span>
+  );
+};
+
+const AnimatedNumber = ({ value }) => {
+  const isNumber = !isNaN(parseFloat(value));
+  const numStr = String(value).replace(/,/g, '');
+  const match = numStr.match(/^(\D*)(\d+(?:\.\d+)?)(\D*)$/);
+  
+  const prefix = match ? match[1] : '';
+  const num = match ? parseFloat(match[2]) : parseFloat(numStr) || 0;
+  const suffix = match ? match[3] : '';
+
+  const { number } = useSpring({
+    from: { number: 0 },
+    to: { number: num },
+    delay: 600,
+    config: { mass: 1, tension: 170, friction: 26 }
+  });
+
+  if (!isNumber && !match) return <span>{value}</span>;
+
+  return (
+    <animated.span>
+      {number.to(n => {
+        let formatted = n % 1 !== 0 ? n.toFixed(1) : Math.floor(n).toLocaleString();
+        return `${prefix}${formatted}${suffix}`;
+      })}
+    </animated.span>
+  );
 };
 
 function DashboardSkeleton() {
@@ -114,6 +234,14 @@ export default function Dashboard() {
   const [conversionRate, setConversionRate] = useState(2.5);
   const [messageInput, setMessageInput] = useState("");
   const [taggedItem, setTaggedItem] = useState("");
+  const [isNavigating, setIsNavigating] = useState(false);
+
+  useEffect(() => {
+    // Trigger progress bar on tab change
+    setIsNavigating(true);
+    const timer = setTimeout(() => setIsNavigating(false), 800);
+    return () => clearTimeout(timer);
+  }, [activeTab]);
 
   const handleSendMessage = async () => {
     if (!messageInput.trim()) return;
@@ -170,6 +298,47 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
+  // --- Lenis Smooth Scroll Setup ---
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.4,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      touchMultiplier: 2,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    return () => lenis.destroy();
+  }, []);
+
+  // --- Global Mouse Tracking for Parallax (60fps without re-renders) ---
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const smoothMouseX = useFramerSpring(mouseX, { stiffness: 50, damping: 20 });
+  const smoothMouseY = useFramerSpring(mouseY, { stiffness: 50, damping: 20 });
+
+  const { scrollY } = useScroll();
+  const rightPanelY = useTransform(scrollY, value => value * 0.05);
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      // Normalize mouse pos from -1 to 1 based on screen size
+      const x = (e.clientX / window.innerWidth) * 2 - 1;
+      const y = (e.clientY / window.innerHeight) * 2 - 1;
+      mouseX.set(x);
+      mouseY.set(y);
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [mouseX, mouseY]);
+
   if (loading && !data) {
     return <DashboardSkeleton />;
   }
@@ -190,12 +359,43 @@ export default function Dashboard() {
 
       <Toaster theme="dark" position="bottom-right" toastOptions={{ style: { background: '#0A0A0F', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', fontFamily: 'monospace' } }} />
 
+      <AnimatePresence>
+        {isNavigating && (
+          <motion.div 
+            initial={{ width: "0%", opacity: 1 }}
+            animate={{ width: "100%", opacity: [1, 1, 0] }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, ease: "circOut" }}
+            className="fixed top-0 left-0 h-[3px] bg-[#00FF94] z-[100] shadow-[0_0_15px_#00FF94]"
+          />
+        )}
+      </AnimatePresence>
+
       {showDashboard && (
-        <div className="flex h-screen w-full bg-black text-white overflow-hidden grain selection:bg-[#00FF94] selection:text-black">
-          <div className="fixed inset-0 grid-bg opacity-10 pointer-events-none z-0" />
+        <motion.div 
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}
+          className="flex h-screen w-full bg-black text-white overflow-hidden grain selection:bg-[#00FF94] selection:text-black"
+        >
+          {/* Subtle static grid dot pattern */}
+          <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: 'radial-gradient(circle at center, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+          
+          {/* Floating Ambient Orb responding to mouse */}
+          <motion.div 
+            className="fixed top-1/4 left-1/4 w-[600px] h-[600px] pointer-events-none z-0"
+            style={{ x: useTransform(smoothMouseX, [-1, 1], [-40, 40]), y: useTransform(smoothMouseY, [-1, 1], [-40, 40]) }}
+          >
+            <motion.div 
+              animate={{ x: [0, 300, -100, 0], y: [0, 200, -200, 0] }}
+              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              className="w-full h-full rounded-full bg-[#00FF94] opacity-[0.15] blur-[150px]"
+            />
+          </motion.div>
 
           {/* Desktop Sidebar */}
-          <aside className="hidden md:flex flex-col w-64 border-r border-white/5 bg-[#050505]/80 backdrop-blur-xl shrink-0 z-20">
+          <motion.aside 
+            initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2, duration: 0.4 }}
+            className="hidden md:flex flex-col w-64 border-r border-white/5 bg-[#050505]/80 backdrop-blur-xl shrink-0 z-20"
+          >
             <div className="h-20 flex items-center px-8 border-b border-white/5 shrink-0">
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 rounded-full bg-[#00FF94] shadow-[0_0_10px_#00FF94] animate-pulse" />
@@ -219,9 +419,23 @@ export default function Dashboard() {
                   <button 
                     key={item.id}
                     onClick={() => setActiveTab(item.id)}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-mono-pro text-xs uppercase tracking-widest transition-all duration-300 ${isActive ? 'bg-[#00FF94]/10 text-[#00FF94] border border-[#00FF94]/20 shadow-[0_0_20px_rgba(0,255,148,0.1)]' : 'text-white/40 hover:text-white hover:bg-white/[0.02] border border-transparent'}`}
+                    className={`relative w-full flex items-center gap-3 px-4 py-3 rounded-xl font-mono-pro text-xs uppercase tracking-widest transition-colors duration-300 group ${isActive ? 'text-[#00FF94]' : 'text-white/40 hover:text-white'}`}
                   >
-                    <Icon className="w-4 h-4" /> {item.label}
+                    {isActive && (
+                      <motion.div
+                        layoutId="activePill"
+                        className="absolute inset-0 bg-[#00FF94]/10 border border-[#00FF94]/20 rounded-xl shadow-[0_0_20px_rgba(0,255,148,0.1)] z-0"
+                        transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                      />
+                    )}
+                    <motion.div 
+                      className="relative z-10 flex items-center gap-3 w-full"
+                      whileHover={!isActive ? { x: 4 } : {}}
+                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    >
+                      <Icon className="w-4 h-4 transition-all duration-300 group-hover:brightness-125" /> 
+                      {item.label}
+                    </motion.div>
                   </button>
                 );
               })}
@@ -232,18 +446,23 @@ export default function Dashboard() {
                 <LogOut className="w-4 h-4 group-hover:text-[#00FF94] transition-colors" /> Disconnect
               </button>
             </div>
-          </aside>
+          </motion.aside>
 
           {/* Main Area (Mobile & Desktop) */}
           <div className="flex-1 flex flex-col h-screen relative z-10 min-w-0">
             {/* Mobile Header */}
-            <header className="md:hidden h-16 border-b border-white/5 bg-[#050505]/80 backdrop-blur-xl flex items-center justify-between px-6 shrink-0 z-20">
+            <motion.header 
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="md:hidden h-16 border-b border-white/5 bg-[#050505]/80 backdrop-blur-xl flex items-center justify-between px-6 shrink-0 z-20"
+            >
                <div className="flex items-center gap-3">
                   <div className="w-2 h-2 rounded-full bg-[#00FF94] shadow-[0_0_10px_#00FF94] animate-pulse" />
                   <span className="font-display font-bold tracking-widest text-sm uppercase text-[#00FF94]">Portal</span>
                 </div>
                <button onClick={logout}><LogOut className="w-4 h-4 text-white/50" /></button>
-            </header>
+            </motion.header>
 
             {/* Scrollable Content */}
             <main className="flex-1 overflow-y-auto p-6 md:p-12 pb-32 md:pb-12 custom-scrollbar">
@@ -255,17 +474,39 @@ export default function Dashboard() {
               {/* Left Column */}
               <div className="lg:col-span-7 space-y-12">
                 <motion.div variants={itemVariants}>
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00FF94]/10 border border-[#00FF94]/20 mb-6">
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00FF94]/10 border border-[#00FF94]/20 mb-6 relative group"
+                  >
+                    <motion.div 
+                      animate={{ boxShadow: ["0 0 0px #00FF94", "0 0 15px #00FF94", "0 0 0px #00FF94"] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                      className="absolute inset-0 rounded-full opacity-50"
+                    />
                     <div className="w-1.5 h-1.5 rounded-full bg-[#00FF94] shadow-[0_0_8px_#00FF94]" />
-                    <span className="font-mono-pro text-[10px] text-[#00FF94] uppercase tracking-widest">Exclusive Portal Activated</span>
-                  </div>
-                  <h1 className="font-display text-4xl sm:text-6xl font-black tracking-tighter leading-none mb-6">
-                    Command Center:<br/>
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/50">{data.company_name}</span>
-                  </h1>
-                  <p className="font-mono-pro text-sm text-white/60 leading-relaxed max-w-lg">
+                    <span className="font-mono-pro text-[10px] text-[#00FF94] uppercase tracking-widest relative z-10">Exclusive Portal Activated</span>
+                  </motion.div>
+                  
+                  <motion.h1 
+                    className="font-display text-4xl sm:text-6xl font-black tracking-tighter leading-none mb-6"
+                    style={{ x: useTransform(smoothMouseX, [-1, 1], [-10, 10]) }}
+                  >
+                    <StaggeredText text="Command Center:" /><br/>
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/50">
+                      <TypewriterText text={data.company_name} delay={0.4} />
+                    </span>
+                  </motion.h1>
+                  
+                  <motion.p 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6, duration: 0.6, ease: "easeOut" }}
+                    className="font-mono-pro text-sm text-white/60 leading-relaxed max-w-lg"
+                  >
                     Your dedicated SEO engine is live. All strategic assets, real-time analytics, and execution roadmaps are fully synchronized and accessible below.
-                  </p>
+                  </motion.p>
                 </motion.div>
 
                 <div className="space-y-12">
@@ -282,15 +523,24 @@ export default function Dashboard() {
                         ].map((m, i) => (
                           <motion.div 
                             key={i} 
-                            whileHover={{ y: -4, scale: 1.02 }}
-                            className="group relative glass rounded-2xl p-6 border border-white/[0.04] hover:border-[#00FF94]/40 hover:shadow-[0_0_30px_rgba(0,255,148,0.1)] transition-all duration-300 flex flex-col"
+                            whileHover={{ y: -4, scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                            style={{ 
+                              rotateX: useTransform(smoothMouseY, [-1, 1], ["8deg", "-8deg"]),
+                              rotateY: useTransform(smoothMouseX, [-1, 1], ["-8deg", "8deg"]),
+                              transformStyle: "preserve-3d"
+                            }}
+                            className="group relative glass rounded-2xl p-6 border border-white/[0.04] hover:border-[#00FF94]/40 hover:shadow-[0_0_30px_rgba(0,255,148,0.1)] flex flex-col"
                           >
                             <div className="absolute inset-0 bg-gradient-to-br from-[#00FF94]/0 to-[#00FF94]/[0.02] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
                             <div className="flex justify-between items-start mb-4">
                               <m.icon className="w-6 h-6 text-[#00FF94] opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300" />
                               <span className="font-mono-pro text-[10px] text-[#00FF94] bg-[#00FF94]/10 px-2 py-1 rounded-full">{m.change}</span>
                             </div>
-                            <p className="font-display font-black text-3xl mb-1 tracking-tight">{m.value}</p>
+                            <p className="font-display font-black text-3xl mb-1 tracking-tight">
+                              <AnimatedNumber value={m.value} />
+                            </p>
                             <p className="font-mono-pro text-[10px] uppercase tracking-widest text-white/40">{m.label}</p>
                           </motion.div>
                         ))}
@@ -339,17 +589,37 @@ export default function Dashboard() {
                           </thead>
                           <tbody className="divide-y divide-white/5">
                             {data.keyword_rankings.map((kw, i) => (
-                              <tr key={i} className="group hover:bg-white/[0.02] transition-colors">
-                                <td className="py-4 pr-4 font-display font-medium text-white/90 whitespace-nowrap">{kw.keyword}</td>
-                                <td className="py-4 font-display text-xl text-white">{kw.rank}</td>
+                              <motion.tr 
+                                key={i} 
+                                initial={{ opacity: 0, x: -10 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true, margin: "-20px" }}
+                                transition={{ delay: i * 0.04 }}
+                                className="group relative hover:bg-white/[0.02] transition-colors"
+                              >
+                                <td className="py-4 pr-4 pl-4 font-display font-medium text-white/90 whitespace-nowrap relative overflow-hidden">
+                                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#00FF94] -translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-[0.16,1,0.3,1]" />
+                                  {kw.keyword}
+                                </td>
+                                <td className="py-4 font-display text-xl text-white relative overflow-hidden h-full">
+                                  <motion.div
+                                    initial={{ y: kw.change.startsWith('-') ? 20 : -20, opacity: 0 }}
+                                    whileInView={{ y: 0, opacity: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.1 + i * 0.04 }}
+                                    className={kw.change !== '0' && kw.change !== '0%' ? (kw.change.startsWith('-') ? 'text-red-400' : 'text-[#00FF94]') : 'text-white'}
+                                  >
+                                    {kw.rank}
+                                  </motion.div>
+                                </td>
                                 <td className={`py-4 font-mono-pro text-xs ${kw.change.startsWith('-') ? 'text-red-400' : 'text-[#00FF94]'}`}>{kw.change}</td>
                                 <td className="py-4 font-mono-pro text-xs text-white/50">{kw.volume}</td>
-                                <td className="py-4 text-right">
+                                <td className="py-4 text-right pr-4">
                                   <span className={`inline-flex px-2 py-1 rounded-full font-mono-pro text-[9px] uppercase tracking-wider ${kw.status === 'active' ? 'bg-[#00FF94]/10 text-[#00FF94]' : 'bg-white/[0.02] text-white/40'}`}>
                                     {kw.status}
                                   </span>
                                 </td>
-                              </tr>
+                              </motion.tr>
                             ))}
                           </tbody>
                         </table>
@@ -487,10 +757,18 @@ export default function Dashboard() {
               </div>
 
               {/* Right Column */}
-              <div className="lg:col-span-5 space-y-8 lg:pt-32">
+              <motion.div 
+                variants={rightPanelVariants}
+                style={{ y: rightPanelY }}
+                className="lg:col-span-5 space-y-8 lg:pt-32"
+              >
                 {/* Sprint Focus */}
-                <motion.div variants={itemVariants} className="relative rounded-3xl p-[1px] overflow-hidden group">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#00FF94]/40 to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
+                <motion.div variants={rightItemVariants} className="relative rounded-3xl p-[1px] overflow-hidden group">
+                  <motion.div 
+                    animate={{ backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"] }}
+                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                    className="absolute inset-0 bg-[length:200%_200%] bg-gradient-to-br from-[#00FF94]/40 via-transparent to-[#00FF94]/10 opacity-60 group-hover:opacity-100 transition-opacity duration-700" 
+                  />
                   <div className="relative rounded-3xl bg-[#050505] p-8 sm:p-10 h-full backdrop-blur-xl">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-[#00FF94]/10 blur-[50px] pointer-events-none" />
                     <h3 className="overline text-[#00FF94] mb-6 flex items-center gap-2"><Target className="w-4 h-4"/> Current Sprint Focus</h3>
@@ -501,7 +779,7 @@ export default function Dashboard() {
                 </motion.div>
 
                 {/* Vault */}
-                <motion.div variants={itemVariants} className="rounded-3xl glass p-8 sm:p-10 border border-white/[0.04]">
+                <motion.div variants={rightItemVariants} className="rounded-3xl glass p-8 sm:p-10 border border-white/[0.04]">
                   <h3 className="overline text-white/40 mb-8 flex items-center gap-3">
                     <div className="w-6 h-[1px] bg-white/20" /> Strategy Vault
                   </h3>
@@ -527,7 +805,7 @@ export default function Dashboard() {
                 </motion.div>
 
                 {/* Support */}
-                <motion.div variants={itemVariants} className="relative rounded-3xl p-8 sm:p-10 border border-[#00FF94]/20 bg-[#00FF94]/5 overflow-hidden">
+                <motion.div variants={rightItemVariants} className="relative rounded-3xl p-8 sm:p-10 border border-[#00FF94]/20 bg-[#00FF94]/5 overflow-hidden">
                   <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-[#00FF94]/10 to-transparent opacity-50" />
                   <div className="relative z-10">
                     <div className="flex items-start justify-between mb-6">
@@ -537,12 +815,15 @@ export default function Dashboard() {
                     <p className="font-mono-pro text-sm text-white/70 leading-relaxed mb-8">
                       Need assistance or want to request a strategy pivot? Open a direct comms channel with your account manager.
                     </p>
-                    <a href="mailto:founder@seoplanet.in" className="inline-flex items-center justify-center w-full gap-3 rounded-full bg-white text-black px-8 py-4 font-mono-pro text-xs uppercase tracking-[0.2em] font-bold hover:bg-[#00FF94] hover:shadow-[0_0_20px_rgba(0,255,148,0.4)] transition-all duration-300 hover:scale-[1.02]">
+                    <HoverButton 
+                      onClick={() => window.location.href = "mailto:founder@seoplanet.in"}
+                      className="w-full rounded-full bg-white text-black px-8 py-4 font-mono-pro text-xs uppercase tracking-[0.2em] font-bold"
+                    >
                       Contact Team
-                    </a>
+                    </HoverButton>
                   </div>
                 </motion.div>
-              </div>
+              </motion.div>
 
             </motion.div>
             ) : activeTab === "deliverables" ? (
@@ -1028,7 +1309,7 @@ export default function Dashboard() {
            </div>
         </nav>
       </div>
-    </div>
+    </motion.div>
   )}
 </>
   );
