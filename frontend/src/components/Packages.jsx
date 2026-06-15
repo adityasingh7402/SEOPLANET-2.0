@@ -130,7 +130,7 @@ export default function Packages() {
               <TiltCard key={pkg.code} className="h-full w-full" isVolumetric={true}>
                 <motion.div
                   {...reveal}
-                className={`relative rounded-2xl p-8 sm:p-10 transition-all duration-300 group flex flex-col justify-between min-h-[720px] ${
+                className={`relative rounded-2xl p-8 sm:p-10 transition-all duration-300 group flex flex-col justify-between h-full min-h-[720px] ${
                   pkg.recommended
                     ? "bg-[#0A0A0F] border border-[#00FF94] shadow-[0_0_30px_rgba(0,255,148,0.12)] hover:shadow-[0_0_40px_rgba(0,255,148,0.2)]"
                     : "bg-white/[0.03] border border-white/10 hover:border-white/20 hover:bg-white/[0.05]"
