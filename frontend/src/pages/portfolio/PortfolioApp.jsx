@@ -32,7 +32,7 @@ const PROJECTS = [
     subtitle: "Luxury Real Estate Brand & Web Presence",
     category: "Real Estate · Brand · Web",
     year: "2025",
-    result: "₹Cr+",
+    result: "₹102Cr+",
     resultLabel: "Listings Showcased",
     color: "#C9A96E",
     url: "https://midheaven.in",
