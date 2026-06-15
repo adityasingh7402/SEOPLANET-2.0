@@ -93,8 +93,9 @@ function TiltCard({ children, className = "", ...props }) {
   const mouseXSpring = useSpring(x, { stiffness: 150, damping: 15, mass: 0.1 });
   const mouseYSpring = useSpring(y, { stiffness: 150, damping: 15, mass: 0.1 });
 
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["5deg", "-5deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-5deg", "5deg"]);
+  // Increased rotation to 15 degrees for extreme WOW factor
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["15deg", "-15deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-15deg", "15deg"]);
   const glareX = useTransform(mouseXSpring, [-0.5, 0.5], ["100%", "0%"]);
   const glareY = useTransform(mouseYSpring, [-0.5, 0.5], ["100%", "0%"]);
 
@@ -126,13 +127,15 @@ function TiltCard({ children, className = "", ...props }) {
         rotateX,
         rotateY,
         transformStyle: "preserve-3d",
+        perspective: 1000, // Explicitly adding perspective here!
       }}
-      className={`relative group perspective-1000 ${className}`}
+      className={`relative group ${className}`}
     >
       <motion.div
         className="pointer-events-none absolute inset-0 z-50 rounded-[inherit] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
         style={{
-          background: "radial-gradient(circle at center, rgba(255,255,255,0.08) 0%, transparent 60%)",
+          // Increased glare visibility for more WOW factor
+          background: "radial-gradient(circle at center, rgba(0,255,148,0.15) 0%, transparent 70%)",
           left: glareX,
           top: glareY,
           transform: "translate(-50%, -50%)",
@@ -140,7 +143,9 @@ function TiltCard({ children, className = "", ...props }) {
           height: "200%",
         }}
       />
-      {children}
+      <div className="relative z-10 w-full h-full pointer-events-auto" style={{ transform: "translateZ(30px)" }}>
+        {children}
+      </div>
     </motion.div>
   );
 }
