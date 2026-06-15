@@ -141,8 +141,8 @@ function ExpandPanel({ p, open, isEven }) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const [imgError, setImgError] = useState(false);
 
-  // Microlink.io free screenshot API
-  const screenshotUrl = `https://api.microlink.io/?url=${encodeURIComponent(p.url)}&screenshot=true&meta=false&embed=screenshot.url&colorScheme=dark&viewport.width=1440&viewport.height=900`;
+  // Thum.io provides much faster, more reliable free screenshots without aggressive rate limits
+  const screenshotUrl = `https://image.thum.io/get/width/1440/crop/900/noanimate/${p.url}`;
 
   useEffect(() => {
     if (!panelRef.current) return;
