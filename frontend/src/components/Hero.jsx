@@ -51,11 +51,10 @@ function ClientLogos() {
 }
 
 export default function Hero() {
-  const [isDesktop, setIsDesktop] = React.useState(true);
+  const [isDesktop, setIsDesktop] = React.useState(window.innerWidth > 768);
 
   React.useEffect(() => {
     const handleResize = () => setIsDesktop(window.innerWidth > 768);
-    handleResize(); // Init
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
