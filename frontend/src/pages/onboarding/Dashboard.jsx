@@ -26,7 +26,10 @@ function CinematicLoader({ companyName, onComplete }) {
       className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black text-white grain"
     >
       <div className="absolute inset-0 grid-bg opacity-20" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,rgba(0,255,148,0.15)_0%,transparent_50%)] animate-pulse pointer-events-none" />
+      {/* Desktop Gaussian Blur */}
+      <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#00FF94]/10 blur-[150px] animate-pulse pointer-events-none" />
+      {/* Mobile Safe Gradient */}
+      <div className="block md:hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,rgba(0,255,148,0.15)_0%,transparent_50%)] animate-pulse pointer-events-none" />
       
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
@@ -411,10 +414,17 @@ export default function Dashboard() {
             className="fixed top-1/4 left-1/4 w-[600px] h-[600px] pointer-events-none z-0"
             style={{ x: orbX, y: orbY }}
           >
+            {/* Desktop Gaussian Blur */}
             <motion.div 
               animate={{ x: [0, 300, -100, 0], y: [0, 200, -200, 0] }}
               transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-              className="w-full h-full bg-[radial-gradient(circle_at_center,rgba(0,255,148,0.15)_0%,transparent_50%)]"
+              className="hidden md:block w-full h-full rounded-full bg-[#00FF94] opacity-[0.15] blur-[150px]"
+            />
+            {/* Mobile Safe Gradient */}
+            <motion.div 
+              animate={{ x: [0, 300, -100, 0], y: [0, 200, -200, 0] }}
+              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              className="block md:hidden w-full h-full bg-[radial-gradient(circle_at_center,rgba(0,255,148,0.15)_0%,transparent_50%)]"
             />
           </motion.div>
 
@@ -797,7 +807,10 @@ export default function Dashboard() {
                     className="absolute inset-0 bg-[length:200%_200%] bg-gradient-to-br from-[#00FF94]/40 via-transparent to-[#00FF94]/10 opacity-60 group-hover:opacity-100 transition-opacity duration-700" 
                   />
                   <div className="relative rounded-3xl bg-[#050505] p-8 sm:p-10 h-full backdrop-blur-xl">
-                    <div className="absolute top-0 right-0 w-[400px] h-[400px] -translate-y-1/2 translate-x-1/2 bg-[radial-gradient(circle_at_center,rgba(0,255,148,0.1)_0%,transparent_50%)] pointer-events-none" />
+                    {/* Desktop Gaussian Blur */}
+                    <div className="hidden md:block absolute top-0 right-0 w-32 h-32 bg-[#00FF94]/10 blur-[50px] pointer-events-none" />
+                    {/* Mobile Safe Gradient */}
+                    <div className="block md:hidden absolute top-0 right-0 w-[400px] h-[400px] -translate-y-1/2 translate-x-1/2 bg-[radial-gradient(circle_at_center,rgba(0,255,148,0.1)_0%,transparent_50%)] pointer-events-none" />
                     <h3 className="overline text-[#00FF94] mb-6 flex items-center gap-2"><Target className="w-4 h-4"/> Current Sprint Focus</h3>
                     <p className="font-display text-2xl sm:text-3xl font-bold leading-tight tracking-tight drop-shadow-lg">
                       {data.current_focus || "Phase 1: Technical Foundation & Site Architecture"}
@@ -1046,7 +1059,10 @@ export default function Dashboard() {
 
               <div className="lg:col-span-4">
                 <div className="glass rounded-3xl p-8 border border-[#00FF94]/20 relative overflow-hidden sticky top-8">
-                  <div className="absolute top-0 right-0 w-[500px] h-[500px] -translate-y-1/2 translate-x-1/2 bg-[radial-gradient(circle_at_center,rgba(0,255,148,0.1)_0%,transparent_50%)] pointer-events-none" />
+                  {/* Desktop Gaussian Blur */}
+                  <div className="hidden md:block absolute top-0 right-0 w-64 h-64 bg-[#00FF94]/10 blur-[80px] rounded-full pointer-events-none" />
+                  {/* Mobile Safe Gradient */}
+                  <div className="block md:hidden absolute top-0 right-0 w-[500px] h-[500px] -translate-y-1/2 translate-x-1/2 bg-[radial-gradient(circle_at_center,rgba(0,255,148,0.1)_0%,transparent_50%)] pointer-events-none" />
                   
                   <div className="flex items-center gap-3 mb-8">
                     <div className="w-10 h-10 rounded-xl bg-[#00FF94]/10 flex items-center justify-center">
@@ -1233,7 +1249,10 @@ export default function Dashboard() {
 
               {/* YTD Summary */}
               <div className="glass rounded-3xl p-8 border border-[#00FF94]/20 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] -translate-y-1/2 translate-x-1/2 bg-[radial-gradient(circle_at_center,rgba(0,255,148,0.1)_0%,transparent_50%)] pointer-events-none" />
+                {/* Desktop Gaussian Blur */}
+                <div className="hidden md:block absolute top-0 right-0 w-64 h-64 bg-[#00FF94]/10 blur-[80px] rounded-full pointer-events-none" />
+                {/* Mobile Safe Gradient */}
+                <div className="block md:hidden absolute top-0 right-0 w-[500px] h-[500px] -translate-y-1/2 translate-x-1/2 bg-[radial-gradient(circle_at_center,rgba(0,255,148,0.1)_0%,transparent_50%)] pointer-events-none" />
                 <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-6 justify-between">
                   <div>
                     <h3 className="font-mono-pro text-xs uppercase tracking-widest text-white/60 mb-2">Total Paid (YTD)</h3>
