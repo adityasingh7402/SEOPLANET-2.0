@@ -520,7 +520,7 @@ export default function Dashboard() {
                     className="font-display text-4xl sm:text-6xl font-black tracking-tighter leading-none mb-6"
                     style={{ x: titleX }}
                   >
-                    <StaggeredText text="Command Center:" /><br/>
+                    <StaggeredText text="Command Center" /><br/>
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/50">
                       <TypewriterText text={data.company_name || ""} delay={0.4} />
                     </span>
