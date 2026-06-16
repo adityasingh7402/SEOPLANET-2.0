@@ -139,7 +139,7 @@ export default function AdminDashboard({ adminData }) {
       {/* Main Content */}
       <main className="flex-1 relative overflow-y-auto custom-scrollbar">
         <div className="fixed inset-0 grid-bg opacity-10 pointer-events-none" />
-        <div className="absolute top-0 right-0 w-[800px] h-[500px] rounded-full bg-[#00D67D]/5 blur-[120px] pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[800px] h-[500px] bg-[radial-gradient(ellipse_at_center,rgba(0,214,125,0.08)_0%,transparent_50%)] pointer-events-none" />
         
         <div className="relative z-10 max-w-5xl mx-auto p-8 sm:p-12">
           
