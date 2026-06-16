@@ -479,7 +479,7 @@ export default function Dashboard() {
             </motion.header>
 
             {/* Scrollable Content */}
-            <main id="dashboard-scroll-wrapper" className="flex-1 overflow-y-auto p-6 md:p-12 pb-32 md:pb-12 custom-scrollbar">
+            <main id="dashboard-scroll-wrapper" className="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 md:p-12 pb-32 md:pb-12 custom-scrollbar">
               <div id="dashboard-scroll-content" className="max-w-5xl mx-auto relative z-10">
                 <AnimatePresence mode="wait">
             {activeTab === "overview" ? (
@@ -590,7 +590,8 @@ export default function Dashboard() {
                   {data.keyword_rankings && data.keyword_rankings.length > 0 && (
                     <motion.div variants={itemVariants} className="glass rounded-2xl p-6 border border-white/[0.04] overflow-hidden">
                       <h3 className="font-mono-pro text-xs text-white/40 uppercase tracking-widest mb-6">Keyword Positions</h3>
-                      <div className="overflow-x-auto">
+                      {/* Desktop Table View */}
+                      <div className="hidden md:block overflow-x-auto">
                         <table className="w-full text-left">
                           <thead>
                             <tr className="border-b border-white/5">
@@ -638,6 +639,45 @@ export default function Dashboard() {
                           </tbody>
                         </table>
                       </div>
+
+                      {/* Ultra-Premium Mobile Card View */}
+                      <div className="block md:hidden space-y-3 mt-4">
+                        {data.keyword_rankings.map((kw, i) => (
+                          <motion.div 
+                            key={`mob-${i}`}
+                            initial={{ opacity: 0, y: 10 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: i * 0.04 }}
+                            className="bg-white/[0.02] border border-white/5 rounded-xl p-4 hover:border-[#00FF94]/20 transition-colors relative overflow-hidden group"
+                          >
+                            <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#00FF94] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            <div className="flex justify-between items-start mb-3">
+                              <span className="font-display font-medium text-white/90 truncate mr-2">{kw.keyword}</span>
+                              <span className={`shrink-0 inline-flex px-2 py-1 rounded-full font-mono-pro text-[9px] uppercase tracking-wider ${kw.status === 'active' ? 'bg-[#00FF94]/10 text-[#00FF94]' : 'bg-white/[0.02] text-white/40'}`}>
+                                {kw.status}
+                              </span>
+                            </div>
+                            <div className="flex justify-between items-end">
+                              <div>
+                                <p className="font-mono-pro text-[9px] text-white/40 uppercase mb-1">Rank</p>
+                                <div className="flex items-baseline gap-2">
+                                  <span className={`font-display text-xl ${kw.change !== '0' && kw.change !== '0%' ? (String(kw.change).startsWith('-') ? 'text-red-400' : 'text-[#00FF94]') : 'text-white'}`}>
+                                    {kw.rank}
+                                  </span>
+                                  <span className={`font-mono-pro text-[10px] ${String(kw.change).startsWith('-') ? 'text-red-400' : 'text-[#00FF94]'}`}>
+                                    {kw.change}
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <p className="font-mono-pro text-[9px] text-white/40 uppercase mb-1">Volume</p>
+                                <span className="font-mono-pro text-xs text-white/50">{kw.volume}</span>
+                              </div>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
                     </motion.div>
                   )}
 
@@ -649,7 +689,7 @@ export default function Dashboard() {
                         {/* Client's own row for comparison */}
                         <div className="flex items-center justify-between p-4 rounded-xl bg-[#00FF94]/5 border border-[#00FF94]/20">
                           <span className="font-display font-bold text-[#00FF94] truncate mr-4">{data.company_name} (You)</span>
-                          <div className="flex gap-8 text-right shrink-0">
+                          <div className="flex gap-4 sm:gap-8 text-right shrink-0">
                             <div>
                               <p className="font-mono-pro text-[9px] text-white/40 uppercase mb-1">Traffic</p>
                               <p className="font-display text-lg text-white">{data.metrics?.traffic || "0"}</p>
@@ -664,7 +704,7 @@ export default function Dashboard() {
                         {data.competitors.map((comp, i) => (
                           <div key={i} className="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] border border-white/5">
                             <span className="font-display font-medium text-white/60 truncate mr-4">{comp.name}</span>
-                            <div className="flex gap-8 text-right opacity-60 shrink-0">
+                            <div className="flex gap-4 sm:gap-8 text-right opacity-60 shrink-0">
                               <div>
                                 <p className="font-display text-lg">{comp.traffic}</p>
                               </div>
@@ -754,8 +794,8 @@ export default function Dashboard() {
                       </h3>
                       <div className="space-y-4">
                         {data.recent_activity.slice(0, 3).map((act, i) => (
-                          <motion.div key={i} whileHover={{ scale: 1.01 }} className="flex gap-5 p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-[#00FF94]/20 transition-colors">
-                            <div className="w-2 h-2 rounded-full bg-[#00FF94] mt-2 shadow-[0_0_10px_#00FF94]" />
+                          <motion.div key={i} whileHover={{ scale: 1.01 }} className="flex gap-3 sm:gap-5 p-4 sm:p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-[#00FF94]/20 transition-colors">
+                            <div className="w-2 h-2 rounded-full bg-[#00FF94] mt-2 shadow-[0_0_10px_#00FF94] shrink-0" />
                             <div>
                               <p className="font-mono-pro text-[10px] text-[#00FF94] mb-1.5 uppercase tracking-wider">
                                 {new Date(act.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
