@@ -327,6 +327,12 @@ export default function Dashboard() {
   const { scrollY } = useScroll();
   const rightPanelY = useTransform(scrollY, value => value * 0.05);
 
+  const orbX = useTransform(smoothMouseX, [-1, 1], [-40, 40]);
+  const orbY = useTransform(smoothMouseY, [-1, 1], [-40, 40]);
+  const titleX = useTransform(smoothMouseX, [-1, 1], [-10, 10]);
+  const cardRotateX = useTransform(smoothMouseY, [-1, 1], ["8deg", "-8deg"]);
+  const cardRotateY = useTransform(smoothMouseX, [-1, 1], ["-8deg", "8deg"]);
+
   useEffect(() => {
     const handleMouseMove = (e) => {
       // Normalize mouse pos from -1 to 1 based on screen size
@@ -382,7 +388,7 @@ export default function Dashboard() {
           {/* Floating Ambient Orb responding to mouse */}
           <motion.div 
             className="fixed top-1/4 left-1/4 w-[600px] h-[600px] pointer-events-none z-0"
-            style={{ x: useTransform(smoothMouseX, [-1, 1], [-40, 40]), y: useTransform(smoothMouseY, [-1, 1], [-40, 40]) }}
+            style={{ x: orbX, y: orbY }}
           >
             <motion.div 
               animate={{ x: [0, 300, -100, 0], y: [0, 200, -200, 0] }}
@@ -491,7 +497,7 @@ export default function Dashboard() {
                   
                   <motion.h1 
                     className="font-display text-4xl sm:text-6xl font-black tracking-tighter leading-none mb-6"
-                    style={{ x: useTransform(smoothMouseX, [-1, 1], [-10, 10]) }}
+                    style={{ x: titleX }}
                   >
                     <StaggeredText text="Command Center:" /><br/>
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/50">
@@ -527,8 +533,8 @@ export default function Dashboard() {
                             whileTap={{ scale: 0.97 }}
                             transition={{ type: "spring", stiffness: 300, damping: 20 }}
                             style={{ 
-                              rotateX: useTransform(smoothMouseY, [-1, 1], ["8deg", "-8deg"]),
-                              rotateY: useTransform(smoothMouseX, [-1, 1], ["-8deg", "8deg"]),
+                              rotateX: cardRotateX,
+                              rotateY: cardRotateY,
                               transformStyle: "preserve-3d"
                             }}
                             className="group relative glass rounded-2xl p-6 border border-white/[0.04] hover:border-[#00FF94]/40 hover:shadow-[0_0_30px_rgba(0,255,148,0.1)] flex flex-col"
