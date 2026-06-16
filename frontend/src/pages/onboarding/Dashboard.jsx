@@ -26,10 +26,6 @@ function CinematicLoader({ companyName, onComplete }) {
       className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black text-white grain"
     >
       <div className="absolute inset-0 grid-bg opacity-20" />
-      {/* Desktop Gaussian Blur */}
-      <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#00FF94]/10 blur-[150px] animate-pulse pointer-events-none" />
-      {/* Mobile Safe Gradient */}
-      <div className="block md:hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,rgba(0,255,148,0.15)_0%,transparent_50%)] animate-pulse pointer-events-none" />
       
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
@@ -408,25 +404,6 @@ export default function Dashboard() {
         >
           {/* Subtle static grid dot pattern */}
           <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: 'radial-gradient(circle at center, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
-          
-          {/* Floating Ambient Orb responding to mouse */}
-          <motion.div 
-            className="fixed top-1/4 left-1/4 w-[600px] h-[600px] pointer-events-none z-0"
-            style={{ x: orbX, y: orbY }}
-          >
-            {/* Desktop Gaussian Blur */}
-            <motion.div 
-              animate={{ x: [0, 300, -100, 0], y: [0, 200, -200, 0] }}
-              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-              className="hidden md:block w-full h-full rounded-full bg-[#00FF94] opacity-[0.15] blur-[150px]"
-            />
-            {/* Mobile Safe Gradient */}
-            <motion.div 
-              animate={{ x: [0, 300, -100, 0], y: [0, 200, -200, 0] }}
-              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-              className="block md:hidden w-full h-full bg-[radial-gradient(circle_at_center,rgba(0,255,148,0.15)_0%,transparent_50%)]"
-            />
-          </motion.div>
 
           {/* Desktop Sidebar */}
           <motion.aside 
