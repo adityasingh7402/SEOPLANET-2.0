@@ -692,7 +692,7 @@ function ParallaxManyMore({ revealed }) {
           lineHeight: 1,
           whiteSpace: "nowrap",
           color: "transparent",
-          WebkitTextStroke: "1px rgba(255,255,255,0.12)",
+          WebkitTextStroke: "2px rgba(255,255,255,0.8)",
           display: "flex", alignItems: "center", gap: "clamp(1rem, 2vw, 2rem)",
           willChange: "transform"
         }}
@@ -701,11 +701,11 @@ function ParallaxManyMore({ revealed }) {
         <span style={{ 
           color: "#fff", 
           WebkitTextStroke: "0px",
-          textShadow: "0 20px 80px rgba(0,255,148,0.25)"
+          textShadow: "0 20px 80px rgba(0,255,148,0.4)"
         }}>
           Many
         </span>
-        <span>more...</span>
+        <span>more</span>
       </div>
     </div>
   );
