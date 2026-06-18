@@ -675,7 +675,7 @@ function ParallaxManyMore({ revealed }) {
     <div 
       ref={containerRef}
       style={{
-        padding: "clamp(100px, 15vw, 180px) 0",
+        padding: "clamp(40px, 8vw, 80px) 0",
         display: "flex", justifyContent: "center", alignItems: "center",
         overflow: "hidden",
         position: "relative",
@@ -687,7 +687,7 @@ function ParallaxManyMore({ revealed }) {
         ref={textRef}
         style={{
           fontFamily: "'Unbounded', sans-serif", fontWeight: 900,
-          fontSize: "clamp(4rem, 11vw, 11rem)", 
+          fontSize: "clamp(2.5rem, 7vw, 7rem)", 
           letterSpacing: "-0.04em",
           lineHeight: 1,
           whiteSpace: "nowrap",
@@ -737,7 +737,7 @@ function CapabilitiesMarquee() {
 
   return (
     <div style={{ 
-      width: "100%", overflow: "hidden", padding: "60px 0", marginTop: "40px",
+      width: "100%", overflow: "hidden", padding: "40px 0", marginTop: "0px",
       borderTop: "1px solid rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.05)",
       background: "linear-gradient(to right, rgba(5,5,10,1) 0%, rgba(5,5,10,0) 10%, rgba(5,5,10,0) 90%, rgba(5,5,10,1) 100%)",
       display: "flex", flexDirection: "column", position: "relative"
