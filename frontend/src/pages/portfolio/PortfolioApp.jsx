@@ -101,7 +101,7 @@ const PROJECTS = [
   },
   {
     index: "006",
-    title: "Streamify",
+    title: "Raidnext",
     subtitle: "Streaming Platform Interface",
     category: "Media · Web App",
     year: "2025",
@@ -137,7 +137,7 @@ const PROJECTS = [
   },
   {
     index: "008",
-    title: "Wanderlust Travels",
+    title: "Wanderly",
     subtitle: "Travel & Tour Booking System",
     category: "Travel · Web App",
     year: "2024",
@@ -751,7 +751,7 @@ export default function PortfolioApp() {
   return (
     <div
       className="portfolio-root"
-      style={{ background: "#05050A", color: "#fff", minHeight: "100vh", overflowX: "hidden", zoom: 0.9 }}
+      style={{ background: "#05050A", color: "#fff", minHeight: "100vh", overflowX: "hidden" }}
       onMouseEnter={() => setHovered(false)}
     >
       <Cursor hovered={hovered} />
