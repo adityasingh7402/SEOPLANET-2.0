@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowUpRight } from "lucide-react";
+import { useCurrency } from "@/context/CurrencyContext";
 
 const links = [
   { label: "Services", href: "#services" },
@@ -14,6 +15,7 @@ const links = [
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { currency, setCurrency } = useCurrency();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -64,15 +66,35 @@ export default function Navigation() {
           ))}
         </nav>
 
-        <a
-          href="#contact"
-          className="hidden md:inline-flex items-center gap-2 group rounded-full bg-[#00FF94] text-black px-5 py-2.5 font-mono-pro text-xs uppercase tracking-[0.2em] font-bold hover:bg-white transition-colors active:scale-95"
-          data-testid="nav-cta-initiate-launch"
-          aria-label="Start a new SEO project with SEO Planet"
-        >
-          Start a Project
-          <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:rotate-45" />
-        </a>
+        <div className="hidden md:flex items-center gap-4">
+          <div className="flex bg-white/[0.04] p-1 rounded-full border border-white/10 w-fit">
+            <button
+              onClick={() => setCurrency('USD')}
+              className={`px-3 py-1.5 rounded-full text-[10px] font-mono-pro font-bold uppercase tracking-widest transition-all ${
+                currency === 'USD' ? "bg-[#00FF94] text-black" : "text-white/50 hover:text-white"
+              }`}
+            >
+              USD
+            </button>
+            <button
+              onClick={() => setCurrency('INR')}
+              className={`px-3 py-1.5 rounded-full text-[10px] font-mono-pro font-bold uppercase tracking-widest transition-all ${
+                currency === 'INR' ? "bg-[#00FF94] text-black" : "text-white/50 hover:text-white"
+              }`}
+            >
+              INR
+            </button>
+          </div>
+          <a
+            href="#contact"
+            className="inline-flex items-center gap-2 group rounded-full bg-[#00FF94] text-black px-5 py-2.5 font-mono-pro text-xs uppercase tracking-[0.2em] font-bold hover:bg-white transition-colors active:scale-95"
+            data-testid="nav-cta-initiate-launch"
+            aria-label="Start a new SEO project with SEO Planet"
+          >
+            Start a Project
+            <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:rotate-45" />
+          </a>
+        </div>
 
         <button
           onClick={() => setOpen((o) => !o)}
@@ -104,10 +126,28 @@ export default function Navigation() {
                 {l.label}
               </a>
             ))}
+            <div className="flex bg-white/[0.04] p-1 rounded-full border border-white/10 w-fit mt-2 mx-auto">
+              <button
+                onClick={() => setCurrency('USD')}
+                className={`px-4 py-2 rounded-full text-[10px] font-mono-pro font-bold uppercase tracking-widest transition-all ${
+                  currency === 'USD' ? "bg-[#00FF94] text-black" : "text-white/50 hover:text-white"
+                }`}
+              >
+                USD
+              </button>
+              <button
+                onClick={() => setCurrency('INR')}
+                className={`px-4 py-2 rounded-full text-[10px] font-mono-pro font-bold uppercase tracking-widest transition-all ${
+                  currency === 'INR' ? "bg-[#00FF94] text-black" : "text-white/50 hover:text-white"
+                }`}
+              >
+                INR
+              </button>
+            </div>
             <a
               href="#contact"
               onClick={() => setOpen(false)}
-              className="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-[#00FF94] text-black px-5 py-4 font-mono-pro text-sm uppercase tracking-[0.2em] font-bold"
+              className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-[#00FF94] text-black px-5 py-4 font-mono-pro text-sm uppercase tracking-[0.2em] font-bold"
               aria-label="Start a new SEO project with SEO Planet"
             >
               Start a Project <ArrowUpRight className="w-4 h-4" />

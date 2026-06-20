@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowUpRight, Send, Loader2, CheckCircle2, Phone } from "lucide-react";
 import axios from "axios";
 import { toast } from "sonner";
+import { useCurrency } from "@/context/CurrencyContext";
 
 
 const fields = [
@@ -20,6 +21,7 @@ export default function Contact() {
   const [booking, setBooking] = useState({ name: "", email: "", website: "", focus: "", budget: "" });
   const [bookingLoading, setBookingLoading] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
+  const { currency } = useCurrency();
 
   const onChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
   const onBookingChange = (e) => setBooking((b) => ({ ...b, [e.target.name]: e.target.value }));
@@ -300,6 +302,7 @@ export default function Contact() {
                       <label className="overline block mb-2 text-white/50">Primary Focus</label>
                       <select name="focus" value={booking.focus} onChange={onBookingChange} required className="w-full bg-[#0A0F0C] border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-mono-pro focus:outline-none focus:border-[#00FF94] transition-all appearance-none cursor-pointer">
                         <option value="" disabled>Select Area</option>
+                        <option value="Others">Others</option>
                         <option value="Technical SEO">Technical SEO & Core Web Vitals</option>
                         <option value="Content Strategy">Content & Semantic Authority</option>
                         <option value="Link Building">Digital PR & Link Building</option>
@@ -310,9 +313,20 @@ export default function Contact() {
                       <label className="overline block mb-2 text-white/50">Monthly Budget</label>
                       <select name="budget" value={booking.budget} onChange={onBookingChange} required className="w-full bg-[#0A0F0C] border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-mono-pro focus:outline-none focus:border-[#00FF94] transition-all appearance-none cursor-pointer">
                         <option value="" disabled>Select Range</option>
-                        <option value="$1k - $2k">$1k - $2k</option>
-                        <option value="$2k - $5k">$2k - $5k</option>
-                        <option value="$5k+">$5k+</option>
+                        <option value="Others">Others</option>
+                        {currency === 'USD' ? (
+                          <>
+                            <option value="$1k - $2k">$1k - $2k</option>
+                            <option value="$2k - $5k">$2k - $5k</option>
+                            <option value="$5k+">$5k+</option>
+                          </>
+                        ) : (
+                          <>
+                            <option value="₹50k - ₹1L">₹50k - ₹1L</option>
+                            <option value="₹1L - ₹3L">₹1L - ₹3L</option>
+                            <option value="₹3L+">₹3L+</option>
+                          </>
+                        )}
                       </select>
                     </div>
                   </div>

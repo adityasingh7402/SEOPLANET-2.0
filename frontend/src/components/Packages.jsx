@@ -1,7 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import TiltCard from "./ui/TiltCard";
-import { Rocket, TrendingUp, Crown, Check, ArrowUpRight } from "lucide-react";
+import { Rocket, TrendingUp, Crown, Check, ArrowUpRight, Settings } from "lucide-react";
+import { useCurrency } from "@/context/CurrencyContext";
 
 const reveal = {
   initial: { opacity: 0, y: 30 },
@@ -15,8 +16,8 @@ const packages = [
     code: "SYS 01",
     tag: "[SYS 01] · ONE-TIME",
     title: "Launch System",
-    price: "₹1.5L",
-    priceSub: "One-time investment",
+    price: { INR: "₹1.5L", USD: "$1,800" },
+    priceSub: { INR: "One-time investment", USD: "One-time investment" },
     desc: "Everything needed to launch a premium digital presence.",
     icon: Rocket,
     accent: "#00E5FF",
@@ -40,8 +41,8 @@ const packages = [
     code: "SYS 02",
     tag: "[SYS 02] · FLAGSHIP OFFER",
     title: "Growth Engine",
-    price: "₹2.5L",
-    priceSub: "per month retainer",
+    price: { INR: "₹2.5L", USD: "$3,000" },
+    priceSub: { INR: "per month retainer", USD: "per month retainer" },
     desc: "A complete acquisition and growth system for scaling brands.",
     icon: TrendingUp,
     accent: "#00FF94",
@@ -65,8 +66,8 @@ const packages = [
     code: "SYS 03",
     tag: "[SYS 03] · ELITE TIER",
     title: "Domination System",
-    price: "Bespoke",
-    priceSub: "Bespoke monthly retainer",
+    price: { INR: "Bespoke", USD: "Bespoke" },
+    priceSub: { INR: "Monthly retainer", USD: "Monthly retainer" },
     desc: "For brands aiming to dominate their category.",
     icon: Crown,
     accent: "#00FF94",
@@ -85,10 +86,36 @@ const packages = [
     ],
     recommended: false,
     testid: "package-card-domination"
+  },
+  {
+    code: "SYS 04",
+    tag: "[SYS 04] · FLEXIBLE",
+    title: "Custom Budget",
+    price: { INR: "Custom", USD: "Custom" },
+    priceSub: { INR: "Tailored to your needs", USD: "Tailored to your needs" },
+    desc: "A customized growth architecture built around your exact financial and strategic constraints.",
+    icon: Settings,
+    accent: "#FFBD2E",
+    bestFor: "Brands needing specific, tailored interventions",
+    timeline: "Timeline depends on scope",
+    features: [
+      "Completely flexible service selection",
+      "Pick and choose what you need most",
+      "Tailored strategy consulting sessions",
+      "Custom analytics & reporting cadence",
+      "One-off projects or custom retainers",
+      "Adjustable scale of deliverables",
+      "Direct line to senior strategists",
+      "Transparent cost-breakdown",
+      "Agile pivoting based on market feedback"
+    ],
+    recommended: false,
+    testid: "package-card-custom"
   }
 ];
 
 export default function Packages() {
+  const { currency } = useCurrency();
   const handleSelectPackage = (packageName) => {
     const event = new CustomEvent("select-package", { detail: packageName });
     window.dispatchEvent(event);
@@ -123,7 +150,7 @@ export default function Packages() {
         </motion.div>
 
         {/* Pricing Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-14 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 max-w-[1400px] mx-auto">
           {packages.map((pkg) => {
             const Icon = pkg.icon;
             return (
@@ -169,10 +196,10 @@ export default function Packages() {
                   {/* Pricing Display */}
                   <div className="border-t border-b border-white/5 py-6 mb-8 flex items-baseline gap-2">
                     <span className="font-display text-4xl sm:text-5xl font-black text-white">
-                      {pkg.price}
+                      {pkg.price[currency]}
                     </span>
                     <span className="font-mono-pro text-xs text-white/40">
-                      / {pkg.priceSub}
+                      / {pkg.priceSub[currency]}
                     </span>
                   </div>
 
