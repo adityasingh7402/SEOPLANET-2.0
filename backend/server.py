@@ -426,6 +426,13 @@ async def submit_contact(payload: ContactCreate):
     doc = submission.model_dump()
     doc['created_at'] = doc['created_at'].isoformat()
     await db.contact_submissions.insert_one(doc)
+    
+    if not email_sent:
+        return {
+            "status": "error",
+            "message": f"Saved to DB, but email failed: {email_error}"
+        }
+        
     return {
         "status": "success",
         "id": submission.id,
