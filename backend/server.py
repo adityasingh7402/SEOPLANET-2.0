@@ -14,8 +14,8 @@ from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from typing import List, Optional, Any
 import uuid
 from datetime import datetime, timezone, timedelta
-
-import resend
+import smtplib
+from email.message import EmailMessage
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -25,12 +25,14 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
-# Resend setup
-RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '')
-SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'onboarding@resend.dev')
+# Email/SMTP setup
+SMTP_HOST = os.environ.get('SMTP_HOST', '')
+SMTP_PORT = int(os.environ.get('SMTP_PORT', '465'))
+SMTP_USER = os.environ.get('SMTP_USER', '')
+SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')
+
+SENDER_EMAIL = os.environ.get('SENDER_EMAIL', SMTP_USER)
 AGENCY_EMAIL = os.environ.get('AGENCY_EMAIL', 'enquiry@seoplanet.in')
-if RESEND_API_KEY:
-    resend.api_key = RESEND_API_KEY
 
 app = FastAPI(title="SEO Planet API")
 api_router = APIRouter(prefix="/api")
@@ -135,18 +137,35 @@ def _build_email_html(payload: ContactCreate) -> str:
     """
 
 
+def _send_smtp_email_sync(payload: ContactCreate) -> None:
+    msg = EmailMessage()
+    msg['Subject'] = f"[SEO Planet] New transmission from {payload.name}"
+    msg['From'] = SENDER_EMAIL or SMTP_USER
+    msg['To'] = AGENCY_EMAIL
+    msg['Reply-To'] = payload.email
+    
+    html_content = _build_email_html(payload)
+    msg.set_content("Please enable HTML to view this message.")
+    msg.add_alternative(html_content, subtype='html')
+    
+    if SMTP_PORT == 465:
+        with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT) as server:
+            if SMTP_USER and SMTP_PASSWORD:
+                server.login(SMTP_USER, SMTP_PASSWORD)
+            server.send_message(msg)
+    else:
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+            server.starttls()
+            if SMTP_USER and SMTP_PASSWORD:
+                server.login(SMTP_USER, SMTP_PASSWORD)
+            server.send_message(msg)
+
+
 async def _send_contact_email(payload: ContactCreate) -> tuple[bool, Optional[str]]:
-    if not RESEND_API_KEY:
-        return False, "RESEND_API_KEY not configured"
-    params = {
-        "from": SENDER_EMAIL,
-        "to": [AGENCY_EMAIL],
-        "reply_to": payload.email,
-        "subject": f"[SEO Planet] New transmission from {payload.name}",
-        "html": _build_email_html(payload),
-    }
+    if not SMTP_HOST:
+        return False, "SMTP_HOST not configured"
     try:
-        await asyncio.to_thread(resend.Emails.send, params)
+        await asyncio.to_thread(_send_smtp_email_sync, payload)
         return True, None
     except Exception as e:
         return False, str(e)
