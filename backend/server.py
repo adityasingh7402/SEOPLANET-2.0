@@ -132,30 +132,10 @@ def _build_email_html(payload: ContactCreate) -> str:
 
 
 async def _send_contact_email(payload: ContactCreate) -> tuple[bool, Optional[str]]:
-    if not WEB3FORMS_ACCESS_KEY:
-        return False, "WEB3FORMS_ACCESS_KEY not configured"
-        
-    url = "https://api.web3forms.com/submit"
-    data = {
-        "access_key": WEB3FORMS_ACCESS_KEY,
-        "name": payload.name,
-        "email": payload.email,
-        "message": f"Company: {payload.company or '—'}\n\nMessage: {payload.message}",
-        "subject": f"[SEO Planet] New transmission from {payload.name}",
-        "from_name": "SEO Planet Forms"
-    }
-    
-    try:
-        async with httpx.AsyncClient() as client:
-            response = await client.post(url, json=data, timeout=10)
-            response.raise_for_status()
-            res_data = response.json()
-            if res_data.get("success"):
-                return True, None
-            else:
-                return False, res_data.get("message", "Web3Forms API error")
-    except Exception as e:
-        return False, str(e)
+    # Web3Forms blocked backend submissions on the free plan (403 Forbidden).
+    # The email is now sent directly from the frontend React app.
+    # We just return True here so the submission gets logged to the DB successfully.
+    return True, None
 
 
 # ===== Routes =====

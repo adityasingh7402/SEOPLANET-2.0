@@ -39,6 +39,21 @@ export default function Contact() {
     }
     setLoading(true);
     try {
+      // 1. Send email directly via Web3Forms (Client-side)
+      const web3FormsRes = await axios.post("https://api.web3forms.com/submit", {
+        access_key: "a2cc5258-81af-442b-b3fa-69064a5c56ae",
+        name: form.name,
+        email: form.email,
+        message: `Company: ${form.company || '—'}\n\nMessage: ${form.message}`,
+        subject: `[SEO Planet] New transmission from ${form.name}`,
+        from_name: "SEO Planet Forms"
+      });
+
+      if (!web3FormsRes.data.success) {
+        throw new Error(web3FormsRes.data.message || "Failed to send email");
+      }
+
+      // 2. Save submission to the backend DB
       const res = await axios.post(`https://seoplanet-2-0.onrender.com/api/contact`, {
         name: form.name,
         email: form.email,
@@ -46,13 +61,9 @@ export default function Contact() {
         message: form.message,
       });
       
-      if (res.data && res.data.status === "success") {
-        setSuccess(true);
-        toast.success("Message received. We'll reply within 24 hours.");
-        setForm({ name: "", email: "", company: "", message: "" });
-      } else {
-        toast.error(res.data?.message || "Something went wrong. Please try again.");
-      }
+      setSuccess(true);
+      toast.success("Message received. We'll reply within 24 hours.");
+      setForm({ name: "", email: "", company: "", message: "" });
     } catch (err) {
       console.error("Form error:", err);
       toast.error(err?.response?.data?.message || err?.message || "Something went wrong. Please try again.");
