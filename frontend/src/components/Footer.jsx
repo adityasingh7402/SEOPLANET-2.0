@@ -1,12 +1,11 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Github, Linkedin, Twitter, Instagram } from "lucide-react";
+import { ArrowUpRight, Linkedin, Twitter, Instagram } from "lucide-react";
 
 const socials = [
   { icon: Twitter, href: "#", label: "twitter" },
   { icon: Linkedin, href: "#", label: "linkedin" },
-  { icon: Instagram, href: "#", label: "instagram" },
-  { icon: Github, href: "#", label: "github" },
+  { icon: Instagram, href: "https://www.instagram.com/seoplanet.in", label: "instagram" },
 ];
 
 export default function Footer() {
