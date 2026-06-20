@@ -313,7 +313,7 @@ export default function Contact() {
                       <label className="overline block mb-2 text-white/50">Monthly Budget</label>
                       <select name="budget" value={booking.budget} onChange={onBookingChange} required className="w-full bg-[#0A0F0C] border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-mono-pro focus:outline-none focus:border-[#00FF94] transition-all appearance-none cursor-pointer">
                         <option value="" disabled>Select Range</option>
-                        <option value="Others">Others</option>
+                        <option value="Custom">Custom</option>
                         {currency === 'USD' ? (
                           <>
                             <option value="$1k - $2k">$1k - $2k</option>
