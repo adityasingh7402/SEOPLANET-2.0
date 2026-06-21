@@ -161,25 +161,71 @@ def _send_welcome_email(to_email: str, username: str, password: str, company_nam
         
     try:
         html_content = f"""
-        <table width="100%" cellpadding="0" cellspacing="0" style="background:#05050A;padding:32px 0;font-family:Arial,Helvetica,sans-serif;color:#ffffff;">
-          <tr><td align="center">
-            <table width="560" cellpadding="0" cellspacing="0" style="background:#0A0A0F;border:1px solid rgba(0,255,148,0.25);border-radius:16px;padding:32px;">
-              <tr><td>
-                <p style="margin:0 0 8px 0;color:#00FF94;letter-spacing:0.2em;font-size:12px;text-transform:uppercase;">SEO Planet Portal Access</p>
-                <h1 style="margin:0 0 24px 0;color:#ffffff;font-size:24px;line-height:1.2;">Welcome, {company_name}</h1>
-                <p style="color:#9CA3AF;font-size:14px;line-height:1.6;margin-bottom:24px;">Your dedicated SEO engine is now live. Use the credentials below to access your command center and track your strategy.</p>
+        <!DOCTYPE html>
+        <html>
+        <body style="margin:0;padding:0;background-color:#030305;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#ffffff;">
+          <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#030305;background-image:radial-gradient(circle at center, rgba(0,255,148,0.05) 0%, transparent 70%);padding:60px 20px;">
+            <tr><td align="center">
+              <table width="600" cellpadding="0" cellspacing="0" style="background:linear-gradient(180deg, #0A0A0F 0%, #050508 100%);border:1px solid rgba(0,255,148,0.15);border-radius:24px;box-shadow:0 20px 40px rgba(0,0,0,0.5), 0 0 60px rgba(0,255,148,0.05);overflow:hidden;">
                 
-                <table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.02);border-radius:8px;padding:16px;margin-bottom:24px;">
-                  <tr><td style="padding:8px 0;color:#9CA3AF;font-size:12px;width:100px;">Portal URL</td><td style="padding:8px 0;color:#00FF94;font-size:14px;"><a href="https://portal.seoplanet.in" style="color:#00FF94;text-decoration:none;">portal.seoplanet.in</a></td></tr>
-                  <tr><td style="padding:8px 0;color:#9CA3AF;font-size:12px;border-top:1px solid rgba(255,255,255,0.05);">Username</td><td style="padding:8px 0;color:#ffffff;font-size:14px;border-top:1px solid rgba(255,255,255,0.05);font-family:monospace;">{username}</td></tr>
-                  <tr><td style="padding:8px 0;color:#9CA3AF;font-size:12px;border-top:1px solid rgba(255,255,255,0.05);">Password</td><td style="padding:8px 0;color:#ffffff;font-size:14px;border-top:1px solid rgba(255,255,255,0.05);font-family:monospace;">{password}</td></tr>
-                </table>
+                <!-- Premium Header / Logo Area -->
+                <tr><td align="center" style="padding:48px 40px 0 40px;">
+                  <!-- Replace the src below with your actual animated logo GIF URL -->
+                  <img src="https://seoplanet.in/favicon.svg" alt="SEO Planet" width="60" style="display:block;margin-bottom:16px;filter:drop-shadow(0 0 12px rgba(0,255,148,0.5));" />
+                  <h2 style="margin:0;color:#00FF94;font-size:16px;letter-spacing:0.4em;text-transform:uppercase;font-weight:600;">SEO Planet</h2>
+                  <div style="height:1px;width:40px;background:linear-gradient(90deg, transparent, #00FF94, transparent);margin:24px auto;"></div>
+                </td></tr>
+
+                <!-- Welcome Message -->
+                <tr><td style="padding:10px 48px 40px 48px;text-align:center;">
+                  <h1 style="margin:0 0 24px 0;color:#ffffff;font-size:28px;font-weight:300;line-height:1.3;letter-spacing:0.02em;">
+                    Welcome to the Elite,<br/><span style="font-weight:600;background:-webkit-linear-gradient(0deg, #ffffff, #a0a5b0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">{company_name}</span>.
+                  </h1>
+                  
+                  <p style="color:#A0A5B0;font-size:15px;line-height:1.8;margin:0 0 20px 0;text-align:left;">
+                    We are truly honored to partner with you on this journey. By joining SEO Planet, you have taken a profound step toward digital dominance. Rest assured, you are now in the hands of experts committed to engineering unparalleled, royal success for your brand.
+                  </p>
+                  <p style="color:#A0A5B0;font-size:15px;line-height:1.8;margin:0 0 32px 0;text-align:left;">
+                    Take a deep breath. The hard part is over. While you focus on your vision, our team is already working tirelessly in the background to elevate your search presence to the highest tier. Below are the keys to your dedicated command center—a meticulously crafted sanctuary where strategy meets flawless execution.
+                  </p>
+
+                  <!-- Credentials Box -->
+                  <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:32px;text-align:left;">
+                    <p style="margin:0 0 16px 0;color:#ffffff;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;font-weight:600;">Your Access Keys</p>
+                    
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td style="padding:12px 0;color:#6B7280;font-size:13px;width:100px;border-bottom:1px solid rgba(255,255,255,0.03);">Secure Portal</td>
+                        <td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.03);"><a href="https://seoplanet-2-0.onrender.com" style="color:#00FF94;font-size:15px;text-decoration:none;font-weight:500;">Access Command Center &rarr;</a></td>
+                      </tr>
+                      <tr>
+                        <td style="padding:12px 0;color:#6B7280;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.03);">Username</td>
+                        <td style="padding:12px 0;color:#ffffff;font-size:15px;font-family:monospace;letter-spacing:0.05em;border-bottom:1px solid rgba(255,255,255,0.03);">{username}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:12px 0;color:#6B7280;font-size:13px;">Password</td>
+                        <td style="padding:12px 0;color:#ffffff;font-size:15px;font-family:monospace;letter-spacing:0.05em;">{password}</td>
+                      </tr>
+                    </table>
+                  </div>
+                </td></tr>
                 
-                <p style="color:#9CA3AF;font-size:12px;line-height:1.6;margin:0;">For security reasons, we recommend changing your password after your first login.</p>
-              </td></tr>
-            </table>
-          </td></tr>
-        </table>
+                <!-- Footer -->
+                <tr><td style="background:#050508;border-top:1px solid rgba(255,255,255,0.03);padding:32px 48px;text-align:center;">
+                  <p style="margin:0;color:#6B7280;font-size:12px;line-height:1.6;">
+                    For your security, we recommend updating your password upon your first login.<br/>
+                    If you require any assistance, your dedicated concierge team is standing by.
+                  </p>
+                  <p style="margin:16px 0 0 0;color:#374151;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;">
+                    &copy; 2026 SEO Planet. All rights reserved.
+                  </p>
+                </td></tr>
+
+              </table>
+            </td></tr>
+          </table>
+        </body>
+        </html>
         """
         
         params: resend.Emails.SendParams = {
