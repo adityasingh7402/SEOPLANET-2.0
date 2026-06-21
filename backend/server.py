@@ -15,8 +15,7 @@ from typing import List, Optional, Any
 import uuid
 from datetime import datetime, timezone, timedelta
 import httpx
-import smtplib
-from email.message import EmailMessage
+import resend
 import secrets
 import string
 
@@ -28,16 +27,14 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
-# Web3Forms setup
+# Web3Forms setup (Deprecated in favor of Resend)
 WEB3FORMS_ACCESS_KEY = os.environ.get('WEB3FORMS_ACCESS_KEY', '')
-AGENCY_EMAIL = os.environ.get('AGENCY_EMAIL', 'enquiry@seoplanet.in')
+AGENCY_EMAIL = os.environ.get('AGENCY_EMAIL', 'founder@seoplanet.in')
 
-# SMTP Setup
-SMTP_SERVER = os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
-SMTP_PORT = int(os.environ.get('SMTP_PORT', 587))
-SMTP_USER = os.environ.get('SMTP_USER', '')
-SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')
-FROM_EMAIL = os.environ.get('FROM_EMAIL', AGENCY_EMAIL)
+# Resend Email Setup
+RESEND_API_KEY = os.environ.get('RESEND_API_KEY', 're_2SErXCjJ_4BsnX1FwvkVhS1AFB1G3NJVs')
+resend.api_key = RESEND_API_KEY
+FROM_EMAIL = os.environ.get('FROM_EMAIL', 'onboarding@seoplanet.in')
 
 app = FastAPI(title="SEO Planet API")
 api_router = APIRouter(prefix="/api")
@@ -152,23 +149,30 @@ def _build_email_html(payload: ContactCreate) -> str:
 
 
 async def _send_contact_email(payload: ContactCreate) -> tuple[bool, Optional[str]]:
-    # Web3Forms blocked backend submissions on the free plan (403 Forbidden).
-    # The email is now sent directly from the frontend React app.
-    # We just return True here so the submission gets logged to the DB successfully.
-    return True, None
+    if not RESEND_API_KEY:
+        logger.warning("Resend API key not configured. Skipping contact email.")
+        return False, "Resend API key not configured"
+
+    try:
+        html_content = _build_email_html(payload)
+        params: resend.Emails.SendParams = {
+            "from": f"SEO Planet Contact <{FROM_EMAIL}>",
+            "to": [AGENCY_EMAIL],
+            "subject": f"New Lead: {payload.name} ({payload.budget})",
+            "html": html_content,
+        }
+        resend.Emails.send(params)
+        return True, None
+    except Exception as e:
+        logger.error(f"Failed to send contact email via Resend: {e}")
+        return False, str(e)
 
 def _send_welcome_email(to_email: str, username: str, password: str, company_name: str) -> bool:
-    if not SMTP_USER or not SMTP_PASSWORD:
-        logger.warning("SMTP credentials not configured. Skipping welcome email.")
+    if not RESEND_API_KEY:
+        logger.warning("Resend API key not configured. Skipping welcome email.")
         return False
         
     try:
-        msg = EmailMessage()
-        msg['Subject'] = 'Welcome to SEO Planet - Your Portal Credentials'
-        msg['From'] = FROM_EMAIL
-        msg['To'] = to_email
-        
-        # Professional HTML template matching the dark theme of SEO Planet
         html_content = f"""
         <table width="100%" cellpadding="0" cellspacing="0" style="background:#05050A;padding:32px 0;font-family:Arial,Helvetica,sans-serif;color:#ffffff;">
           <tr><td align="center">
@@ -191,17 +195,18 @@ def _send_welcome_email(to_email: str, username: str, password: str, company_nam
         </table>
         """
         
-        msg.add_alternative(html_content, subtype='html')
-        
-        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-            server.starttls()
-            server.login(SMTP_USER, SMTP_PASSWORD)
-            server.send_message(msg)
+        params: resend.Emails.SendParams = {
+            "from": f"SEO Planet Portal <{FROM_EMAIL}>",
+            "to": [to_email],
+            "subject": "Welcome to SEO Planet - Your Portal Credentials",
+            "html": html_content,
+        }
+        resend.Emails.send(params)
             
         logger.info(f"Welcome email sent successfully to {to_email}")
         return True
     except Exception as e:
-        logger.error(f"Failed to send welcome email: {e}")
+        logger.error(f"Failed to send welcome email via Resend: {e}")
         return False
 
 
