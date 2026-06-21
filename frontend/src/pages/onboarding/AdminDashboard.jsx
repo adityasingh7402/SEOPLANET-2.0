@@ -233,12 +233,29 @@ export default function AdminDashboard({ adminData }) {
           
           {activeTab === "clients" && (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                <div>
-                  <h1 className="font-display text-3xl font-black mb-2">Client Roster</h1>
-                  <p className="font-mono-pro text-xs text-white/40 uppercase tracking-widest">Manage your active campaigns</p>
+              <div className="mb-6">
+                <h1 className="font-display text-3xl font-black mb-2">Client Roster</h1>
+                <p className="font-mono-pro text-xs text-white/40 uppercase tracking-widest">Manage your active campaigns</p>
+              </div>
+
+              {/* Filters & Search */}
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                <div className="flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar">
+                  {["All", "Domination System", "Growth Engine", "Launch System"].map(tier => (
+                    <button 
+                      key={tier}
+                      onClick={() => setTierFilter(tier)}
+                      className={`whitespace-nowrap px-4 py-2 rounded-full font-mono-pro text-xs tracking-wider transition-colors border ${
+                        tierFilter === tier 
+                          ? 'bg-[#00D67D] text-black border-[#00D67D] font-bold' 
+                          : 'bg-white/[0.02] text-white/50 border-white/5 hover:text-white hover:bg-white/[0.05]'
+                      }`}
+                    >
+                      {tier}
+                    </button>
+                  ))}
                 </div>
-                <div className="relative">
+                <div className="relative w-full md:w-auto">
                   <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
                   <input 
                     type="text" 
@@ -248,23 +265,6 @@ export default function AdminDashboard({ adminData }) {
                     className="w-full sm:w-64 pl-9 pr-4 py-2 bg-white/[0.02] border border-white/5 rounded-xl text-sm text-white font-mono-pro focus:outline-none focus:border-[#00D67D] transition-colors"
                   />
                 </div>
-              </div>
-
-              {/* Filters */}
-              <div className="flex items-center gap-2 mb-8 overflow-x-auto pb-2 custom-scrollbar">
-                {["All", "Domination System", "Growth Engine", "Launch System"].map(tier => (
-                  <button 
-                    key={tier}
-                    onClick={() => setTierFilter(tier)}
-                    className={`whitespace-nowrap px-4 py-2 rounded-full font-mono-pro text-xs tracking-wider transition-colors border ${
-                      tierFilter === tier 
-                        ? 'bg-[#00D67D] text-black border-[#00D67D] font-bold' 
-                        : 'bg-white/[0.02] text-white/50 border-white/5 hover:text-white hover:bg-white/[0.05]'
-                    }`}
-                  >
-                    {tier}
-                  </button>
-                ))}
               </div>
 
               {loading ? (
