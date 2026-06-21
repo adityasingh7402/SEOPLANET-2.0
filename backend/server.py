@@ -169,8 +169,9 @@ def _send_welcome_email(to_email: str, username: str, password: str, company_nam
               <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.05);border:1px solid #E5E7EB;">
                 
                 <!-- Welcome Header -->
-                <tr><td style="padding:48px 48px 24px 48px;text-align:left;background:#ffffff;">
-                  <h1 style="margin:0;color:#000000;font-size:72px;font-weight:900;letter-spacing:-0.04em;text-transform:uppercase;line-height:1;font-family:'Arial Black',Impact,sans-serif;">WELCOME</h1>
+                <tr><td style="padding:48px 48px 24px 48px;text-align:center;background:#ffffff;">
+                  <img src="https://portal.seoplanet.in/email-logo.png" alt="SEO Planet" style="height:14px;display:inline-block;margin:0 0 16px 0;" />
+                  <h1 style="margin:0;color:#000000;font-size:84px;font-weight:900;letter-spacing:-0.05em;text-transform:uppercase;line-height:0.9;font-family:'Arial Black',Impact,sans-serif;width:100%;">WELCOME</h1>
                 </td></tr>
 
                 <!-- Welcome Message -->
@@ -179,8 +180,12 @@ def _send_welcome_email(to_email: str, username: str, password: str, company_nam
                     Hey {company_name},
                   </p>
                   
-                  <p style="color:#4B5563;font-size:15px;line-height:1.6;margin:0 0 24px 0;">
-                    Thank you for choosing to work with us. We're thrilled to have the opportunity to bring your vision to life. Below, you'll find everything you need to get started smoothly.
+                  <p style="color:#4B5563;font-size:15px;line-height:1.8;margin:0 0 20px 0;">
+                    We are profoundly honored to welcome you into the SEO Planet family. By choosing to partner with us, you have taken a definitive step toward absolute digital dominance. We recognize the trust you have placed in our team, and we do not take it lightly. Rest assured, you are now in the hands of elite experts committed to engineering unparalleled, royal success for your brand. Our mission is to not just meet your expectations, but to meticulously craft a legacy of growth that redefines your industry standing.
+                  </p>
+                  
+                  <p style="color:#4B5563;font-size:15px;line-height:1.8;margin:0 0 32px 0;">
+                    Take a deep breath. The hard part is over. While you focus on scaling your grand vision, our dedicated team is already working tirelessly in the background to elevate your search presence to the highest echelon. Below are the keys to your dedicated command center, a meticulously crafted sanctuary where strategy meets flawless execution. Your journey to the top begins here, and we will be fiercely guarding your success every step of the way.
                   </p>
 
                   <p style="margin:0 0 16px 0;font-size:12px;font-weight:800;color:#000000;letter-spacing:0.05em;text-transform:uppercase;">
@@ -221,12 +226,6 @@ def _send_welcome_email(to_email: str, username: str, password: str, company_nam
                     The Client Portal is designed to make your experience with us as seamless and transparent as possible. We're excited to have you here and look forward to creating exceptional work together!
                   </p>
                 </td></tr>
-
-                <!-- Logo Footer -->
-                <tr><td align="right" style="padding:24px 48px;border-top:1px solid #E5E7EB;background:#ffffff;">
-                  <img src="https://portal.seoplanet.in/email-logo.png" alt="SEO Planet" style="height:24px;display:inline-block;" />
-                </td></tr>
-
               </table>
             </td></tr>
           </table>
