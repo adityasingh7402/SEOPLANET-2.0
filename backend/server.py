@@ -164,68 +164,111 @@ def _send_welcome_email(to_email: str, username: str, password: str, company_nam
         <!DOCTYPE html>
         <html>
         <head>
-          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Unbounded:wght@700;800;900&display=swap" rel="stylesheet">
+          <meta charset="utf-8">
+          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Unbounded:wght@400;600;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
         </head>
-        <body style="margin:0;padding:0;background-color:#05050A;font-family:'Inter',system-ui,-apple-system,sans-serif;color:#ffffff;">
-          <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#05050A;padding:40px 20px;">
+        <body style="margin:0;padding:0;background-color:#020205;font-family:'Inter',system-ui,-apple-system,sans-serif;color:#ffffff;line-height:1.6;-webkit-font-smoothing:antialiased;">
+          <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#020205;padding:60px 20px;">
             <tr><td align="center">
-              <table width="600" cellpadding="0" cellspacing="0" style="background:#000000;border-radius:12px;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.5);border:1px solid #1A1A1A;">
+              
+              <!-- Main Container with subtle glowing border simulation -->
+              <table width="640" cellpadding="0" cellspacing="0" style="background:#0A0A0F;border-radius:16px;overflow:hidden;border:1px solid #1F1F2E;box-shadow:0 20px 40px rgba(0,0,0,0.8), 0 0 20px rgba(0,255,148,0.05);">
                 
-                <!-- Welcome Header -->
-                <tr><td style="padding:48px 20px 24px 20px;text-align:center;background:#000000;">
-                  <img src="https://portal.seoplanet.in/email-logo-white.png" alt="SEO Planet" style="height:14px;display:inline-block;margin:0 0 16px 0;" />
-                  <h1 style="margin:0;color:#ffffff;font-size:94px;font-weight:900;letter-spacing:0.04em;text-transform:uppercase;line-height:0.9;font-family:'Unbounded',system-ui,sans-serif;width:100%;">WELCOME</h1>
+                <!-- Header Section -->
+                <tr><td style="padding:60px 48px 40px 48px;text-align:center;background:linear-gradient(180deg, #101018 0%, #0A0A0F 100%);border-bottom:1px solid #151520;">
+                  <img src="https://portal.seoplanet.in/email-logo-white.png" alt="SEO Planet" style="height:16px;display:inline-block;margin:0 0 32px 0;opacity:0.9;" />
+                  
+                  <h1 style="margin:0;color:#ffffff;font-size:72px;font-weight:900;letter-spacing:-0.02em;text-transform:uppercase;line-height:0.9;font-family:'Unbounded',system-ui,sans-serif;">
+                    WEL<span style="color:#00FF94;">COME</span>
+                  </h1>
+                  <p style="margin:16px 0 0 0;font-size:14px;color:#8B8B99;letter-spacing:0.3em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;">
+                    To The New Era
+                  </p>
                 </td></tr>
 
-                <!-- Welcome Message -->
-                <tr><td style="padding:48px 48px 32px 48px;text-align:left;background:#000000;">
-                  <p style="margin:0 0 24px 0;font-size:16px;font-weight:700;color:#ffffff;">
-                    Hey {company_name},
+                <!-- Content Section -->
+                <tr><td style="padding:48px;text-align:left;">
+                  <p style="margin:0 0 24px 0;font-size:18px;font-weight:500;color:#ffffff;">
+                    Welcome to the apex, <span style="color:#00FF94;">{company_name}</span>.
                   </p>
                   
-                  <p style="color:#D1D5DB;font-size:15px;line-height:1.8;margin:0 0 20px 0;">
-                    We are profoundly honored to welcome you into the SEO Planet family. By choosing to partner with us, you have taken a definitive step toward absolute digital dominance. We recognize the trust you have placed in our team, and we do not take it lightly. Rest assured, you are now in the hands of elite experts committed to engineering unparalleled, royal success for your brand. Our mission is to not just meet your expectations, but to meticulously craft a legacy of growth that redefines your industry standing.
+                  <p style="color:#A1A1AA;font-size:16px;line-height:1.8;margin:0 0 24px 0;font-weight:300;">
+                    It is with profound honor and deep respect that we formally welcome you into the exclusive ranks of the SEO Planet family. By forging this alliance today, you haven't just signed up for a service&mdash;you have claimed your rightful throne in the digital ecosystem. You have drawn a definitive line in the sand, signaling to the world that you are no longer competing; you are conquering.
                   </p>
                   
-                  <p style="color:#D1D5DB;font-size:15px;line-height:1.8;margin:0 0 48px 0;">
-                    Take a deep breath. The hard part is over. While you focus on scaling your grand vision, our dedicated team is already working tirelessly in the background to elevate your search presence to the highest echelon. Below are the keys to your dedicated command center, a meticulously crafted sanctuary where strategy meets flawless execution. Your journey to the top begins here, and we will be fiercely guarding your success every step of the way.
+                  <p style="color:#A1A1AA;font-size:16px;line-height:1.8;margin:0 0 24px 0;font-weight:300;">
+                    We understand the monumental weight of the trust you have placed within our walls. Building an empire is not a task for the faint of heart, and we do not take our role as your strategic architects lightly. From this exact moment onward, you are surrounded by an elite vanguard of specialists who treat your brand's legacy as fiercely as their own.
                   </p>
 
-                  <p style="margin:0 0 16px 0;font-size:12px;font-weight:800;color:#ffffff;letter-spacing:0.05em;text-transform:uppercase;">
-                    CLIENT PORTAL LINK: <a href="https://portal.seoplanet.in" style="color:#D1D5DB;text-decoration:none;">portal.seoplanet.in</a>
+                  <p style="color:#A1A1AA;font-size:16px;line-height:1.8;margin:0 0 24px 0;font-weight:300;">
+                    So, take a deep breath. Let the burden of the unseen algorithmic wars fall from your shoulders. The hardest battles are now ours to fight. While you sit at the helm and focus entirely on the grand vision of your empire, our engineers are already moving in the shadows deploying relentless precision to ensure your name echoes across every search query that matters.
                   </p>
+
+                  <p style="color:#A1A1AA;font-size:16px;line-height:1.8;margin:0 0 40px 0;font-weight:300;">
+                    We are not here to merely meet expectations; we are here to shatter them and rewrite the rules of your industry entirely. The era of compromises is over. Welcome to your new legacy. Welcome to unparalleled, royal success.
+                  </p>
+
+                  <!-- Divider -->
+                  <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:40px;">
+                    <tr><td style="height:1px;background:linear-gradient(90deg, rgba(0,255,148,0) 0%, rgba(0,255,148,0.3) 50%, rgba(0,255,148,0) 100%);"></td></tr>
+                  </table>
+
+                  <h3 style="margin:0 0 16px 0;font-size:12px;font-weight:600;color:#ffffff;letter-spacing:0.1em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;">
+                    <span style="color:#00FF94;margin-right:8px;">//</span> SECURE COMMAND CENTER
+                  </h3>
                   
-                  <p style="color:#D1D5DB;font-size:15px;line-height:1.6;margin:0 0 24px 0;">
-                    Welcome to your personalized Client Portal! This is your dedicated space to stay connected with us and track every stage of your project in one convenient place. Inside, you'll find:
+                  <p style="color:#A1A1AA;font-size:15px;line-height:1.6;margin:0 0 32px 0;font-weight:300;">
+                    Below are the keys to your dedicated sanctuary where strategy meets flawless execution. Inside, you'll track real-time project goals, access exclusive deliverables, and review project timelines.
                   </p>
 
-                  <ul style="color:#D1D5DB;font-size:14px;line-height:1.6;margin:0 0 32px 0;padding-left:20px;">
-                    <li style="margin-bottom:12px;"><strong style="color:#ffffff;">Project Overview:</strong> A summary of your project goals, timelines, and key deliverables.</li>
-                    <li style="margin-bottom:12px;"><strong style="color:#ffffff;">Documents (Agreements & Invoices):</strong> All your important paperwork in one place. Easily review signed agreements and manage invoices.</li>
-                    <li style="margin-bottom:12px;"><strong style="color:#ffffff;">Project Timeline & Updates:</strong> Stay informed with real-time updates on your project's milestones and progress. View a detailed timeline, upcoming tasks, and key dates to ensure everything is on track.</li>
-                    <li style="margin-bottom:12px;"><strong style="color:#ffffff;">Media Deliverables:</strong> Access your project's files, including drafts, final deliverables, and reference materials. All content will be organized and readily available for your review and download.</li>
-                    <li style="margin-bottom:12px;"><strong style="color:#ffffff;">Contact:</strong> Need assistance or have questions? Here's how to reach us.</li>
-                  </ul>
-
-                  <!-- Credentials Box -->
-                  <div style="background:#0A0A0F;border:1px solid #1A1A1A;border-radius:8px;padding:24px;margin-bottom:32px;">
+                  <!-- Credentials Card - Premium Glass/Terminal effect -->
+                  <div style="background:#050508;border:1px solid #1A1A24;border-left:3px solid #00FF94;border-radius:8px;padding:24px 32px;margin-bottom:40px;">
                     <table width="100%" cellpadding="0" cellspacing="0">
                       <tr>
-                        <td style="padding:8px 0;color:#9CA3AF;font-size:13px;width:100px;border-bottom:1px solid #1A1A1A;">Username</td>
-                        <td style="padding:8px 0;color:#ffffff;font-size:15px;font-family:monospace;letter-spacing:0.05em;border-bottom:1px solid #1A1A1A;font-weight:700;">{username}</td>
+                        <td style="padding:12px 0;color:#6B7280;font-size:12px;text-transform:uppercase;letter-spacing:0.05em;width:120px;border-bottom:1px solid rgba(255,255,255,0.05);">ACCESS_ID</td>
+                        <td style="padding:12px 0;color:#ffffff;font-size:15px;font-family:'JetBrains Mono',monospace;letter-spacing:0.05em;border-bottom:1px solid rgba(255,255,255,0.05);">{username}</td>
                       </tr>
                       <tr>
-                        <td style="padding:8px 0;color:#9CA3AF;font-size:13px;">Password</td>
-                        <td style="padding:8px 0;color:#ffffff;font-size:15px;font-family:monospace;letter-spacing:0.05em;font-weight:700;">{password}</td>
+                        <td style="padding:12px 0;color:#6B7280;font-size:12px;text-transform:uppercase;letter-spacing:0.05em;padding-top:16px;">PASSKEY</td>
+                        <td style="padding:12px 0;color:#00FF94;font-size:15px;font-family:'JetBrains Mono',monospace;letter-spacing:0.05em;padding-top:16px;">{password}</td>
                       </tr>
                     </table>
                   </div>
                   
-                  <p style="color:#D1D5DB;font-size:14px;line-height:1.6;margin:0 0 32px 0;">
-                    The Client Portal is designed to make your experience with us as seamless and transparent as possible. We're excited to have you here and look forward to creating exceptional work together!
+                  <!-- Premium Button -->
+                  <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:48px;">
+                    <tr><td align="center">
+                      <a href="https://portal.seoplanet.in" style="display:inline-block;background:#ffffff;color:#000000;text-decoration:none;font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:18px 48px;border-radius:100px;font-family:'Inter',sans-serif;">
+                        INITIALIZE PORTAL
+                      </a>
+                    </td></tr>
+                  </table>
+                  
+                  <!-- Signature -->
+                  <table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #1A1A24;padding-top:32px;">
+                    <tr>
+                      <td style="width:48px;vertical-align:top;">
+                        <div style="width:32px;height:32px;background:#101018;border-radius:50%;border:1px solid #1F1F2E;display:inline-block;text-align:center;line-height:32px;color:#00FF94;font-family:'Unbounded',sans-serif;font-size:14px;font-weight:900;">S</div>
+                      </td>
+                      <td>
+                        <p style="margin:0;color:#ffffff;font-size:14px;font-weight:600;">The SEO Planet Team</p>
+                        <p style="margin:4px 0 0 0;color:#6B7280;font-size:13px;">Engineering digital dominance.</p>
+                      </td>
+                    </tr>
+                  </table>
+
+                </td></tr>
+              </table>
+              
+              <!-- Footer Text -->
+              <table width="640" cellpadding="0" cellspacing="0">
+                <tr><td style="padding:32px 0;text-align:center;">
+                  <p style="margin:0;color:#4B5563;font-size:11px;font-family:'JetBrains Mono',monospace;letter-spacing:0.05em;">
+                    ENCRYPTED TRANSMISSION &middot; SEO PLANET INC.
                   </p>
                 </td></tr>
               </table>
+
             </td></tr>
           </table>
         </body>
