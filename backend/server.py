@@ -169,9 +169,9 @@ def _send_welcome_email(to_email: str, username: str, password: str, company_nam
               <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.05);border:1px solid #E5E7EB;">
                 
                 <!-- Welcome Header -->
-                <tr><td style="padding:48px 48px 24px 48px;text-align:center;background:#ffffff;">
+                <tr><td style="padding:48px 20px 24px 20px;text-align:center;background:#ffffff;">
                   <img src="https://portal.seoplanet.in/email-logo.png" alt="SEO Planet" style="height:14px;display:inline-block;margin:0 0 16px 0;" />
-                  <h1 style="margin:0;color:#000000;font-size:84px;font-weight:900;letter-spacing:-0.05em;text-transform:uppercase;line-height:0.9;font-family:'Arial Black',Impact,sans-serif;width:100%;">WELCOME</h1>
+                  <h1 style="margin:0;color:#000000;font-size:94px;font-weight:900;letter-spacing:0.04em;text-transform:uppercase;line-height:0.9;font-family:'Arial Black',Impact,sans-serif;width:100%;">WELCOME</h1>
                 </td></tr>
 
                 <!-- Welcome Message -->
