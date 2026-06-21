@@ -56,7 +56,7 @@ export default function Login() {
           
           <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight mb-3">
             {isOnboardingDomain ? (
-              <>Admin <span className="neon-text italic font-light">Onboarding</span></>
+              <>Client <span className="neon-text italic font-light">Onboarding</span></>
             ) : (
               <>Client <span className="neon-text italic font-light">Portal</span></>
             )}
