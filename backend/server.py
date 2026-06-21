@@ -204,8 +204,13 @@ def _send_welcome_email(to_email: str, username: str, password: str, company_nam
                     So, take a deep breath. Let the burden of the unseen algorithmic wars fall from your shoulders. The hardest battles are now ours to fight. While you sit at the helm and focus entirely on the grand vision of your empire, our engineers are already moving in the shadows deploying relentless precision to ensure your name echoes across every search query that matters.
                   </p>
 
-                  <p style="color:#A1A1AA;font-size:16px;line-height:1.8;margin:0 0 40px 0;font-weight:300;">
+                  <p style="color:#A1A1AA;font-size:16px;line-height:1.8;margin:0 0 24px 0;font-weight:300;">
                     We are not here to merely meet expectations; we are here to shatter them and rewrite the rules of your industry entirely. The era of compromises is over. Welcome to your new legacy. Welcome to unparalleled, royal success.
+                  </p>
+
+                  <p style="color:#ffffff;font-size:16px;line-height:1.6;margin:0 0 40px 0;font-weight:500;">
+                    - Mukul Bhardwaj<br>
+                    <span style="font-size:14px;color:#8B8B99;font-weight:400;">CEO, Founder</span>
                   </p>
 
                   <!-- Divider -->
