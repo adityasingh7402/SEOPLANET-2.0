@@ -298,7 +298,7 @@ export default function Dashboard() {
     const fetchData = async () => {
       try {
         const res = await axios.get("https://seoplanet-2-0.onrender.com/api/onboarding/dashboard");
-        if (["admin", "onboarding_admin", "portal_admin"].includes(res.data.data.username)) {
+        if (["admin", "onboardingadmin", "portaladmin"].includes(res.data.data.username)) {
           setIsAdmin(true);
           setAdminData(res.data.data);
         } else {

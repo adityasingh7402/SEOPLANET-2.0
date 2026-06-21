@@ -19,12 +19,12 @@ export default function Login() {
     e.preventDefault();
     if (!username || !password) return;
     
-    if (isOnboardingDomain && username !== "onboarding_admin") {
+    if (isOnboardingDomain && username !== "onboardingadmin") {
       toast.error("Access Denied: Invalid credentials for onboarding portal");
       return;
     }
 
-    if (!isOnboardingDomain && username === "onboarding_admin") {
+    if (!isOnboardingDomain && username === "onboardingadmin") {
       toast.error("Access Denied: Invalid domain for these credentials");
       return;
     }
