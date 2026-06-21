@@ -375,11 +375,11 @@ export default function Dashboard() {
     return <DashboardSkeleton />;
   }
 
-  if (!data) return null;
-
-  if (data.username === "admin") {
-    return <AdminDashboard adminData={data} />;
+  if (isAdmin && adminData) {
+    return <AdminDashboard adminData={adminData} />;
   }
+
+  if (!data) return null;
 
   return (
     <>
