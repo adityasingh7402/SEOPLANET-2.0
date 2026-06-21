@@ -210,10 +210,8 @@ export default function AdminDashboard({ adminData }) {
             </button>
           )}
         </nav>
-        <div className="p-4 border-t border-white/5">
-          <button onClick={logout} className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-mono-pro text-xs uppercase tracking-wider text-white/30 hover:bg-white/[0.02] hover:text-white transition-all">
-            <LogOut className="w-4 h-4" /> Disconnect
-          </button>
+        <div className="p-4 border-t border-white/5 text-center text-white/20 font-mono-pro text-[10px] uppercase tracking-widest">
+          v2.0.0
         </div>
       </aside>
 
@@ -224,6 +222,13 @@ export default function AdminDashboard({ adminData }) {
         <div className="hidden md:block absolute top-0 right-0 w-[800px] h-[500px] rounded-full bg-[#00D67D]/5 blur-[120px] pointer-events-none" />
         {/* Mobile Safe Gradient */}
         <div className="block md:hidden absolute top-0 right-0 w-[800px] h-[500px] bg-[radial-gradient(ellipse_at_center,rgba(0,214,125,0.08)_0%,transparent_50%)] pointer-events-none" />
+        
+        {/* Top Right Disconnect Button */}
+        <div className="absolute top-6 right-6 sm:top-8 sm:right-8 z-50">
+          <button onClick={logout} className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-mono-pro text-[10px] sm:text-xs uppercase tracking-wider text-white/50 hover:bg-red-500/10 hover:text-red-500 hover:border-red-500/20 border border-white/5 bg-white/[0.02] transition-all shadow-lg backdrop-blur-md">
+            <LogOut className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Disconnect</span>
+          </button>
+        </div>
         
         <div className="relative z-10 max-w-5xl mx-auto p-8 sm:p-12">
           
