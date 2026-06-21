@@ -34,7 +34,7 @@ AGENCY_EMAIL = os.environ.get('AGENCY_EMAIL', 'founder@seoplanet.in')
 # Resend Email Setup
 RESEND_API_KEY = os.environ.get('RESEND_API_KEY', 're_2SErXCjJ_4BsnX1FwvkVhS1AFB1G3NJVs')
 resend.api_key = RESEND_API_KEY
-FROM_EMAIL = os.environ.get('FROM_EMAIL', 'onboarding@seoplanet.in')
+FROM_EMAIL = os.environ.get('FROM_EMAIL', 'hello@seoplanet.in')
 
 app = FastAPI(title="SEO Planet API")
 api_router = APIRouter(prefix="/api")
