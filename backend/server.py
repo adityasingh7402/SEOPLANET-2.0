@@ -163,66 +163,69 @@ def _send_welcome_email(to_email: str, username: str, password: str, company_nam
         html_content = f"""
         <!DOCTYPE html>
         <html>
-        <body style="margin:0;padding:0;background-color:#F3F4F6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111827;">
-          <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#F3F4F6;padding:40px 20px;">
+        <head>
+          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Unbounded:wght@700;800;900&display=swap" rel="stylesheet">
+        </head>
+        <body style="margin:0;padding:0;background-color:#05050A;font-family:'Inter',system-ui,-apple-system,sans-serif;color:#ffffff;">
+          <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#05050A;padding:40px 20px;">
             <tr><td align="center">
-              <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.05);border:1px solid #E5E7EB;">
+              <table width="600" cellpadding="0" cellspacing="0" style="background:#000000;border-radius:12px;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.5);border:1px solid #1A1A1A;">
                 
                 <!-- Welcome Header -->
-                <tr><td style="padding:48px 20px 24px 20px;text-align:center;background:#ffffff;">
-                  <img src="https://portal.seoplanet.in/email-logo.png" alt="SEO Planet" style="height:14px;display:inline-block;margin:0 0 16px 0;" />
-                  <h1 style="margin:0;color:#000000;font-size:94px;font-weight:900;letter-spacing:0.04em;text-transform:uppercase;line-height:0.9;font-family:'Arial Black',Impact,sans-serif;width:100%;">WELCOME</h1>
+                <tr><td style="padding:48px 20px 24px 20px;text-align:center;background:#000000;">
+                  <img src="https://portal.seoplanet.in/email-logo-white.png" alt="SEO Planet" style="height:14px;display:inline-block;margin:0 0 16px 0;" />
+                  <h1 style="margin:0;color:#ffffff;font-size:94px;font-weight:900;letter-spacing:0.04em;text-transform:uppercase;line-height:0.9;font-family:'Unbounded',system-ui,sans-serif;width:100%;">WELCOME</h1>
                 </td></tr>
 
                 <!-- Welcome Message -->
-                <tr><td style="padding:0 48px 32px 48px;text-align:left;background:#ffffff;">
-                  <p style="margin:0 0 24px 0;font-size:16px;font-weight:700;color:#000000;">
+                <tr><td style="padding:0 48px 32px 48px;text-align:left;background:#000000;">
+                  <p style="margin:0 0 24px 0;font-size:16px;font-weight:700;color:#ffffff;">
                     Hey {company_name},
                   </p>
                   
-                  <p style="color:#4B5563;font-size:15px;line-height:1.8;margin:0 0 20px 0;">
+                  <p style="color:#D1D5DB;font-size:15px;line-height:1.8;margin:0 0 20px 0;">
                     We are profoundly honored to welcome you into the SEO Planet family. By choosing to partner with us, you have taken a definitive step toward absolute digital dominance. We recognize the trust you have placed in our team, and we do not take it lightly. Rest assured, you are now in the hands of elite experts committed to engineering unparalleled, royal success for your brand. Our mission is to not just meet your expectations, but to meticulously craft a legacy of growth that redefines your industry standing.
                   </p>
                   
-                  <p style="color:#4B5563;font-size:15px;line-height:1.8;margin:0 0 32px 0;">
+                  <p style="color:#D1D5DB;font-size:15px;line-height:1.8;margin:0 0 32px 0;">
                     Take a deep breath. The hard part is over. While you focus on scaling your grand vision, our dedicated team is already working tirelessly in the background to elevate your search presence to the highest echelon. Below are the keys to your dedicated command center, a meticulously crafted sanctuary where strategy meets flawless execution. Your journey to the top begins here, and we will be fiercely guarding your success every step of the way.
                   </p>
 
-                  <p style="margin:0 0 16px 0;font-size:12px;font-weight:800;color:#000000;letter-spacing:0.05em;text-transform:uppercase;">
-                    AGREEMENT: <a href="#" style="color:#4B5563;text-decoration:none;">(LINK TO THE AGREEMENT)</a>
+                  <p style="margin:0 0 16px 0;font-size:12px;font-weight:800;color:#ffffff;letter-spacing:0.05em;text-transform:uppercase;">
+                    AGREEMENT: <a href="#" style="color:#D1D5DB;text-decoration:none;">(LINK TO THE AGREEMENT)</a>
                   </p>
 
-                  <p style="margin:0 0 16px 0;font-size:12px;font-weight:800;color:#000000;letter-spacing:0.05em;text-transform:uppercase;">
-                    CLIENT PORTAL LINK: <a href="https://portal.seoplanet.in" style="color:#4B5563;text-decoration:none;">(PORTAL LINK)</a>
+                  <p style="margin:0 0 16px 0;font-size:12px;font-weight:800;color:#ffffff;letter-spacing:0.05em;text-transform:uppercase;">
+                    CLIENT PORTAL LINK: <a href="https://portal.seoplanet.in" style="color:#D1D5DB;text-decoration:none;">(PORTAL LINK)</a>
                   </p>
                   
-                  <p style="color:#4B5563;font-size:15px;line-height:1.6;margin:0 0 24px 0;">
+                  <p style="color:#D1D5DB;font-size:15px;line-height:1.6;margin:0 0 24px 0;">
                     Welcome to your personalized Client Portal! This is your dedicated space to stay connected with us and track every stage of your project in one convenient place. Inside, you'll find:
                   </p>
 
-                  <ul style="color:#4B5563;font-size:14px;line-height:1.6;margin:0 0 32px 0;padding-left:20px;">
-                    <li style="margin-bottom:12px;"><strong style="color:#000000;">Project Overview:</strong> A summary of your project goals, timelines, and key deliverables.</li>
-                    <li style="margin-bottom:12px;"><strong style="color:#000000;">Documents (Agreements & Invoices):</strong> All your important paperwork in one place. Easily review signed agreements and manage invoices.</li>
-                    <li style="margin-bottom:12px;"><strong style="color:#000000;">Project Timeline & Updates:</strong> Stay informed with real-time updates on your project's milestones and progress. View a detailed timeline, upcoming tasks, and key dates to ensure everything is on track.</li>
-                    <li style="margin-bottom:12px;"><strong style="color:#000000;">Media Deliverables:</strong> Access your project's files, including drafts, final deliverables, and reference materials. All content will be organized and readily available for your review and download.</li>
-                    <li style="margin-bottom:12px;"><strong style="color:#000000;">Contact:</strong> Need assistance or have questions? Here's how to reach us.</li>
+                  <ul style="color:#D1D5DB;font-size:14px;line-height:1.6;margin:0 0 32px 0;padding-left:20px;">
+                    <li style="margin-bottom:12px;"><strong style="color:#ffffff;">Project Overview:</strong> A summary of your project goals, timelines, and key deliverables.</li>
+                    <li style="margin-bottom:12px;"><strong style="color:#ffffff;">Documents (Agreements & Invoices):</strong> All your important paperwork in one place. Easily review signed agreements and manage invoices.</li>
+                    <li style="margin-bottom:12px;"><strong style="color:#ffffff;">Project Timeline & Updates:</strong> Stay informed with real-time updates on your project's milestones and progress. View a detailed timeline, upcoming tasks, and key dates to ensure everything is on track.</li>
+                    <li style="margin-bottom:12px;"><strong style="color:#ffffff;">Media Deliverables:</strong> Access your project's files, including drafts, final deliverables, and reference materials. All content will be organized and readily available for your review and download.</li>
+                    <li style="margin-bottom:12px;"><strong style="color:#ffffff;">Contact:</strong> Need assistance or have questions? Here's how to reach us.</li>
                   </ul>
 
                   <!-- Credentials Box -->
-                  <div style="background:#F9FAFB;border:1px solid #E5E7EB;border-radius:8px;padding:24px;margin-bottom:32px;">
+                  <div style="background:#0A0A0F;border:1px solid #1A1A1A;border-radius:8px;padding:24px;margin-bottom:32px;">
                     <table width="100%" cellpadding="0" cellspacing="0">
                       <tr>
-                        <td style="padding:8px 0;color:#6B7280;font-size:13px;width:100px;border-bottom:1px solid #E5E7EB;">Username</td>
-                        <td style="padding:8px 0;color:#111827;font-size:15px;font-family:monospace;letter-spacing:0.05em;border-bottom:1px solid #E5E7EB;font-weight:700;">{username}</td>
+                        <td style="padding:8px 0;color:#9CA3AF;font-size:13px;width:100px;border-bottom:1px solid #1A1A1A;">Username</td>
+                        <td style="padding:8px 0;color:#ffffff;font-size:15px;font-family:monospace;letter-spacing:0.05em;border-bottom:1px solid #1A1A1A;font-weight:700;">{username}</td>
                       </tr>
                       <tr>
-                        <td style="padding:8px 0;color:#6B7280;font-size:13px;">Password</td>
-                        <td style="padding:8px 0;color:#111827;font-size:15px;font-family:monospace;letter-spacing:0.05em;font-weight:700;">{password}</td>
+                        <td style="padding:8px 0;color:#9CA3AF;font-size:13px;">Password</td>
+                        <td style="padding:8px 0;color:#ffffff;font-size:15px;font-family:monospace;letter-spacing:0.05em;font-weight:700;">{password}</td>
                       </tr>
                     </table>
                   </div>
                   
-                  <p style="color:#4B5563;font-size:14px;line-height:1.6;margin:0 0 32px 0;">
+                  <p style="color:#D1D5DB;font-size:14px;line-height:1.6;margin:0 0 32px 0;">
                     The Client Portal is designed to make your experience with us as seamless and transparent as possible. We're excited to have you here and look forward to creating exceptional work together!
                   </p>
                 </td></tr>
