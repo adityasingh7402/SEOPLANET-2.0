@@ -149,23 +149,10 @@ def _build_email_html(payload: ContactCreate) -> str:
 
 
 async def _send_contact_email(payload: ContactCreate) -> tuple[bool, Optional[str]]:
-    if not RESEND_API_KEY:
-        logger.warning("Resend API key not configured. Skipping contact email.")
-        return False, "Resend API key not configured"
-
-    try:
-        html_content = _build_email_html(payload)
-        params: resend.Emails.SendParams = {
-            "from": f"SEO Planet Contact <{FROM_EMAIL}>",
-            "to": [AGENCY_EMAIL],
-            "subject": f"New Lead: {payload.name} ({payload.budget})",
-            "html": html_content,
-        }
-        resend.Emails.send(params)
-        return True, None
-    except Exception as e:
-        logger.error(f"Failed to send contact email via Resend: {e}")
-        return False, str(e)
+    # Web3Forms blocked backend submissions on the free plan (403 Forbidden).
+    # The email is now sent directly from the frontend React app using Web3Forms.
+    # We just return True here so the submission gets logged to the DB successfully.
+    return True, None
 
 def _send_welcome_email(to_email: str, username: str, password: str, company_name: str) -> bool:
     if not RESEND_API_KEY:
