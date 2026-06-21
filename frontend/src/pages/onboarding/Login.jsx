@@ -4,6 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Loader2, KeyRound } from "lucide-react";
 import { toast } from "sonner";
+import Logo from "../../components/Logo";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -43,17 +44,14 @@ export default function Login() {
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         className="relative z-10 w-full max-w-md p-8 sm:p-12"
       >
-        <div className="mb-10 text-center">
+        <div className="mb-10 text-center flex flex-col items-center">
           <motion.div 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="flex items-center justify-center gap-2 mb-4"
+            className="mb-4"
           >
-            <div className="w-2 h-2 rounded-full bg-[#00D67D] animate-pulse" />
-            <span className="font-display font-black text-xl tracking-wider">
-              SEO PLANET
-            </span>
+            <Logo hideVersion={true} className="justify-center" />
           </motion.div>
           
           <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight mb-3">

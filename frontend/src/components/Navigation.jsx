@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { useCurrency } from "@/context/CurrencyContext";
+import Logo from "./Logo";
 
 const links = [
   { label: "Services", href: "#services" },
@@ -39,16 +40,7 @@ export default function Navigation() {
           }`}
       >
         <a href="#top" className="flex items-center gap-2 group" data-testid="nav-logo" aria-label="Scroll to top of SEO Planet">
-          <span className="relative inline-block w-2.5 h-2.5">
-            <span className="absolute inset-0 rounded-full bg-[#00FF94]" />
-            <span className="absolute inset-0 rounded-full bg-[#00FF94] animate-ping opacity-60" />
-          </span>
-          <span className="font-display font-black tracking-tight text-white text-lg">
-            SEO PLANET
-          </span>
-          <span className="hidden sm:inline overline ml-3 text-[10px] text-white/40">
-            v.2026
-          </span>
+          <Logo />
         </a>
 
         <nav className="hidden md:flex items-center gap-1">

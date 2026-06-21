@@ -4,6 +4,7 @@ import { LogOut, LayoutDashboard, Users, PlusCircle, Loader2, Edit2, Save, X, Se
 import axios from "axios";
 import { toast } from "sonner";
 import { useAuth } from "../../context/AuthContext";
+import Logo from "../../components/Logo";
 
 export default function AdminDashboard({ adminData }) {
   const { logout } = useAuth();
@@ -128,8 +129,7 @@ export default function AdminDashboard({ adminData }) {
       {/* Sidebar */}
       <aside className="w-64 border-r border-white/5 bg-[#050505] flex flex-col z-20">
         <div className="h-20 flex items-center px-6 border-b border-white/5">
-          <div className="w-2 h-2 rounded-full bg-[#00D67D] animate-pulse mr-3" />
-          <span className="font-display font-bold tracking-wider text-sm">ADMIN COMMAND</span>
+          <Logo hideVersion={true} />
         </div>
         <nav className="flex-1 p-4 space-y-2">
           {(!isOnboardingDomain) && (

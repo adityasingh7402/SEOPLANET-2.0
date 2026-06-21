@@ -8,6 +8,8 @@ import axios from "axios";
 import { Toaster, toast } from "sonner";
 import AdminDashboard from "./AdminDashboard";
 import { AreaChart, Area, Tooltip, ResponsiveContainer } from "recharts";
+import { useCurrency } from "../../context/CurrencyContext";
+import Logo from "../../components/Logo";
 
 function CinematicLoader({ companyName, onComplete }) {
   const [phase, setPhase] = useState(0);
@@ -261,7 +263,7 @@ export default function Dashboard() {
         tagged_item: taggedItem,
         date: new Date().toISOString()
       }, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: "Bearer " + token }
       });
       const newData = { ...data };
       if (!newData.messages) newData.messages = [];
@@ -411,10 +413,7 @@ export default function Dashboard() {
             className="hidden md:flex flex-col w-64 border-r border-white/5 bg-[#050505]/80 backdrop-blur-xl shrink-0 z-20"
           >
             <div className="h-20 flex items-center px-8 border-b border-white/5 shrink-0">
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-[#00FF94] shadow-[0_0_10px_#00FF94] animate-pulse" />
-                <span className="font-display font-bold tracking-widest text-sm uppercase">SEO PLANET</span>
-              </div>
+              <Logo hideVersion={true} />
             </div>
             
             <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto custom-scrollbar">
@@ -472,8 +471,7 @@ export default function Dashboard() {
               className="md:hidden h-16 border-b border-white/5 bg-[#050505]/80 backdrop-blur-xl flex items-center justify-between px-6 shrink-0 z-20"
             >
                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-[#00FF94] shadow-[0_0_10px_#00FF94] animate-pulse" />
-                  <span className="font-display font-bold tracking-widest text-sm uppercase text-[#00FF94]">Portal</span>
+                  <Logo hideVersion={true} />
                 </div>
                <button onClick={logout}><LogOut className="w-4 h-4 text-white/50" /></button>
             </motion.header>
