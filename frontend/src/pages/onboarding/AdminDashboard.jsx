@@ -7,7 +7,10 @@ import { useAuth } from "../../context/AuthContext";
 
 export default function AdminDashboard({ adminData }) {
   const { logout } = useAuth();
-  const [activeTab, setActiveTab] = useState("clients");
+  const isOnboardingDomain = window.location.hostname.startsWith("onboarding.") || (window.location.hostname === "localhost" && window.location.pathname.startsWith("/onboarding-test"));
+  const isPortalDomain = window.location.hostname.startsWith("portal.") || (window.location.hostname === "localhost" && window.location.pathname.startsWith("/portal-test"));
+
+  const [activeTab, setActiveTab] = useState(isOnboardingDomain ? "provision" : "clients");
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
   
@@ -17,7 +20,7 @@ export default function AdminDashboard({ adminData }) {
   const [editForm, setEditForm] = useState(null);
 
   // Provision Form State
-  const [adminForm, setAdminForm] = useState({ username: "", company: "", password: "" });
+  const [adminForm, setAdminForm] = useState({ username: "", company: "", email: "", password: "" });
   const [provisionLoading, setProvisionLoading] = useState(false);
 
   const fetchClients = async () => {
@@ -38,13 +41,20 @@ export default function AdminDashboard({ adminData }) {
     e.preventDefault();
     setProvisionLoading(true);
     try {
-      await axios.post("https://seoplanet-2-0.onrender.com/api/onboarding/clients", {
+      const res = await axios.post("https://seoplanet-2-0.onrender.com/api/onboarding/clients", {
         username: adminForm.username,
         company_name: adminForm.company,
+        email: adminForm.email,
         password: adminForm.password
       });
-      toast.success("Client account provisioned successfully!");
-      setAdminForm({ username: "", company: "", password: "" });
+      
+      if (res.data.email_sent) {
+        toast.success("Client account provisioned and welcome email sent!");
+      } else {
+        toast.success("Client account provisioned (Email delivery failed/disabled).");
+      }
+      
+      setAdminForm({ username: "", company: "", email: "", password: "" });
       fetchClients();
       setActiveTab("clients");
     } catch (err) {
@@ -122,12 +132,16 @@ export default function AdminDashboard({ adminData }) {
           <span className="font-display font-bold tracking-wider text-sm">ADMIN COMMAND</span>
         </div>
         <nav className="flex-1 p-4 space-y-2">
-          <button onClick={() => setActiveTab("clients")} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-mono-pro text-xs uppercase tracking-wider transition-all ${activeTab === 'clients' ? 'bg-[#00D67D]/10 text-[#00D67D]' : 'text-white/50 hover:bg-white/[0.02] hover:text-white'}`}>
-            <Users className="w-4 h-4" /> Client Roster
-          </button>
-          <button onClick={() => setActiveTab("provision")} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-mono-pro text-xs uppercase tracking-wider transition-all ${activeTab === 'provision' ? 'bg-[#00D67D]/10 text-[#00D67D]' : 'text-white/50 hover:bg-white/[0.02] hover:text-white'}`}>
-            <PlusCircle className="w-4 h-4" /> Provision New
-          </button>
+          {(!isOnboardingDomain) && (
+            <button onClick={() => setActiveTab("clients")} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-mono-pro text-xs uppercase tracking-wider transition-all ${activeTab === 'clients' ? 'bg-[#00D67D]/10 text-[#00D67D]' : 'text-white/50 hover:bg-white/[0.02] hover:text-white'}`}>
+              <Users className="w-4 h-4" /> Client Roster
+            </button>
+          )}
+          {(isOnboardingDomain || !isPortalDomain) && (
+            <button onClick={() => setActiveTab("provision")} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-mono-pro text-xs uppercase tracking-wider transition-all ${activeTab === 'provision' ? 'bg-[#00D67D]/10 text-[#00D67D]' : 'text-white/50 hover:bg-white/[0.02] hover:text-white'}`}>
+              <PlusCircle className="w-4 h-4" /> Provision New
+            </button>
+          )}
         </nav>
         <div className="p-4 border-t border-white/5">
           <button onClick={logout} className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-mono-pro text-xs uppercase tracking-wider text-white/30 hover:bg-white/[0.02] hover:text-white transition-all">
@@ -227,6 +241,10 @@ export default function AdminDashboard({ adminData }) {
                 <div>
                   <label className="overline-premium block mb-2 text-white/50 text-[10px]">Company Name</label>
                   <input required type="text" value={adminForm.company} onChange={e => setAdminForm({...adminForm, company: e.target.value})} className="w-full bg-white/[0.03] border border-white/[0.04] rounded-xl px-4 py-3 text-white text-sm font-mono-pro focus:border-[#00D67D] focus:outline-none" placeholder="e.g. Acme Corporation" />
+                </div>
+                <div>
+                  <label className="overline-premium block mb-2 text-white/50 text-[10px]">Client Email</label>
+                  <input required type="email" value={adminForm.email} onChange={e => setAdminForm({...adminForm, email: e.target.value})} className="w-full bg-white/[0.03] border border-white/[0.04] rounded-xl px-4 py-3 text-white text-sm font-mono-pro focus:border-[#00D67D] focus:outline-none" placeholder="client@company.com" />
                 </div>
                 <div>
                   <label className="overline-premium block mb-2 text-white/50 text-[10px]">Secure Password</label>

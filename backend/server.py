@@ -15,6 +15,10 @@ from typing import List, Optional, Any
 import uuid
 from datetime import datetime, timezone, timedelta
 import httpx
+import smtplib
+from email.message import EmailMessage
+import secrets
+import string
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -27,6 +31,13 @@ db = client[os.environ['DB_NAME']]
 # Web3Forms setup
 WEB3FORMS_ACCESS_KEY = os.environ.get('WEB3FORMS_ACCESS_KEY', '')
 AGENCY_EMAIL = os.environ.get('AGENCY_EMAIL', 'enquiry@seoplanet.in')
+
+# SMTP Setup
+SMTP_SERVER = os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
+SMTP_PORT = int(os.environ.get('SMTP_PORT', 587))
+SMTP_USER = os.environ.get('SMTP_USER', '')
+SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')
+FROM_EMAIL = os.environ.get('FROM_EMAIL', AGENCY_EMAIL)
 
 app = FastAPI(title="SEO Planet API")
 api_router = APIRouter(prefix="/api")
@@ -137,6 +148,54 @@ async def _send_contact_email(payload: ContactCreate) -> tuple[bool, Optional[st
     # We just return True here so the submission gets logged to the DB successfully.
     return True, None
 
+def _send_welcome_email(to_email: str, username: str, password: str, company_name: str) -> bool:
+    if not SMTP_USER or not SMTP_PASSWORD:
+        logger.warning("SMTP credentials not configured. Skipping welcome email.")
+        return False
+        
+    try:
+        msg = EmailMessage()
+        msg['Subject'] = 'Welcome to SEO Planet - Your Portal Credentials'
+        msg['From'] = FROM_EMAIL
+        msg['To'] = to_email
+        
+        # Professional HTML template matching the dark theme of SEO Planet
+        html_content = f"""
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#05050A;padding:32px 0;font-family:Arial,Helvetica,sans-serif;color:#ffffff;">
+          <tr><td align="center">
+            <table width="560" cellpadding="0" cellspacing="0" style="background:#0A0A0F;border:1px solid rgba(0,255,148,0.25);border-radius:16px;padding:32px;">
+              <tr><td>
+                <p style="margin:0 0 8px 0;color:#00FF94;letter-spacing:0.2em;font-size:12px;text-transform:uppercase;">SEO Planet Portal Access</p>
+                <h1 style="margin:0 0 24px 0;color:#ffffff;font-size:24px;line-height:1.2;">Welcome, {company_name}</h1>
+                <p style="color:#9CA3AF;font-size:14px;line-height:1.6;margin-bottom:24px;">Your dedicated SEO engine is now live. Use the credentials below to access your command center and track your strategy.</p>
+                
+                <table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.02);border-radius:8px;padding:16px;margin-bottom:24px;">
+                  <tr><td style="padding:8px 0;color:#9CA3AF;font-size:12px;width:100px;">Portal URL</td><td style="padding:8px 0;color:#00FF94;font-size:14px;"><a href="https://portal.seoplanet.in" style="color:#00FF94;text-decoration:none;">portal.seoplanet.in</a></td></tr>
+                  <tr><td style="padding:8px 0;color:#9CA3AF;font-size:12px;border-top:1px solid rgba(255,255,255,0.05);">Username</td><td style="padding:8px 0;color:#ffffff;font-size:14px;border-top:1px solid rgba(255,255,255,0.05);font-family:monospace;">{username}</td></tr>
+                  <tr><td style="padding:8px 0;color:#9CA3AF;font-size:12px;border-top:1px solid rgba(255,255,255,0.05);">Password</td><td style="padding:8px 0;color:#ffffff;font-size:14px;border-top:1px solid rgba(255,255,255,0.05);font-family:monospace;">{password}</td></tr>
+                </table>
+                
+                <p style="color:#9CA3AF;font-size:12px;line-height:1.6;margin:0;">For security reasons, we recommend changing your password after your first login.</p>
+              </td></tr>
+            </table>
+          </td></tr>
+        </table>
+        """
+        
+        msg.add_alternative(html_content, subtype='html')
+        
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()
+            server.login(SMTP_USER, SMTP_PASSWORD)
+            server.send_message(msg)
+            
+        logger.info(f"Welcome email sent successfully to {to_email}")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to send welcome email: {e}")
+        return False
+
+
 
 # ===== Routes =====
 @api_router.get("/")
@@ -190,6 +249,7 @@ async def get_onboarding_dashboard(current_client: dict = Depends(get_current_cl
 class ClientCreate(BaseModel):
     username: str
     company_name: str
+    email: EmailStr
     password: str
 
 @api_router.post("/onboarding/clients")
@@ -205,6 +265,7 @@ async def create_new_client(payload: ClientCreate, current_client: dict = Depend
     client_doc = {
         "username": payload.username,
         "company_name": payload.company_name,
+        "email": payload.email,
         "password_hash": hashed_password,
         "status": "active",
         "metrics": {
@@ -241,7 +302,11 @@ async def create_new_client(payload: ClientCreate, current_client: dict = Depend
         "invoices": []
     }
     await db.clients.insert_one(client_doc)
-    return {"status": "success", "message": "Client created"}
+    
+    # Send email synchronously
+    email_sent = _send_welcome_email(payload.email, payload.username, payload.password, payload.company_name)
+    
+    return {"status": "success", "message": "Client created", "email_sent": email_sent}
 
 @api_router.get("/onboarding/clients")
 async def get_all_clients(current_client: dict = Depends(get_current_client)):
