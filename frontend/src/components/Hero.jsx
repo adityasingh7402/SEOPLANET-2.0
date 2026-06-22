@@ -138,13 +138,13 @@ export default function Hero({ locationData }) {
       </motion.div>
 
       {/* Content */}
-      <div className="relative z-[3] max-w-7xl mx-auto px-6 sm:px-12 pt-32 sm:pt-40 pb-24 sm:pb-32 min-h-screen flex flex-col justify-center">
-        <motion.p {...fade(0)} className="overline mb-8 sm:mb-10">
+      <div className="relative z-[3] max-w-7xl mx-auto px-6 sm:px-12 pt-24 sm:pt-32 pb-16 sm:pb-20 min-h-screen flex flex-col justify-center">
+        <motion.p {...fade(0)} className="overline mb-5 sm:mb-6">
           <span className="text-[#00FF94]">[001]</span> &nbsp;{locationData ? `Local SEO For ${locationData.city}` : 'Next-Gen Marketing Agency'}
         </motion.p>
 
         <motion.h1
-          className="font-display font-black text-white text-5xl sm:text-7xl lg:text-[7.5rem] leading-[0.95] tracking-tighter max-w-6xl"
+          className="font-display font-black text-white text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tighter max-w-5xl"
           data-testid="hero-headline"
         >
           {headlineTokens.map((w, i) =>
@@ -181,12 +181,12 @@ export default function Hero({ locationData }) {
 
         <motion.p
           {...fade(0.55)}
-          className="mt-10 max-w-2xl text-base sm:text-lg text-white/60 leading-relaxed font-mono-pro"
+          className="mt-6 max-w-xl text-sm sm:text-base text-white/60 leading-relaxed font-mono-pro"
         >
           {subheadlineText}
         </motion.p>
 
-        <motion.div {...fade(0.8)} className="mt-12 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-5 w-full sm:w-auto">
+        <motion.div {...fade(0.8)} className="mt-8 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-4 w-full sm:w-auto">
           <MagneticWrap strength={24}>
             <a
               href="#contact"
@@ -215,7 +215,7 @@ export default function Hero({ locationData }) {
         {/* Metric strip */}
         <motion.div
           {...fade(1.0)}
-          className="mt-20 sm:mt-24 grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/5 border border-white/5 max-w-4xl"
+          className="mt-12 sm:mt-16 grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/5 border border-white/5 max-w-4xl"
           data-testid="hero-metric-strip"
         >
           <HeroMetric
