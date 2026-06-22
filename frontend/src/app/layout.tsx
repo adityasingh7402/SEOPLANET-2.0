@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   applicationName: "SEO Planet",
   openGraph: {
     title: "SEO Planet | Premier Digital Marketing & SEO Agency",
-    description: "SEO Planet is a premier digital marketing agency for the AI era.",
+    description: "SEO Planet is a premier digital marketing agency for the AI era. We pair algorithmic SEO, performance ads, and content systems to help ambitious brands win.",
     url: "https://seoplanet.in",
     siteName: "SEO Planet",
     type: "website",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "SEO Planet | Premier Digital Marketing & SEO Agency",
-    description: "SEO Planet is a premier digital marketing agency for the AI era.",
+    description: "SEO Planet is a premier digital marketing agency for the AI era. We pair algorithmic SEO, performance ads, and content systems to help ambitious brands win.",
     images: ["https://seoplanet.in/orbital-planet-bg.png"],
   },
   alternates: {
