@@ -6,7 +6,7 @@ const Hero3D = lazy(() => import("./Hero3D"));
 import MagneticWrap from "./MagneticWrap";
 import useCountUp from "../hooks/useCountUp";
 
-const HERO_BG = process.env.NEXT_PUBLIC_HERO_BG_IMAGE || "/orbital-planet-bg.png";
+const HERO_BG = process.env.NEXT_PUBLIC_HERO_BG_IMAGE || "";
 
 /** Base offset so hero entrance plays after the preloader exit (~2.8s). */
 const BASE_DELAY = 2.7;
@@ -91,10 +91,12 @@ export default function Hero({ locationData }) {
       data-testid="hero-section"
     >
       {/* Background image + overlays */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${HERO_BG})` }}
-      />
+      {HERO_BG && (
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${HERO_BG})` }}
+        />
+      )}
       <div className="absolute inset-0 bg-[#05050A]/80" />
       <div className="absolute inset-0 grid-bg opacity-60" />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#05050A]" />
