@@ -18,7 +18,7 @@ export default function Contact() {
   const [success, setSuccess] = useState(false);
   const [contactMethod, setContactMethod] = useState("form"); // "form" or "calendly"
 
-  const [booking, setBooking] = useState({ name: "", email: "", website: "", focus: "", budget: "" });
+  const [booking, setBooking] = useState({ name: "", email: "", phone: "", website: "", focus: "", budget: "" });
   const [bookingLoading, setBookingLoading] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const { currency } = useCurrency();
@@ -87,7 +87,7 @@ export default function Contact() {
     }
     setBookingLoading(true);
     try {
-      const message = `Website: ${booking.website || 'N/A'}\nFocus: ${booking.focus || 'N/A'}\nBudget: ${booking.budget || 'N/A'}\n\n[This is a Discovery Session Request]`;
+      const message = `Phone: ${booking.phone || 'N/A'}\nWebsite: ${booking.website || 'N/A'}\nFocus: ${booking.focus || 'N/A'}\nBudget: ${booking.budget || 'N/A'}\n\n[This is a Discovery Session Request]`;
       
       const web3FormsRes = await axios.post("https://api.web3forms.com/submit", {
         access_key: "a2cc5258-81af-442b-b3fa-69064a5c56ae",
@@ -109,7 +109,7 @@ export default function Contact() {
 
       setBookingSuccess(true);
       toast.success("Discovery session requested! We'll send you available time slots shortly.");
-      setBooking({ name: "", email: "", website: "", focus: "", budget: "" });
+      setBooking({ name: "", email: "", phone: "", website: "", focus: "", budget: "" });
     } catch (err) {
       console.error("Booking error:", err);
       toast.error(err?.message || "Something went wrong.");
@@ -292,6 +292,10 @@ export default function Contact() {
                     </div>
                   </div>
 
+                  <div className="mb-4">
+                    <label className="overline block mb-2 text-white/50">Phone Number</label>
+                    <input type="tel" name="phone" value={booking.phone} onChange={onBookingChange} required placeholder="+1 (555) 000-0000" className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-mono-pro placeholder:text-white/25 focus:outline-none focus:border-[#00FF94] transition-all" />
+                  </div>
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
