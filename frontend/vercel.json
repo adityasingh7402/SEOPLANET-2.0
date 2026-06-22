@@ -32,6 +32,14 @@
   ],
   "rewrites": [
     {
+      "source": "/(.*\\.(?:env|php|sql|bak|zip|htpasswd|log|ini|conf))",
+      "destination": "/404"
+    },
+    {
+      "source": "/(.*\\.git.*)",
+      "destination": "/404"
+    },
+    {
       "source": "/(.*)",
       "has": [
         {
