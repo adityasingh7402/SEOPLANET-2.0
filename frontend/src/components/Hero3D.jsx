@@ -170,18 +170,19 @@ export default function Hero3D() {
 
     // Mouse parallax
     const mouse = { x: 0, y: 0 };
+    let cachedRect = mount.getBoundingClientRect();
     const onMove = (e) => {
       // Only calculate if visible
       if (!isVisible) return;
-      const rect = mount.getBoundingClientRect();
-      mouse.x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-      mouse.y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+      mouse.x = ((e.clientX - cachedRect.left) / cachedRect.width - 0.5) * 2;
+      mouse.y = ((e.clientY - cachedRect.top) / cachedRect.height - 0.5) * 2;
     };
     window.addEventListener("mousemove", onMove, { passive: true });
 
     // Resize
     const onResize = () => {
       if (!mount) return;
+      cachedRect = mount.getBoundingClientRect();
       const w = mount.clientWidth;
       const h = mount.clientHeight;
       camera.aspect = w / h;

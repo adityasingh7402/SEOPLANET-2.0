@@ -502,9 +502,16 @@ function ProjectRow({ p, index, revealed }) {
 
   const isEven = index % 2 === 0;
 
+  const cachedRect = useRef(null);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    cachedRect.current = rowRef.current?.getBoundingClientRect();
+  };
+
   const handleMouseMove = (e) => {
-    if (!imageRef.current || !rowRef.current || isOpen) return;
-    const rect = rowRef.current.getBoundingClientRect();
+    if (!imageRef.current || !cachedRect.current || isOpen) return;
+    const rect = cachedRect.current;
     const x = ((e.clientX - rect.left) / rect.width - 0.5) * 20;
     const y = ((e.clientY - rect.top) / rect.height - 0.5) * -12;
     imageRef.current.style.transform = `scale(1.12) translate(${x}px, ${y}px)`;
@@ -533,7 +540,7 @@ function ProjectRow({ p, index, revealed }) {
     >
       <div
         ref={rowRef}
-        onMouseEnter={() => setIsHovered(true)}
+        onMouseEnter={handleMouseEnter}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         onClick={() => setIsOpen(!isOpen)}

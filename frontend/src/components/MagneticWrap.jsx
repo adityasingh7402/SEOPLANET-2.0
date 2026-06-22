@@ -16,8 +16,14 @@ export default function MagneticWrap({ children, strength = 18, className = "" }
   const tx = useTransform(sx, (v) => v);
   const ty = useTransform(sy, (v) => v);
 
+  const cachedRect = useRef(null);
+
+  const onEnter = () => {
+    cachedRect.current = ref.current?.getBoundingClientRect();
+  };
+
   const onMove = (e) => {
-    const rect = ref.current?.getBoundingClientRect();
+    const rect = cachedRect.current;
     if (!rect) return;
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
@@ -32,6 +38,7 @@ export default function MagneticWrap({ children, strength = 18, className = "" }
   return (
     <motion.div
       ref={ref}
+      onMouseEnter={onEnter}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       style={{ x: tx, y: ty, display: "inline-block" }}
