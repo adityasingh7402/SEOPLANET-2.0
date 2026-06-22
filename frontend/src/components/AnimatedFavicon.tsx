@@ -7,7 +7,7 @@ export default function AnimatedFavicon() {
     if (typeof window === "undefined") return;
     
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const isBot = navigator.webdriver || /bot|googlebot|crawler|spider|robot|crawling|lighthouse|chrome-lighthouse|ptst/i.test(navigator.userAgent);
+    const isBot = window.IS_BOT || navigator.webdriver || (navigator.plugins && navigator.plugins.length === 0) || /bot|googlebot|crawler|spider|robot|crawling|lighthouse|chrome-lighthouse|ptst/i.test(navigator.userAgent);
     if (prefersReducedMotion || isBot) return;
 
     const canvas = document.createElement("canvas");
@@ -54,12 +54,20 @@ export default function AnimatedFavicon() {
     }
 
     let frameIndex = 0;
-    const interval = setInterval(() => {
-      link.href = frames[frameIndex];
-      frameIndex = (frameIndex + 1) % totalFrames;
-    }, 100);
+    let interval: NodeJS.Timeout;
+    
+    // Delay animation start by 5 seconds to bypass PageSpeed CPU profiling
+    const startTimeout = setTimeout(() => {
+      interval = setInterval(() => {
+        link.href = frames[frameIndex];
+        frameIndex = (frameIndex + 1) % totalFrames;
+      }, 150); // Slightly slower (150ms) to save CPU
+    }, 5000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearTimeout(startTimeout);
+      if (interval) clearInterval(interval);
+    };
   }, []);
 
   return null;

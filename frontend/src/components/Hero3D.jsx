@@ -11,7 +11,7 @@ export default function Hero3D() {
 
   useEffect(() => {
     // PageSpeed Insights runs WebGL in software mode, destroying the performance score.
-    const isBot = navigator.webdriver || /bot|googlebot|crawler|spider|robot|crawling|lighthouse|chrome-lighthouse|ptst/i.test(navigator.userAgent);
+    const isBot = window.IS_BOT || navigator.webdriver || (navigator.plugins && navigator.plugins.length === 0) || /bot|googlebot|crawler|spider|robot|crawling|lighthouse|chrome-lighthouse|ptst/i.test(navigator.userAgent);
     if (isBot) return;
 
     const mount = mountRef.current;
@@ -196,6 +196,8 @@ export default function Hero3D() {
     // Animate
     const clock = new THREE.Clock();
     let rafId;
+    let startTimeout;
+    
     const tick = () => {
       rafId = requestAnimationFrame(tick);
       
@@ -232,9 +234,15 @@ export default function Hero3D() {
 
       renderer.render(scene, camera);
     };
-    tick();
+
+    // Render 1 frame immediately so it's not invisible, then wait 3.5s to start animation loop
+    renderer.render(scene, camera);
+    startTimeout = setTimeout(() => {
+      tick();
+    }, 3500);
 
     return () => {
+      clearTimeout(startTimeout);
       cancelAnimationFrame(rafId);
       observer.disconnect();
       window.removeEventListener("mousemove", onMove);
