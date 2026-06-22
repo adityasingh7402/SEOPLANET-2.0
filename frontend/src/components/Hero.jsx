@@ -6,7 +6,7 @@ const Hero3D = lazy(() => import("./Hero3D"));
 import MagneticWrap from "./MagneticWrap";
 import useCountUp from "../hooks/useCountUp";
 
-const HERO_BG = process.env.REACT_APP_HERO_BG_IMAGE;
+const HERO_BG = process.env.NEXT_PUBLIC_HERO_BG_IMAGE || "/orbital-planet-bg.png";
 
 /** Base offset so hero entrance plays after the preloader exit (~2.8s). */
 const BASE_DELAY = 2.7;
