@@ -1,13 +1,10 @@
-
 import React from 'react';
-import dynamic from 'next/dynamic';
-
-const PortfolioApp = dynamic(() => import('@/views/portfolio/PortfolioApp'), { ssr: false });
+import PortfolioWrapper from './PortfolioWrapper';
 
 export function generateStaticParams() {
   return [{ slug: [] }];
 }
 
 export default function PortfolioPage() {
-  return <PortfolioApp />;
+  return <PortfolioWrapper />;
 }
