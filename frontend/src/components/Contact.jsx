@@ -125,7 +125,6 @@ export default function Contact() {
       data-testid="contact-section"
     >
       <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
-      <div className="absolute left-1/2 -top-40 -translate-x-1/2 w-[700px] h-[700px] rounded-full bg-[#00FF94]/8 blur-3xl pointer-events-none" />
 
       <div className="max-w-6xl mx-auto relative">
         <motion.div

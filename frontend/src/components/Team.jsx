@@ -71,7 +71,7 @@ export default function Team() {
             >
               <div className="aspect-[3/4] relative overflow-hidden">
                 <img
-                  src={m.img}
+                  src={m.img?.src || m.img}
                   alt={`${m.name} - ${m.role} at SEO Planet`}
                   loading="lazy"
                   className="w-full h-full object-cover grayscale-[0.9] group-hover:grayscale-0 transition-all duration-700 ease-out group-hover:scale-105"
