@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 
 import T1 from "../assets/team/team1.webp";
 import T2 from "../assets/team/team2.webp";
-import T3 from "../assets/team/team3.webp";
 import T4 from "../assets/team/team4.webp";
 
 const team = [
@@ -24,12 +23,6 @@ const team = [
     role: "Tech Lead · Full Stack Engineer",
     img: T2,
     bio: "4+ yrs building scalable SaaS products from scratch.",
-  },
-  {
-    name: "Shanmukha",
-    role: "Sales Director",
-    img: T3,
-    bio: "Expert in sales strategy, client acquisition, and revenue growth with a proven track record of success.",
   },
 ];
 
@@ -68,7 +61,7 @@ export default function Team() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
           {team.map((m, i) => (
             <motion.div
               key={m.name}
