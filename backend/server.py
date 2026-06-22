@@ -182,7 +182,7 @@ def _send_welcome_email(to_email: str, username: str, password: str, company_nam
                 <!-- Header Section -->
                 <tr><td style="padding:60px 48px 40px 48px;text-align:center;background:linear-gradient(180deg, #101018 0%, #0A0A0F 100%);border-bottom:1px solid #151520;">
                   <img src="cid:logo" alt="SEO Planet" width="140" style="display:block;margin:0 auto 32px auto;border:0;" />
-                  <h1 style="font-family:'Unbounded',sans-serif;font-weight:900;font-size:56px;letter-spacing:-0.05em;margin:0 0 16px 0;color:#ffffff;line-height:1.1;">
+                  <h1 style="font-family:'Unbounded',sans-serif;font-weight:300;font-size:56px;letter-spacing:-0.02em;margin:0 0 16px 0;color:#ffffff;line-height:1.1;">
                     Welcome
                   </h1>
                   <p style="margin:0;color:#6B7280;font-size:12px;letter-spacing:6px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;">
