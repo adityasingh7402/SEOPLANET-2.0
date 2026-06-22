@@ -43,9 +43,9 @@ function HeroMetric({ value, label, format }) {
 
 function ClientLogos() {
   return (
-    <motion.div {...fade(0.9)} className="mt-4 pt-4 border-t border-white/5 opacity-60">
-      <p className="text-[10px] uppercase tracking-[0.2em] mb-3 font-mono-pro text-white/40">Trusted by fast-growing brands</p>
-      <div className="flex flex-wrap gap-4 sm:gap-8 items-center grayscale">
+    <motion.div {...fade(0.9)} className="opacity-60 flex flex-col items-center justify-center text-center">
+      <p className="text-[10px] uppercase tracking-[0.2em] mb-6 font-mono-pro text-white/40">Trusted by fast-growing brands</p>
+      <div className="flex flex-wrap gap-6 sm:gap-12 justify-center items-center grayscale">
         <span className="font-display font-bold text-base sm:text-lg text-white">Acme Corp</span>
         <span className="font-display font-bold text-base sm:text-lg text-white italic">Globex</span>
         <span className="font-display font-bold text-base sm:text-lg text-white tracking-tighter">Soylent</span>
@@ -91,13 +91,14 @@ export default function Hero({ locationData }) {
     : `SEO Planet is a digital marketing agency built for the AI era. We pair algorithmic SEO with performance ads, content systems, and analytics to help ambitious brands win their category.`;
 
   return (
-    <section
-      id="top"
-      className="relative min-h-screen w-full overflow-hidden grain"
-      data-testid="hero-section"
-    >
-      {/* Background image + overlays */}
-      {HERO_BG && (
+    <>
+      <section
+        id="top"
+        className="relative min-h-screen w-full overflow-hidden grain"
+        data-testid="hero-section"
+      >
+        {/* Background image + overlays */}
+        {HERO_BG && (
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${HERO_BG})` }}
@@ -210,8 +211,6 @@ export default function Hero({ locationData }) {
           </MagneticWrap>
         </motion.div>
 
-        {/* Client Logos */}
-        <ClientLogos />
 
         {/* Metric strip */}
         <motion.div
@@ -267,6 +266,14 @@ export default function Hero({ locationData }) {
         </div>
       </div>
     </section>
+
+    {/* Client Logos Section - moved below the moving strip */}
+    <section className="relative z-10 bg-[#05050A] w-full py-12 sm:py-16 border-b border-white/5">
+      <div className="max-w-7xl mx-auto px-6 sm:px-12">
+        <ClientLogos />
+      </div>
+    </section>
+    </>
   );
 }
 
