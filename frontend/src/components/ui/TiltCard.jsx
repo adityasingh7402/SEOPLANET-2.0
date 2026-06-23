@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { motion, useMotionValue, useSpring, useMotionTemplate } from "framer-motion";
 
-export default function TiltCard({ children, className = "", maxRotation = 18, isVolumetric = false, volumetricTheme = "green" }) {
+export default function TiltCard({ children, className = "", maxRotation = 18, isVolumetric = false, volumetricTheme = "green", depthMultiplier = 1 }) {
   const ref = useRef(null);
 
   const x = useMotionValue(0.5);
@@ -56,7 +56,7 @@ export default function TiltCard({ children, className = "", maxRotation = 18, i
                 <div 
                   key={i}
                   className={`absolute inset-0 rounded-2xl ${sliceClass}`}
-                  style={{ transform: `translateZ(-${(i + 1) * 5}px)` }} 
+                  style={{ transform: `translateZ(-${(i + 1) * 5 * depthMultiplier}px)` }} 
                 />
               );
             })}

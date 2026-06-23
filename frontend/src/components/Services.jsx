@@ -216,10 +216,10 @@ export default function Services() {
               <motion.div
                 layoutId="enterprise-search-card"
                 transition={{ type: "spring", damping: 30, stiffness: 300, mass: 0.8 }}
-                className="relative w-full max-w-4xl"
+                className="relative w-full max-w-4xl pointer-events-auto"
                 style={{ transformStyle: "preserve-3d" }}
               >
-                <TiltCard isVolumetric={true} volumetricTheme="neutral" className="w-full h-full">
+                <TiltCard isVolumetric={true} volumetricTheme="neutral" depthMultiplier={5} className="w-full h-full">
                   <div
                     className="relative w-full rounded-3xl bg-[#05050A]/90 backdrop-blur-3xl border border-white/10 p-8 sm:p-12 overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.1)]"
                     style={{ transformStyle: "preserve-3d" }}
