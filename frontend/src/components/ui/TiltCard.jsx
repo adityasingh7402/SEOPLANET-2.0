@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { motion, useMotionValue, useSpring, useMotionTemplate } from "framer-motion";
 
-export default function TiltCard({ children, className = "", maxRotation = 18, isVolumetric = false }) {
+export default function TiltCard({ children, className = "", maxRotation = 18, isVolumetric = false, volumetricTheme = "green" }) {
   const ref = useRef(null);
 
   const x = useMotionValue(0.5);
@@ -45,15 +45,21 @@ export default function TiltCard({ children, className = "", maxRotation = 18, i
         {/* Volumetric Block Extrusion (Slices) */}
         {isVolumetric && (
           <div style={{ transformStyle: "preserve-3d" }} className="absolute inset-0 pointer-events-none transition-all duration-300">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <div 
-                key={i}
-                className={`absolute inset-0 rounded-2xl ${i === 9 ? 'bg-[#00FF94]/15 border border-[#00FF94]/50 shadow-[0_0_30px_rgba(0,255,148,0.3)]' : 'bg-[#05050A]/80 border border-[#00FF94]/5'}`}
-                style={{ 
-                  transform: `translateZ(-${(i + 1) * 5}px)`,
-                }} 
-              />
-            ))}
+            {Array.from({ length: 10 }).map((_, i) => {
+              let sliceClass = "";
+              if (volumetricTheme === "green") {
+                sliceClass = i === 9 ? 'bg-[#00FF94]/15 border border-[#00FF94]/50 shadow-[0_0_30px_rgba(0,255,148,0.3)]' : 'bg-[#05050A]/80 border border-[#00FF94]/5';
+              } else {
+                sliceClass = i === 9 ? 'bg-[#05050A]/90 border border-white/20 shadow-[0_50px_100px_-20px_rgba(0,0,0,1)]' : 'bg-[#05050A]/90 border border-white/5';
+              }
+              return (
+                <div 
+                  key={i}
+                  className={`absolute inset-0 rounded-2xl ${sliceClass}`}
+                  style={{ transform: `translateZ(-${(i + 1) * 5}px)` }} 
+                />
+              );
+            })}
           </div>
         )}
 

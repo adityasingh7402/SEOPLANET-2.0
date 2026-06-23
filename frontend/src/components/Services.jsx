@@ -52,34 +52,6 @@ const services = [
 
 export default function Services() {
   const [isEnterpriseExpanded, setIsEnterpriseExpanded] = useState(false);
-  
-  // 3D Parallax State for Modal
-  const modalRef = useRef(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 20 });
-  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 20 });
-  
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
-
-  const handleMouseMove = (e) => {
-    if (!modalRef.current) return;
-    const rect = modalRef.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    x.set(xPct);
-    y.set(yPct);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
 
   return (
     <section
@@ -105,14 +77,18 @@ export default function Services() {
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-14">
           {/* Highlight card */}
-          <TiltCard isVolumetric={true} className="md:col-span-8 md:row-span-2 h-full w-full">
           <motion.div
             {...reveal}
             layoutId="enterprise-search-card"
-            className="relative neon-border rounded-2xl bg-white/[0.03] border border-white/10 p-8 sm:p-12 group h-full"
-            style={{ transformStyle: "preserve-3d" }}
-            data-testid="service-card-highlight"
+            className="md:col-span-8 md:row-span-2 h-full w-full"
+            style={{ transformStyle: "preserve-3d", zIndex: isEnterpriseExpanded ? 100 : 1 }}
           >
+          <TiltCard isVolumetric={true} className="h-full w-full">
+            <div
+              className="relative neon-border rounded-2xl bg-white/[0.03] border border-white/10 p-8 sm:p-12 group h-full"
+              style={{ transformStyle: "preserve-3d" }}
+              data-testid="service-card-highlight"
+            >
             <div className="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-[#00FF94]/15 blur-3xl" style={{ transform: "translateZ(10px)" }} />
             <div className="absolute inset-0 grid-bg opacity-25 rounded-2xl overflow-hidden" style={{ transform: "translateZ(20px)" }} />
             <div className="relative" style={{ transform: "translateZ(50px)" }}>
@@ -148,8 +124,9 @@ export default function Services() {
                 <ArrowUpRight className="w-4 h-4 transition-transform group-hover/cta:rotate-45" />
               </div>
             </div>
-          </motion.div>
+          </div>
           </TiltCard>
+          </motion.div>
 
           {/* Side small */}
           <TiltCard isVolumetric={true} className="md:col-span-4 h-full w-full">
@@ -235,50 +212,34 @@ export default function Services() {
               onClick={() => setIsEnterpriseExpanded(false)}
             />
             <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 sm:p-6 pointer-events-none perspective-[2000px]">
-              {/* Background Orbs to refract through the glass */}
-              <motion.div 
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.8 }}
-                className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00FF94]/20 rounded-full blur-[120px]" 
-              />
-              <motion.div 
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.8, delay: 0.2 }}
-                className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[#00E5FF]/10 rounded-full blur-[120px]" 
-              />
-
-              {/* Interactive 3D Tilt Wrapper */}
+              {/* Interactive 3D Wrapper mapped via layoutId */}
               <motion.div
-                ref={modalRef}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-                className="relative w-full max-w-4xl pointer-events-auto"
-                style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+                layoutId="enterprise-search-card"
+                transition={{ type: "spring", damping: 30, stiffness: 300, mass: 0.8 }}
+                className="relative w-full max-w-4xl"
+                style={{ transformStyle: "preserve-3d" }}
               >
-                <motion.div
-                  layoutId="enterprise-search-card"
-                  transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                  className="relative w-full rounded-3xl bg-white/[0.02] backdrop-blur-3xl border border-white/5 border-t-white/20 border-l-white/20 p-8 sm:p-12 overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8),0_0_80px_rgba(0,255,148,0.05),inset_0_1px_1px_rgba(255,255,255,0.1)]"
-                  style={{ transformStyle: "preserve-3d" }}
-                >
-                  {/* Physical Depth Slab Layers */}
-                  <div className="absolute inset-0 rounded-3xl bg-white/[0.01] border border-white/5 pointer-events-none" style={{ transform: "translateZ(-10px)" }} />
-                  <div className="absolute inset-0 rounded-3xl bg-black/40 border border-white/5 pointer-events-none shadow-[0_50px_100px_-20px_rgba(0,0,0,1)]" style={{ transform: "translateZ(-20px)" }} />
-                  
-                  <button 
-                    onClick={() => setIsEnterpriseExpanded(false)}
-                    className="absolute top-6 right-6 p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all z-20 hover:scale-105 active:scale-95"
-                    style={{ transform: "translateZ(60px)" }}
-                    aria-label="Close details"
+                <TiltCard isVolumetric={true} volumetricTheme="neutral" className="w-full h-full">
+                  <div
+                    className="relative w-full rounded-3xl bg-[#05050A]/90 backdrop-blur-3xl border border-white/10 p-8 sm:p-12 overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.1)]"
+                    style={{ transformStyle: "preserve-3d" }}
                   >
-                    <X className="w-5 h-5" />
-                  </button>
+                    <button 
+                      onClick={() => setIsEnterpriseExpanded(false)}
+                      className="absolute top-6 right-6 p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all z-20 hover:scale-105 active:scale-95"
+                      style={{ transform: "translateZ(60px)" }}
+                      aria-label="Close details"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
 
-                  <motion.div 
-                    initial={{ opacity: 0, y: 50, rotateX: 45, rotateY: -10 }}
-                    animate={{ opacity: 1, y: 0, rotateX: 0, rotateY: 0 }}
-                    transition={{ delay: 0.35, duration: 0.8, type: "spring", bounce: 0.4 }}
-                    className="relative z-10" 
-                    style={{ transformStyle: "preserve-3d", transform: "translateZ(50px)" }}
-                  >
+                    <motion.div 
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.15, duration: 0.6, type: "spring", bounce: 0 }}
+                      className="relative z-10" 
+                      style={{ transformStyle: "preserve-3d", transform: "translateZ(50px)" }}
+                    >
                   <div className="flex items-center gap-4 mb-6">
                     <CircuitBoard className="w-6 h-6 text-[#00FF94]" />
                     <span className="overline text-white/60 tracking-[0.3em]">[S01] · Deep Dive</span>
@@ -331,11 +292,12 @@ export default function Services() {
                       </motion.div>
                     </div>
                   </div>
-                </motion.div>
+                    </motion.div>
+                  </div>
+                </TiltCard>
               </motion.div>
-            </motion.div>
-          </div>
-        </>
+            </div>
+          </>
       )}
       </AnimatePresence>
     </section>
