@@ -192,9 +192,9 @@ export default function Hero({ locationData }) {
                 href="#contact"
                 className="pulse-ring-btn group inline-flex justify-center items-center gap-3 rounded-full bg-[#00FF94] text-black px-6 py-3 font-mono-pro text-xs uppercase tracking-[0.25em] font-bold hover:bg-white transition-colors active:scale-95 w-full sm:w-auto"
                 data-testid="hero-cta-launch"
-                aria-label="Initialize growth loop with SEO Planet"
+                aria-label="Start scaling with SEO Planet"
               >
-                Initialize Growth
+                Start Scaling
                 <ArrowUpRight className="w-4 h-4 transition-transform group-hover:rotate-45" />
               </a>
             </MagneticWrap>
