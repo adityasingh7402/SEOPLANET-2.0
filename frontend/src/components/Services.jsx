@@ -21,29 +21,29 @@ const reveal = {
 const services = [
   {
     code: "S04",
-    title: "Paid Media",
-    desc: "Cross-channel performance ads optimized in real time.",
+    title: "Predictive Acquisition",
+    desc: "Algorithmic capital allocation across predictive channels.",
     icon: Zap,
     accent: "#00E5FF",
   },
   {
     code: "S05",
-    title: "Content Strategy",
-    desc: "Topical authority built at scale.",
+    title: "Semantic Authority Networks",
+    desc: "Topical dominance engineered at scale.",
     icon: FileCode2,
     accent: "#00FF94",
   },
   {
     code: "S06",
-    title: "Analytics",
-    desc: "Forecast revenue with attribution-grade models.",
+    title: "Attribution & Forecasting",
+    desc: "Predict revenue with machine-learning attribution models.",
     icon: BarChart3,
     accent: "#00E5FF",
   },
   {
     code: "S07",
-    title: "Brand Identity",
-    desc: "Visual systems built for the modern web.",
+    title: "Digital Ecosystem Design",
+    desc: "Interactive architectures built for cognitive engagement.",
     icon: Sparkles,
     accent: "#00FF94",
   },
@@ -62,8 +62,8 @@ export default function Services() {
           <div>
             <p className="overline mb-4">[02] · What We Do</p>
             <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tighter max-w-2xl leading-[1.02]">
-              Six services. <br />
-              <span className="text-white/40">One growth system.</span>
+              Six cognitive protocols. <br />
+              <span className="text-white/40">One revenue engine.</span>
             </h2>
           </div>
           <p className="font-mono-pro text-sm text-white/55 max-w-sm">
@@ -89,11 +89,11 @@ export default function Services() {
                 <CircuitBoard className="w-6 h-6 text-[#00FF94]" />
               </div>
               <h3 className="font-display text-3xl sm:text-5xl lg:text-6xl font-black tracking-tighter text-white drop-shadow-xl">
-                Algorithmic <span className="neon-text">SEO</span>
+                Search <span className="neon-text">Ecosystems</span>
               </h3>
               <p className="mt-5 text-white/65 max-w-md leading-relaxed font-mono-pro text-sm">
-                Programmatic content systems, technical audits, and entity
-                graphs built for both classical and AI-driven search.
+                Programmatic content structures, technical architecture, and entity
+                graphs engineered for deterministic search dominance.
               </p>
 
               <div className="mt-10 grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -131,10 +131,10 @@ export default function Services() {
                 <Search className="w-5 h-5 text-[#00FF94] group-hover:scale-110 transition-transform" />
               </div>
               <h3 className="font-display text-2xl text-white font-bold tracking-tight">
-                Conversion Design
+                Behavioral Engines
               </h3>
               <p className="mt-3 text-xs text-white/55 font-mono-pro leading-relaxed">
-                Funnel teardown, experimentation, and revenue calibration.
+                Funnel teardowns, predictive experimentation, and revenue calibration.
               </p>
             </div>
           </motion.div>
@@ -153,10 +153,10 @@ export default function Services() {
                 <Sparkles className="w-5 h-5 text-[#00E5FF] group-hover:scale-110 transition-transform" />
               </div>
               <h3 className="font-display text-2xl text-white font-bold tracking-tight">
-                GEO &amp; AI Search
+                Cognitive Search
               </h3>
               <p className="mt-3 text-xs text-white/55 font-mono-pro leading-relaxed">
-                Generative Engine Optimization for ChatGPT, Perplexity, Gemini.
+                Generative Engine Optimization for LLM-driven discovery.
               </p>
             </div>
           </motion.div>

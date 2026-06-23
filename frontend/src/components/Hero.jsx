@@ -87,8 +87,8 @@ export default function Hero({ locationData }) {
   ];
 
   const subheadlineText = locationData
-    ? `We pair algorithmic SEO with performance ads and content systems to help ${locationData.localIndustry} brands dominate ${locationData.city}. Outrank ${locationData.competitorCount} competitors today.`
-    : `SEO Planet is a digital marketing agency built for the AI era. We pair algorithmic SEO with performance ads, content systems, and analytics to help ambitious brands win their category.`;
+    ? `We pair algorithmic SEO with predictive acquisition and content networks to help ${locationData.localIndustry} brands dominate ${locationData.city}. Outrank ${locationData.competitorCount} competitors today.`
+    : `SEO Planet is a continuous revenue engineering lab. We deploy autonomous growth loops, algorithmic intelligence, and predictive analytics to systematically dominate your category.`;
 
   return (
     <>
@@ -140,7 +140,7 @@ export default function Hero({ locationData }) {
         {/* Content */}
         <div className="relative z-[3] max-w-7xl mx-auto px-6 sm:px-12 pt-30 sm:pt-32 pb-20 sm:pb-24 min-h-screen flex flex-col justify-center">
           <motion.p {...fade(0)} className="overline mb-4 sm:mb-5">
-            <span className="text-[#00FF94]">[001]</span> &nbsp;{locationData ? `Local SEO For ${locationData.city}` : 'Next-Gen Marketing Agency'}
+            <span className="text-[#00FF94]">[001]</span> &nbsp;{locationData ? `Local SEO For ${locationData.city}` : 'Algorithmic Growth Architecture'}
           </motion.p>
 
           <motion.h1
@@ -192,9 +192,9 @@ export default function Hero({ locationData }) {
                 href="#contact"
                 className="pulse-ring-btn group inline-flex justify-center items-center gap-3 rounded-full bg-[#00FF94] text-black px-6 py-3 font-mono-pro text-xs uppercase tracking-[0.25em] font-bold hover:bg-white transition-colors active:scale-95 w-full sm:w-auto"
                 data-testid="hero-cta-launch"
-                aria-label="Start a new SEO project with SEO Planet"
+                aria-label="Initialize growth loop with SEO Planet"
               >
-                Start a Project
+                Initialize Growth
                 <ArrowUpRight className="w-4 h-4 transition-transform group-hover:rotate-45" />
               </a>
             </MagneticWrap>
@@ -244,17 +244,17 @@ export default function Hero({ locationData }) {
             {Array.from({ length: 2 }).map((_, k) => (
               <div key={k} className="flex shrink-0">
                 {[
-                  "SEO",
+                  "Algorithmic Intelligence",
                   "★",
-                  "Performance Ads",
+                  "Revenue Engineering",
                   "★",
-                  "Content Strategy",
+                  "Growth Loops",
                   "★",
-                  "Analytics",
+                  "Predictive Analytics",
                   "★",
-                  "Brand Identity",
+                  "Digital Ecosystems",
                   "★",
-                  "Conversion Design",
+                  "Behavioral Conversion",
                   "★",
                 ].map((w, i) => (
                   <span key={`${k}-${i}`} className="px-6">

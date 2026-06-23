@@ -85,9 +85,9 @@ export default function Navigation() {
             href="#contact"
             className="inline-flex items-center gap-2 group rounded-full bg-[#00FF94] text-black px-5 py-2.5 font-mono-pro text-xs uppercase tracking-[0.2em] font-bold hover:bg-white transition-colors active:scale-95"
             data-testid="nav-cta-initiate-launch"
-            aria-label="Start a new SEO project with SEO Planet"
+            aria-label="Initialize growth loop with SEO Planet"
           >
-            Start a Project
+            Initialize Growth
             <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:rotate-45" />
           </a>
         </div>
@@ -144,9 +144,9 @@ export default function Navigation() {
               href="#contact"
               onClick={() => setOpen(false)}
               className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-[#00FF94] text-black px-5 py-4 font-mono-pro text-sm uppercase tracking-[0.2em] font-bold"
-              aria-label="Start a new SEO project with SEO Planet"
+              aria-label="Initialize growth loop with SEO Planet"
             >
-              Start a Project <ArrowUpRight className="w-4 h-4" />
+              Initialize Growth <ArrowUpRight className="w-4 h-4" />
             </a>
           </motion.div>
         )}
