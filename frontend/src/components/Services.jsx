@@ -221,12 +221,12 @@ export default function Services() {
               >
                 <TiltCard isVolumetric={true} volumetricTheme="glass" depthMultiplier={5} className="w-full h-full">
                   <div
-                    className="relative w-full rounded-3xl bg-black/20 backdrop-blur-3xl border border-white/20 border-b-white/5 border-r-white/5 p-8 sm:p-12 overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.2)]"
+                    className="relative w-full rounded-3xl bg-black/20 backdrop-blur-3xl border border-white/20 border-b-white/5 border-r-white/5 p-6 sm:p-8 overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.2)]"
                     style={{ transformStyle: "preserve-3d" }}
                   >
                     <button 
                       onClick={() => setIsEnterpriseExpanded(false)}
-                      className="absolute top-6 right-6 p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all z-20 hover:scale-105 active:scale-95"
+                      className="absolute top-5 right-5 p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all z-20 hover:scale-105 active:scale-95"
                       style={{ transform: "translateZ(60px)" }}
                       aria-label="Close details"
                     >
@@ -240,55 +240,55 @@ export default function Services() {
                       className="relative z-10 drop-shadow-[0_30px_30px_rgba(0,0,0,0.8)]" 
                       style={{ transformStyle: "preserve-3d", transform: "translateZ(100px)" }}
                     >
-                  <div className="flex items-center gap-4 mb-6">
-                    <CircuitBoard className="w-6 h-6 text-[#00FF94]" />
+                  <div className="flex items-center gap-4 mb-4">
+                    <CircuitBoard className="w-5 h-5 text-[#00FF94]" />
                     <span className="overline text-white/60 tracking-[0.3em]">[S01] · Deep Dive</span>
                   </div>
-                  <h3 className="font-display text-4xl sm:text-5xl font-bold tracking-tighter text-white mb-6 drop-shadow-xl">
+                  <h3 className="font-display text-3xl sm:text-4xl font-bold tracking-tighter text-white mb-4 drop-shadow-xl">
                     Enterprise <span className="text-[#00FF94]">Search Architecture</span>
                   </h3>
                   
-                  <div className="space-y-8 text-white/70 font-mono-pro text-sm leading-relaxed max-w-3xl">
-                    <p className="text-white/80 text-base max-w-2xl">
+                  <div className="space-y-4 text-white/70 font-mono-pro text-sm leading-relaxed max-w-3xl">
+                    <p className="text-white/80 text-sm max-w-2xl">
                       Dominating the modern search landscape requires more than just keywords. It demands a fully integrated ecosystem of technical perfection, semantic authority, and computational analysis.
                     </p>
                     
-                    <div className="grid sm:grid-cols-2 gap-6 mt-8" style={{ transformStyle: "preserve-3d" }}>
+                    <div className="grid sm:grid-cols-2 gap-4 mt-6" style={{ transformStyle: "preserve-3d" }}>
                       <motion.div 
                         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.6 }}
-                        className="bg-white/[0.03] backdrop-blur-xl border border-white/5 border-t-white/10 p-6 rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] transition-transform hover:scale-[1.02]" style={{ transform: "translateZ(20px)" }}
+                        className="bg-white/[0.03] backdrop-blur-xl border border-white/5 border-t-white/10 p-4 rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] transition-transform hover:scale-[1.02]" style={{ transform: "translateZ(20px)" }}
                       >
-                        <h4 className="text-white font-bold mb-3 text-base flex items-center gap-2">
-                          <span className="text-[#00FF94] text-xs">01</span> Algorithmic Entity Optimization
+                        <h4 className="text-white font-bold mb-2 text-sm flex items-center gap-2">
+                          <span className="text-[#00FF94] text-[10px]">01</span> Algorithmic Entity Optimization
                         </h4>
-                        <p className="text-white/60">We map your brand and products into knowledge graphs that Google's LLMs and traditional algorithms inherently understand and prioritize.</p>
+                        <p className="text-white/60 text-xs">We map your brand and products into knowledge graphs that Google's LLMs and traditional algorithms inherently understand and prioritize.</p>
                       </motion.div>
                       <motion.div 
                         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45, duration: 0.6 }}
-                        className="bg-white/[0.03] backdrop-blur-xl border border-white/5 border-t-white/10 p-6 rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] transition-transform hover:scale-[1.02]" style={{ transform: "translateZ(20px)" }}
+                        className="bg-white/[0.03] backdrop-blur-xl border border-white/5 border-t-white/10 p-4 rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] transition-transform hover:scale-[1.02]" style={{ transform: "translateZ(20px)" }}
                       >
-                        <h4 className="text-white font-bold mb-3 text-base flex items-center gap-2">
-                          <span className="text-[#00FF94] text-xs">02</span> Technical Infrastructure
+                        <h4 className="text-white font-bold mb-2 text-sm flex items-center gap-2">
+                          <span className="text-[#00FF94] text-[10px]">02</span> Technical Infrastructure
                         </h4>
-                        <p className="text-white/60">We deploy advanced Next.js/React server-side rendering, schema markup, and dynamic sitemaps to ensure perfect crawlability and lightning-fast Core Web Vitals.</p>
+                        <p className="text-white/60 text-xs">We deploy advanced Next.js/React server-side rendering, schema markup, and dynamic sitemaps to ensure perfect crawlability and lightning-fast Core Web Vitals.</p>
                       </motion.div>
                       <motion.div 
                         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.6 }}
-                        className="bg-white/[0.03] backdrop-blur-xl border border-white/5 border-t-white/10 p-6 rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] transition-transform hover:scale-[1.02]" style={{ transform: "translateZ(20px)" }}
+                        className="bg-white/[0.03] backdrop-blur-xl border border-white/5 border-t-white/10 p-4 rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] transition-transform hover:scale-[1.02]" style={{ transform: "translateZ(20px)" }}
                       >
-                        <h4 className="text-white font-bold mb-3 text-base flex items-center gap-2">
-                          <span className="text-[#00FF94] text-xs">03</span> Programmatic Content Scaling
+                        <h4 className="text-white font-bold mb-2 text-sm flex items-center gap-2">
+                          <span className="text-[#00FF94] text-[10px]">03</span> Programmatic Content Scaling
                         </h4>
-                        <p className="text-white/60">We engineer automated, high-quality content loops that capture thousands of long-tail intent variations without sacrificing brand voice or quality.</p>
+                        <p className="text-white/60 text-xs">We engineer automated, high-quality content loops that capture thousands of long-tail intent variations without sacrificing brand voice or quality.</p>
                       </motion.div>
                       <motion.div 
                         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55, duration: 0.6 }}
-                        className="bg-white/[0.03] backdrop-blur-xl border border-white/5 border-t-white/10 p-6 rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] transition-transform hover:scale-[1.02]" style={{ transform: "translateZ(20px)" }}
+                        className="bg-white/[0.03] backdrop-blur-xl border border-white/5 border-t-white/10 p-4 rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] transition-transform hover:scale-[1.02]" style={{ transform: "translateZ(20px)" }}
                       >
-                        <h4 className="text-white font-bold mb-3 text-base flex items-center gap-2">
-                          <span className="text-[#00FF94] text-xs">04</span> Predictive Analytics
+                        <h4 className="text-white font-bold mb-2 text-sm flex items-center gap-2">
+                          <span className="text-[#00FF94] text-[10px]">04</span> Predictive Analytics
                         </h4>
-                        <p className="text-white/60">Our proprietary attribution modeling forecasts exactly how search volume translates to pipeline revenue, eliminating the guesswork from SEO.</p>
+                        <p className="text-white/60 text-xs">Our proprietary attribution modeling forecasts exactly how search volume translates to pipeline revenue, eliminating the guesswork from SEO.</p>
                       </motion.div>
                     </div>
                   </div>
