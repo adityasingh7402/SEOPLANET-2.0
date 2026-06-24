@@ -44,15 +44,41 @@ export default function TiltCard({ children, className = "", maxRotation = 18, i
   };
 
   useEffect(() => {
+    let baselineGamma = null;
+    let baselineBeta = null;
+
     const handleOrientation = (e) => {
-      if (isInteracting.current) return;
+      if (isInteracting.current) {
+        baselineGamma = e.gamma;
+        baselineBeta = e.beta;
+        return;
+      }
+      
       let gamma = e.gamma;
       let beta = e.beta;
       if (gamma === null || beta === null) return;
-      gamma = Math.min(Math.max(gamma, -45), 45);
-      beta = Math.min(Math.max(beta, 0), 90);
-      x.set((gamma + 45) / 90);
-      y.set(beta / 90);
+
+      if (baselineGamma === null || baselineBeta === null) {
+        baselineGamma = gamma;
+        baselineBeta = beta;
+      }
+
+      // Slowly adapt the baseline to the current angle (high-pass filter)
+      // This centers the card when held still, fixing the "tilted by default" issue.
+      baselineGamma += (gamma - baselineGamma) * 0.02;
+      baselineBeta += (beta - baselineBeta) * 0.02;
+
+      let deltaGamma = gamma - baselineGamma;
+      let deltaBeta = beta - baselineBeta;
+
+      // Increase this value to make the gyro LESS sensitive (requires more physical tilt)
+      const maxTiltRange = 75; 
+
+      deltaGamma = Math.min(Math.max(deltaGamma, -maxTiltRange), maxTiltRange);
+      deltaBeta = Math.min(Math.max(deltaBeta, -maxTiltRange), maxTiltRange);
+
+      x.set((deltaGamma + maxTiltRange) / (maxTiltRange * 2));
+      y.set((deltaBeta + maxTiltRange) / (maxTiltRange * 2));
     };
 
     if (typeof window !== "undefined" && window.DeviceOrientationEvent) {
