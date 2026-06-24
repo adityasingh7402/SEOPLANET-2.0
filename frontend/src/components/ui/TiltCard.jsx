@@ -66,7 +66,7 @@ export default function TiltCard({ children, className = "", maxRotation = 18, i
       let deltaBeta = beta - baselineBeta;
 
       // Decrease this value to make the gyro MORE sensitive (requires less physical tilt)
-      const maxTiltRange = 15; 
+      const maxTiltRange = 25; 
 
       deltaGamma = Math.min(Math.max(deltaGamma, -maxTiltRange), maxTiltRange);
       deltaBeta = Math.min(Math.max(deltaBeta, -maxTiltRange), maxTiltRange);
