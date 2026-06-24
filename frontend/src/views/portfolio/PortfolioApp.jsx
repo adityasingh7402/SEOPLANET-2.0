@@ -361,7 +361,7 @@ function ExpandPanel({ p, open, isEven }) {
             <div 
               ref={containerRef}
               style={{
-                position: "relative", width: "100%", flex: 1, display: "flex",
+                position: "relative", width: "100%", display: "flex",
                 border: "1px solid rgba(255,255,255,0.06)", borderTop: "none", borderRadius: "0 0 8px 8px",
                 background: "#0A0A12", overflow: "hidden", aspectRatio: "1440/900",
             }}>
