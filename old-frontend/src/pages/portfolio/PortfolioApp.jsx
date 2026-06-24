@@ -145,7 +145,7 @@ const PROJECTS = [
     result: "Beta",
     resultLabel: "Launch",
     color: "#B026FF",
-    url: "https://streaming-two-xi.vercel.app",
+    url: "https://raidnext.com",
     description: "A high-performance media streaming platform interface with dynamic content loading, immersive media preview features, and a dark-mode optimized viewing experience.",
     tags: ["React", "Vite", "CSS Modules"],
     scope: ["UI Engineering", "Performance", "Animations"],
