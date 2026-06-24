@@ -37,16 +37,6 @@ export default function TiltCard({ children, className = "", maxRotation = 18, i
     }
   };
 
-  const handleTouchMove = (e) => {
-    if (!ref.current) return;
-    isInteracting.current = true;
-    const touch = e.touches[0];
-    const rect = ref.current.getBoundingClientRect();
-    const touchX = touch.clientX - rect.left;
-    const touchY = touch.clientY - rect.top;
-    x.set(Math.min(Math.max(touchX / rect.width, 0), 1));
-    y.set(Math.min(Math.max(touchY / rect.height, 0), 1));
-  };
 
   useEffect(() => {
     let baselineGamma = null;
@@ -102,8 +92,6 @@ export default function TiltCard({ children, className = "", maxRotation = 18, i
         ref={ref}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleMouseLeave}
         style={{
           rotateX,
           rotateY,
