@@ -18,8 +18,8 @@ export default function TiltCard({ children, className = "", maxRotation = 18, i
   const isInteracting = useRef(false);
   const isGyroActive = useRef(false);
 
-  const handleMouseMove = (e) => {
-    if (!ref.current) return;
+  const handlePointerMove = (e) => {
+    if (!ref.current || e.pointerType === "touch") return;
     isInteracting.current = true;
     const rect = ref.current.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
@@ -28,7 +28,8 @@ export default function TiltCard({ children, className = "", maxRotation = 18, i
     y.set(mouseY / rect.height);
   };
 
-  const handleMouseLeave = () => {
+  const handlePointerLeave = (e) => {
+    if (e.pointerType === "touch") return;
     isInteracting.current = false;
     // Do not force snap to center if gyroscope is driving the tilt
     if (!isGyroActive.current) {
@@ -90,8 +91,8 @@ export default function TiltCard({ children, className = "", maxRotation = 18, i
     <div style={{ perspective: "1200px" }} className={`relative group ${className}`}>
       <motion.div
         ref={ref}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
+        onPointerMove={handlePointerMove}
+        onPointerLeave={handlePointerLeave}
         style={{
           rotateX,
           rotateY,
