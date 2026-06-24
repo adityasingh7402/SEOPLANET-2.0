@@ -63,11 +63,6 @@ export default function TiltCard({ children, className = "", maxRotation = 18, i
         baselineBeta = beta;
       }
 
-      // Slowly adapt the baseline to the current angle (high-pass filter)
-      // Lower rate (0.005) so it doesn't fight active movements, reducing choppiness.
-      baselineGamma += (gamma - baselineGamma) * 0.005;
-      baselineBeta += (beta - baselineBeta) * 0.005;
-
       let deltaGamma = gamma - baselineGamma;
       let deltaBeta = beta - baselineBeta;
 
@@ -77,9 +72,9 @@ export default function TiltCard({ children, className = "", maxRotation = 18, i
       deltaGamma = Math.min(Math.max(deltaGamma, -maxTiltRange), maxTiltRange);
       deltaBeta = Math.min(Math.max(deltaBeta, -maxTiltRange), maxTiltRange);
 
-      // Invert the deltas so it moves in the correct natural direction
-      x.set((-deltaGamma + maxTiltRange) / (maxTiltRange * 2));
-      y.set((-deltaBeta + maxTiltRange) / (maxTiltRange * 2));
+      // Positive mapping for a physical-object effect
+      x.set((deltaGamma + maxTiltRange) / (maxTiltRange * 2));
+      y.set((deltaBeta + maxTiltRange) / (maxTiltRange * 2));
     };
 
     if (typeof window !== "undefined" && window.DeviceOrientationEvent) {
