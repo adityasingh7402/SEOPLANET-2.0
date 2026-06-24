@@ -7,7 +7,7 @@ export default function TiltCard({ children, className = "", maxRotation = 18, i
   const x = useMotionValue(0.5);
   const y = useMotionValue(0.5);
 
-  const springConfig = { stiffness: 150, damping: 25, mass: 1.2 };
+  const springConfig = { stiffness: 400, damping: 30, mass: 0.2 };
   const smoothX = useSpring(x, springConfig);
   const smoothY = useSpring(y, springConfig);
 
