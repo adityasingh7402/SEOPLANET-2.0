@@ -7,7 +7,8 @@ export default function TiltCard({ children, className = "", maxRotation = 18, i
   const x = useMotionValue(0.5);
   const y = useMotionValue(0.5);
 
-  const springConfig = { stiffness: 300, damping: 30, mass: 0.5 };
+  // Ultra-snappy spring for maximum FPS and zero latency
+  const springConfig = { stiffness: 1000, damping: 40, mass: 0.01 };
   const smoothX = useSpring(x, springConfig);
   const smoothY = useSpring(y, springConfig);
 
@@ -75,7 +76,7 @@ export default function TiltCard({ children, className = "", maxRotation = 18, i
       let deltaBeta = beta - baselineBeta;
 
       // Decrease this value to make the gyro MORE sensitive (requires less physical tilt)
-      const maxTiltRange = 30; 
+      const maxTiltRange = 15; 
 
       deltaGamma = Math.min(Math.max(deltaGamma, -maxTiltRange), maxTiltRange);
       deltaBeta = Math.min(Math.max(deltaBeta, -maxTiltRange), maxTiltRange);
